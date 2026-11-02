@@ -76,6 +76,7 @@ if suser_id(N'lg_backup')        is not null drop login lg_backup;
 
 if exists (select 1 from sys.server_principals where name = N'rol_srv_respaldo' and type = 'R')
     drop server role rol_srv_respaldo;
+    
 go
 
 
