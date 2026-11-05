@@ -36,29 +36,9 @@ use migracion;
 go
 
 
-/* ------------------------------------------------------------
-   1. respaldo previo
-   se guarda en la carpeta de datos del contenedor, que siempre existe.
-   copy_only: no altera la cadena de respaldos de la estrategia oficial.
-   ------------------------------------------------------------ */
-backup database migracion
-to disk = N'/var/opt/mssql/data/migracion_pre_esquemas.bak'
-with copy_only, init, checksum, stats = 25;
-go
 
-restore verifyonly
-from disk = N'/var/opt/mssql/data/migracion_pre_esquemas.bak'
-with checksum;
-go
+--Esquemas 
 
-
-/* ------------------------------------------------------------
-   2. esquemas
-   todos pertenecen a dbo: así las vistas de reportes pueden leer las
-   tablas de los otros esquemas sin dar permisos sobre las tablas
-   (encadenamiento de propiedad).
-   create schema debe ir solo en su lote, por eso se usa exec.
-   ------------------------------------------------------------ */
 if schema_id(N'catalogos') is null exec (N'create schema catalogos authorization dbo;');  -- datos de referencia
 if schema_id(N'gestion')   is null exec (N'create schema gestion authorization dbo;');    -- clientes, mascotas y agenda
 if schema_id(N'clinica')   is null exec (N'create schema clinica authorization dbo;');    -- atención médica
@@ -69,10 +49,7 @@ go
 
 
 /* ------------------------------------------------------------
-   3. transferencia de tablas
-   solo se mueve si la tabla sigue en dbo, así el script puede
-   ejecutarse varias veces. no se copian filas: la tabla es la misma,
-   con sus llaves, índices y restricciones.
+ Transferencia
    ------------------------------------------------------------ */
 
 -- catálogos
