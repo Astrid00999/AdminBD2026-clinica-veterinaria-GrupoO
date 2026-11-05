@@ -30,6 +30,12 @@
    se borran al final. mínimo 8 caracteres con mayúscula, minúscula,
    número y símbolo.
    ------------------------------------------------------------ */
+
+-- por si una ejecución anterior quedó a medias en esta misma pestaña
+if @@trancount > 0 rollback transaction;
+if original_login() <> suser_sname() revert;
+go
+
 use master;
 go
 
@@ -493,11 +499,14 @@ begin
         set @obtenido = N'permitido';
     end try
     begin catch
-        if user_name() = @usuario revert;
         set @obtenido = case
                             when error_number() in (229, 230, 262, 15247) then N'denegado'
                             else N'error ' + cast(error_number() as nvarchar(10)) + N': ' + error_message()
                         end;
+        -- primero rollback: un error en create table o create role deja la
+        -- transacción inservible, y en ese estado no se puede hacer revert
+        if xact_state() <> 0 rollback transaction;
+        if user_name() = @usuario revert;
     end catch;
     if @@trancount > 0 rollback transaction;
 
