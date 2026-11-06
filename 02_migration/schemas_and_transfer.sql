@@ -76,6 +76,9 @@ if object_id(N'dbo.detalles_facturas', N'U') is not null alter schema finanzas t
 go
 
 
+
+
+
 /* ------------------------------------------------------------
    4. verificación
    ------------------------------------------------------------ */
