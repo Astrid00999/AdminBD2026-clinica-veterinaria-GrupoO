@@ -1,7 +1,12 @@
+----------------------------------------------------------------------------------------
+--PROCEDIMIENTO ALMACENADO PARA ANULAR UNA FACTURA POR EQUIVOCACIÓN. 
+-----------------------------------------------------------------------------------------
+
+
 USE migracion;
 GO
 
-CREATE PROCEDURE sp_cancelar_factura 
+CREATE PROCEDURE finanzas.sp_cancelar_factura 
 @FacturaID int, 
 @MotivoCancelacion varchar(255),
 @UsuarioID int 
@@ -29,20 +34,20 @@ BEGIN TRANSACTION;
 
 
 
-IF NOT EXISTS(SELECT 1 FROM facturas where id_factura = @FacturaID AND estado_f = 'ACTIVA')
+IF NOT EXISTS(SELECT 1 FROM finanzas.facturas where id_factura = @FacturaID AND estado_f = 'ACTIVA')
 BEGIN
 	RAISERROR('La factura no existe, ya se encuentra anulada o no está en estado activo.', 16, 1);
 	ROLLBACK TRANSACTION;
 	RETURN;
 END
 
-UPDATE facturas 
+UPDATE finanzas.facturas 
 SET estado_f = 'ANULADA'
 WHERE id_factura = @FacturaID;
 
 UPDATE med
 SET med.stock_m = med.stock_m + det.cantidad_df
-FROM dbo.medicamentos med
+FROM catalogos.medicamentos med
 INNER JOIN detalles_factura det ON med.id_medicamento = det.id_medicamento
 WHERE det.id_factura = @FacturaID;
 

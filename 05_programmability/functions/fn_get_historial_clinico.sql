@@ -1,17 +1,21 @@
-CREATE OR ALTER FUNCTION fn_get_historial_medico (@id INT)
+CREATE OR ALTER FUNCTION clinica.fn_get_historial_medico (@id INT)
 RETURNS TABLE
 AS
-RETURN
-(
+RETURN (
     SELECT
         m.nombre_m                          AS nombre_ma,
-        gestion.fn_get_edad(m.fecha_nacimiento) AS edad,
+        DATEDIFF(YEAR, m.fecha_nacimiento, GETDATE()) - 
+        CASE 
+            WHEN DATEADD(YEAR, DATEDIFF(YEAR, m.fecha_nacimiento, GETDATE()), m.fecha_nacimiento) > GETDATE() 
+            THEN 1 
+            ELSE 0 
+        END                                 AS edad,
         m.peso_m                            AS peso,
         c.fecha_c                           AS fecha_cita,
         v.nombre_v                          AS veterinario,
         d.descripcion_d                     AS diagnostico,
         t.descripcion_t                     AS tratamiento,
-        STRING_AGG(me.nombre_m + ' (' + dt.dosis_dt + ')', ', ')
+        STRING_AGG(me.nombre_m + ' (' + dt.dosis_dt + ')', ', ') 
                                             AS medicamentos_recetados
     FROM gestion.mascotas m
     JOIN gestion.citas c                  ON c.id_mascota      = m.id_mascota
@@ -32,4 +36,5 @@ RETURN
 );
 GO
 
-SELECT * FROM dbo.fn_get_historial_medico(3);
+-- Ejemplo de uso:
+SELECT * FROM clinica.fn_get_historial_medico(3);
