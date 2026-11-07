@@ -1,7 +1,7 @@
 ﻿/* ============================================================
    02_migration/schema_and_data.sql
 
-   Crea la base migracion (tablas, llaves e índices) y la llena con:
+   Crea la base ClinicaVeterinaria (tablas, llaves e índices) y la llena con:
      1. datos base escritos a mano (catálogos y casos de ejemplo)
      2. carga masiva que sigue el plan de consultas de la clínica:
         consultas por mes, día y hora, y enfermedades por mes
@@ -12,97 +12,97 @@
    ============================================================ */
 USE [master]
 GO
-IF DB_ID(N'migracion') IS NOT NULL
+IF DB_ID(N'ClinicaVeterinaria') IS NOT NULL
 BEGIN
-    ALTER DATABASE [migracion] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
-    DROP DATABASE [migracion];
+    ALTER DATABASE [ClinicaVeterinaria] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;
+    DROP DATABASE [ClinicaVeterinaria];
 END
 GO
-/****** Objeto: Database [migracion] Fecha de script: 31/10/2026 16:31:23 ******/
-CREATE DATABASE [migracion]
+/****** Objeto: Database [ClinicaVeterinaria] Fecha de script: 31/10/2026 16:31:23 ******/
+CREATE DATABASE [ClinicaVeterinaria]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'migracion', FILENAME = N'/var/opt/mssql/data/migracion.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'ClinicaVeterinaria', FILENAME = N'/var/opt/mssql/data/ClinicaVeterinaria.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'migracion_log', FILENAME = N'/var/opt/mssql/data/migracion_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'ClinicaVeterinaria_log', FILENAME = N'/var/opt/mssql/data/ClinicaVeterinaria_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
  WITH CATALOG_COLLATION = DATABASE_DEFAULT, LEDGER = OFF
 GO
-ALTER DATABASE [migracion] SET COMPATIBILITY_LEVEL = 170
+ALTER DATABASE [ClinicaVeterinaria] SET COMPATIBILITY_LEVEL = 170
 GO
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
-EXEC [migracion].[dbo].[sp_fulltext_database] @action = 'enable'
+EXEC [ClinicaVeterinaria].[dbo].[sp_fulltext_database] @action = 'enable'
 end
 GO
-ALTER DATABASE [migracion] SET ANSI_NULL_DEFAULT OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ANSI_NULL_DEFAULT OFF 
 GO
-ALTER DATABASE [migracion] SET ANSI_NULLS OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ANSI_NULLS OFF 
 GO
-ALTER DATABASE [migracion] SET ANSI_PADDING OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ANSI_PADDING OFF 
 GO
-ALTER DATABASE [migracion] SET ANSI_WARNINGS OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ANSI_WARNINGS OFF 
 GO
-ALTER DATABASE [migracion] SET ARITHABORT OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ARITHABORT OFF 
 GO
-ALTER DATABASE [migracion] SET AUTO_CLOSE OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET AUTO_CLOSE OFF 
 GO
-ALTER DATABASE [migracion] SET AUTO_SHRINK OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET AUTO_SHRINK OFF 
 GO
-ALTER DATABASE [migracion] SET AUTO_UPDATE_STATISTICS ON 
+ALTER DATABASE [ClinicaVeterinaria] SET AUTO_UPDATE_STATISTICS ON 
 GO
-ALTER DATABASE [migracion] SET CURSOR_CLOSE_ON_COMMIT OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET CURSOR_CLOSE_ON_COMMIT OFF 
 GO
-ALTER DATABASE [migracion] SET CURSOR_DEFAULT  GLOBAL 
+ALTER DATABASE [ClinicaVeterinaria] SET CURSOR_DEFAULT  GLOBAL 
 GO
-ALTER DATABASE [migracion] SET CONCAT_NULL_YIELDS_NULL OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET CONCAT_NULL_YIELDS_NULL OFF 
 GO
-ALTER DATABASE [migracion] SET NUMERIC_ROUNDABORT OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET NUMERIC_ROUNDABORT OFF 
 GO
-ALTER DATABASE [migracion] SET QUOTED_IDENTIFIER OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET QUOTED_IDENTIFIER OFF 
 GO
-ALTER DATABASE [migracion] SET RECURSIVE_TRIGGERS OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET RECURSIVE_TRIGGERS OFF 
 GO
-ALTER DATABASE [migracion] SET  ENABLE_BROKER 
+ALTER DATABASE [ClinicaVeterinaria] SET  ENABLE_BROKER 
 GO
-ALTER DATABASE [migracion] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
 GO
-ALTER DATABASE [migracion] SET DATE_CORRELATION_OPTIMIZATION OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET DATE_CORRELATION_OPTIMIZATION OFF 
 GO
-ALTER DATABASE [migracion] SET TRUSTWORTHY OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET TRUSTWORTHY OFF 
 GO
-ALTER DATABASE [migracion] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET ALLOW_SNAPSHOT_ISOLATION OFF 
 GO
-ALTER DATABASE [migracion] SET PARAMETERIZATION SIMPLE 
+ALTER DATABASE [ClinicaVeterinaria] SET PARAMETERIZATION SIMPLE 
 GO
-ALTER DATABASE [migracion] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET READ_COMMITTED_SNAPSHOT OFF 
 GO
-ALTER DATABASE [migracion] SET HONOR_BROKER_PRIORITY OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET HONOR_BROKER_PRIORITY OFF 
 GO
-ALTER DATABASE [migracion] SET RECOVERY SIMPLE 
+ALTER DATABASE [ClinicaVeterinaria] SET RECOVERY SIMPLE 
 GO
-ALTER DATABASE [migracion] SET  MULTI_USER 
+ALTER DATABASE [ClinicaVeterinaria] SET  MULTI_USER 
 GO
-ALTER DATABASE [migracion] SET PAGE_VERIFY CHECKSUM  
+ALTER DATABASE [ClinicaVeterinaria] SET PAGE_VERIFY CHECKSUM  
 GO
-ALTER DATABASE [migracion] SET DB_CHAINING OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET DB_CHAINING OFF 
 GO
-ALTER DATABASE [migracion] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+ALTER DATABASE [ClinicaVeterinaria] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
 GO
-ALTER DATABASE [migracion] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+ALTER DATABASE [ClinicaVeterinaria] SET TARGET_RECOVERY_TIME = 60 SECONDS 
 GO
-ALTER DATABASE [migracion] SET DELAYED_DURABILITY = DISABLED 
+ALTER DATABASE [ClinicaVeterinaria] SET DELAYED_DURABILITY = DISABLED 
 GO
-ALTER DATABASE [migracion] SET OPTIMIZED_LOCKING = OFF 
+ALTER DATABASE [ClinicaVeterinaria] SET OPTIMIZED_LOCKING = OFF 
 GO
-ALTER DATABASE [migracion] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+ALTER DATABASE [ClinicaVeterinaria] SET ACCELERATED_DATABASE_RECOVERY = OFF  
 GO
-EXEC sys.sp_db_vardecimal_storage_format N'migracion', N'ON'
+EXEC sys.sp_db_vardecimal_storage_format N'ClinicaVeterinaria', N'ON'
 GO
-ALTER DATABASE [migracion] SET QUERY_STORE = ON
+ALTER DATABASE [ClinicaVeterinaria] SET QUERY_STORE = ON
 GO
-ALTER DATABASE [migracion] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
+ALTER DATABASE [ClinicaVeterinaria] SET QUERY_STORE (OPERATION_MODE = READ_WRITE, CLEANUP_POLICY = (STALE_QUERY_THRESHOLD_DAYS = 30), DATA_FLUSH_INTERVAL_SECONDS = 900, INTERVAL_LENGTH_MINUTES = 60, MAX_STORAGE_SIZE_MB = 1000, QUERY_CAPTURE_MODE = AUTO, SIZE_BASED_CLEANUP_MODE = AUTO, MAX_PLANS_PER_QUERY = 200, WAIT_STATS_CAPTURE_MODE = ON)
 GO
-USE [migracion]
+USE [ClinicaVeterinaria]
 GO
 /****** Objeto: Table [dbo].[citas] Fecha de script: 31/10/2026 16:31:24 ******/
 SET ANSI_NULLS ON
@@ -122,9 +122,6 @@ CREATE TABLE [dbo].[citas](
 	[id_cita] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE dbo.citas
-ALTER COLUMN motivo_c VARCHAR(255);
 GO
 /****** Objeto: Table [dbo].[detalles_facturas] Fecha de script: 31/10/2026 16:31:24 ******/
 SET ANSI_NULLS ON
@@ -148,9 +145,6 @@ CREATE TABLE [dbo].[detalles_facturas](
 	[id_detalle_factura] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE dbo.detalles_facturas
-ALTER COLUMN descripcion_df VARCHAR(255) NOT NULL;
 GO
 /****** Objeto: Table [dbo].[detalles_tratamientos] Fecha de script: 31/10/2026 16:31:24 ******/
 SET ANSI_NULLS ON
@@ -188,11 +182,6 @@ CREATE TABLE [dbo].[diagnosticos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE dbo.diagnosticos
-ALTER COLUMN descripcion_d VARCHAR(255) NOT NULL;
-ALTER TABLE dbo.diagnosticos
-ALTER COLUMN observaciones_d VARCHAR(255);
-GO
 /****** Objeto: Table [dbo].[especialidades] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
 GO
@@ -208,9 +197,6 @@ CREATE TABLE [dbo].[especialidades](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE dbo.especialidades
-ALTER COLUMN descripcion_esp VARCHAR(255);
-GO
 /****** Objeto: Table [dbo].[especies] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
 GO
@@ -225,9 +211,6 @@ CREATE TABLE [dbo].[especies](
 	[id_especie] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE dbo.especies
-ALTER COLUMN descripcion_e VARCHAR(255) NOT NULL;
 GO
 /****** Objeto: Table [dbo].[facturas] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
@@ -301,9 +284,6 @@ CREATE TABLE [dbo].[procedimientos](
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 GO
-ALTER TABLE dbo.procedimientos
-ALTER COLUMN descripcion_p VARCHAR(255);
-GO
 /****** Objeto: Table [dbo].[propietarios] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
 GO
@@ -324,9 +304,6 @@ CREATE TABLE [dbo].[propietarios](
 	[id_propietario] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE dbo.propietarios
-ALTER COLUMN direccion_p VARCHAR(255);
 GO
 /****** Objeto: Table [dbo].[razas] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
@@ -360,11 +337,6 @@ CREATE TABLE [dbo].[tratamiento](
 	[id_tratamiento] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
-GO
-ALTER TABLE dbo.tratamiento
-ALTER COLUMN descripcion_t VARCHAR(255);
-ALTER TABLE dbo.tratamiento
-ALTER COLUMN indicaciones_t VARCHAR(255);
 GO
 /****** Objeto: Table [dbo].[veterinario] Fecha de script: 31/10/2026 16:31:25 ******/
 SET ANSI_NULLS ON
@@ -599,7 +571,7 @@ GO
    numéricos fijos, por eso solo deben correr sobre tablas vacías
    (el script siempre recrea la base antes).
    ============================================================ */
-use [migracion]
+use [ClinicaVeterinaria]
 go
 -- ============================================================
 -- 1° insert: especies (17)
@@ -1510,7 +1482,7 @@ go
    - Sin rand(): mismas filas en cada instalación.
      Si no se quiere el volumen, borrar esta sección.
    ============================================================ */
-use [migracion]
+use [ClinicaVeterinaria]
 go
 set nocount on
 go
@@ -3086,11 +3058,11 @@ go
 select x.anio, x.mes, x.id_categoria, count(*) as cantidad
 into #base_cat
 from (select year(c.fecha_c) as anio, month(c.fecha_c) as mes,
-             case when d.descripcion_d like 'Paciente sano%' then 13
+             case when cast(d.descripcion_d as varchar(200)) like 'Paciente sano%' then 13
                   else isnull(k.id_categoria, 14) end as id_categoria
       from dbo.diagnosticos d
       join dbo.citas c on c.id_cita = d.id_cita
-      left join #categoria k on k.nombre = d.descripcion_d and k.id_categoria <= 12
+      left join #categoria k on k.nombre = cast(d.descripcion_d as varchar(200)) and k.id_categoria <= 12
       where cast(c.fecha_c as date) between cast('2024-11-01' as date) and cast('2026-10-31' as date)) x
 group by x.anio, x.mes, x.id_categoria;
 
@@ -3557,7 +3529,7 @@ into #linea
 from (select s.id_factura, 1 as tipo, cast(0 as bigint) as orden, s.id_cita,
              cast(null as bigint) as id_medicamento, cast(null as bigint) as id_tratamiento,
              cast(null as bigint) as id_procedimiento,
-             concat('Costo de atención - ', c.motivo_c) as descripcion,
+             concat('Costo de atención - ', cast(c.motivo_c as varchar(200))) as descripcion,
              1 as cantidad, c.costo_c as precio
       from #sin_detalle s
       join dbo.citas c on c.id_cita = s.id_cita
@@ -3629,11 +3601,11 @@ select coalesce(cs.mes, x.mes) as mes, coalesce(cs.id_categoria, x.id_categoria)
 from #casos cs
 full outer join (select y.mes, y.id_categoria, count(*) as casos
                  from (select month(c.fecha_c) as mes,
-                              case when d.descripcion_d like 'Paciente sano%' then 13
+                              case when cast(d.descripcion_d as varchar(200)) like 'Paciente sano%' then 13
                                    else isnull(k.id_categoria, 14) end as id_categoria
                        from dbo.diagnosticos d
                        join dbo.citas c on c.id_cita = d.id_cita
-                       left join #categoria k on k.nombre = d.descripcion_d and k.id_categoria <= 12
+                       left join #categoria k on k.nombre = cast(d.descripcion_d as varchar(200)) and k.id_categoria <= 12
                        where cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)) y
                  group by y.mes, y.id_categoria) x
   on x.mes = cs.mes and x.id_categoria = cs.id_categoria
@@ -3642,14 +3614,14 @@ where isnull(cs.casos, 0) <> isnull(x.casos, 0);
 -- 15.4 las 5 enfermedades más comunes de cada mes (compárese con la sección 8.2)
 select y.mes, y.puesto, y.enfermedad, y.casos,
        cast(100.0 * y.casos / m.consultas as decimal(4, 1)) as porcentaje
-from (select month(c.fecha_c) as mes, d.descripcion_d as enfermedad, count(*) as casos,
+from (select month(c.fecha_c) as mes, cast(d.descripcion_d as varchar(100)) as enfermedad, count(*) as casos,
              row_number() over (partition by month(c.fecha_c)
-                                order by count(*) desc, d.descripcion_d) as puesto
+                                order by count(*) desc, cast(d.descripcion_d as varchar(100))) as puesto
       from dbo.diagnosticos d
       join dbo.citas c on c.id_cita = d.id_cita
       where cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)
-        and d.descripcion_d not like 'Paciente sano%'
-      group by month(c.fecha_c), d.descripcion_d) y
+        and cast(d.descripcion_d as varchar(100)) not like 'Paciente sano%'
+      group by month(c.fecha_c), cast(d.descripcion_d as varchar(100))) y
 join #mes m on m.mes = y.mes
 where y.puesto <= 5
 order by y.mes, y.puesto;
@@ -3663,21 +3635,21 @@ where (x.dia <= 6 and x.hora not between 7 and 19)
    or (x.dia = 7 and x.hora not between 7 and 12);
 
 -- 15.6 diagnósticos que no son enfermedad ("Paciente sano: ...")
-select cast(100.0 * sum(case when descripcion_d like 'Paciente sano%' then 1 else 0 end)
+select cast(100.0 * sum(case when cast(descripcion_d as varchar(200)) like 'Paciente sano%' then 1 else 0 end)
             / count(*) as decimal(4, 1)) as porcentaje_sin_enfermedad
 from dbo.diagnosticos;
 
 -- 15.7 los 3 medicamentos más usados en cada enfermedad del documento
 select y.enfermedad, y.puesto, y.medicamento, y.veces
-from (select d.descripcion_d as enfermedad, m.nombre_m as medicamento, count(*) as veces,
-             row_number() over (partition by d.descripcion_d
+from (select cast(d.descripcion_d as varchar(100)) as enfermedad, m.nombre_m as medicamento, count(*) as veces,
+             row_number() over (partition by cast(d.descripcion_d as varchar(100))
                                 order by count(*) desc, m.nombre_m) as puesto
       from dbo.diagnosticos d
-      join #categoria k on k.nombre = d.descripcion_d and k.id_categoria <= 12
+      join #categoria k on k.nombre = cast(d.descripcion_d as varchar(100)) and k.id_categoria <= 12
       join dbo.tratamiento t on t.id_diagnostico = d.id_diagnostico
       join dbo.detalles_tratamientos dt on dt.id_tratamiento = t.id_tratamiento
       join dbo.medicamentos m on m.id_medicamento = dt.id_medicamento
-      group by d.descripcion_d, m.nombre_m) y
+      group by cast(d.descripcion_d as varchar(100)), m.nombre_m) y
 where y.puesto <= 3
 order by y.enfermedad, y.puesto;
 go
@@ -3715,5 +3687,5 @@ go
 
 use [master]
 go
-alter database [migracion] set read_write
+alter database [ClinicaVeterinaria] set read_write
 go
