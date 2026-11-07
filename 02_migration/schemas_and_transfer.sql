@@ -1,9 +1,9 @@
 /* ============================================================
-   02_migration/schemas_and_transfer.sql
+   02_ClinicaVeterinaria/schemas_and_transfer.sql
 
    Requisitos:
      - Ejecutar con una cuenta sysadmin.
-     - Ejecutar después de 02_migration/schema_and_data.sql
+     - Ejecutar después de 02_ClinicaVeterinaria/schema_and_data.sql
        y antes de los demás scripts (vistas, índices, auditoría, roles).
 
    Orden de este script:
@@ -27,7 +27,7 @@ go
 
 if db_id(N'migracion') is null
 begin
-    raiserror(N'La base migracion no existe. Ejecuten primero 02_migration/schema_and_data.sql.', 16, 1);
+    raiserror(N'La base migracion no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
     set noexec on;
 end
 go

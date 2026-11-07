@@ -1,5 +1,6 @@
---Trigger para tablas críticas detalles_tratamientos
-
+--============================================================================
+-- TRIGGER PARA TABLAS CRITICAS detalles_tratamientos
+--===========================================================================
 CREATE OR ALTER TRIGGER clinica.tr_auditoria_detalles_tratamientos
 ON clinica.detalles_tratamientos
 AFTER INSERT, UPDATE, DELETE
@@ -44,8 +45,9 @@ END;
 GO
 
 
-
---Tabla de diagnósticos. 
+--====================================================================================
+-- TRIGGER PARA TABLA DE AUDITORIA DE DIAGNOSTICOS
+--====================================================================================
 CREATE OR ALTER TRIGGER clinica.tr_auditoria_diagnosticos
 ON clinica.diagnosticos
 AFTER INSERT, UPDATE, DELETE

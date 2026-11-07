@@ -2,7 +2,7 @@
    05_programmability/views.sql
 
    Requisitos:
-     - Ejecutar después de 02_migration/schemas_and_transfer.sql
+     - Ejecutar después de 02_ClinicaVeterinaria/schemas_and_transfer.sql
        (las tablas ya deben estar en catalogos, gestion, clinica y finanzas).
 
    Criterios de diseño:
@@ -37,19 +37,19 @@
 use master;
 go
 
-if db_id(N'migracion') is null
+if db_id(N'ClinicaVeterinaria') is null
 begin
-    raiserror(N'La base migracion no existe.', 16, 1);
+    raiserror(N'La base ClinicaVeterinaria no existe.', 16, 1);
     set noexec on;
 end
 go
 
-use migracion;
+use ClinicaVeterinaria;
 go
 
 if schema_id(N'reportes') is null or object_id(N'gestion.citas', N'U') is null
 begin
-    raiserror(N'Primero ejecuten 02_migration/schemas_and_transfer.sql.', 16, 1);
+    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql.', 16, 1);
     set noexec on;
 end
 go

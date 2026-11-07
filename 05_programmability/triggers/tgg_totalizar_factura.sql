@@ -1,3 +1,8 @@
+--================================================================================
+-- 1. TOTALIZAR FACTURA
+--==================================================================================
+
+
 CREATE OR ALTER TRIGGER finanzas.tr_acumular_total_factura
 ON finanzas.detalles_facturas
 AFTER INSERT
@@ -17,7 +22,7 @@ END;
 GO
 
 -- ============================================================
--- 4. Control de inventario de medicamentos
+-- 2. CONTROL INVENTARIO 
 -- ============================================================
 CREATE OR ALTER TRIGGER finanzas.tr_actualizar_inventario_farmacia
 ON finanzas.detalles_facturas
