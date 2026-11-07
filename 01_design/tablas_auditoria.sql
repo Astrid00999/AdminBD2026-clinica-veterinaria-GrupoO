@@ -1,6 +1,6 @@
------------------------------------------------------------------------------------
---TABLAS DE AUDITORIA PARA TABLAS CRÍTICAS
-----------------------------------------------------------------------------------
+--================================================================================
+--TABLAS DE AUDITORIA PARA FINANZAS
+--=================================================================================
 DROP TABLE IF EXISTS seguridad.facturas_auditoria
 DROP TABLE IF EXISTS seguridad.detalles_factura_auditoria
 
@@ -40,21 +40,25 @@ CREATE TABLE seguridad.detalles_factura_auditoria (
 )WITH (LEDGER = ON (APPEND_ONLY = ON));
 GO
 
---Tablas de auditoría para historial clínico. 
-
+--==============================================================================
+--TABLAS DE AUDITORIA PARA HISTORIAL CLINICO 
+--===============================================================================
 DROP TABLE IF EXISTS seguridad.historial_clinico_auditoria;
 GO
 
 CREATE TABLE seguridad.historial_clinico_auditoria (
     id_auditoria       INT IDENTITY(1,1) NOT NULL PRIMARY KEY,
     tabla_afectada     VARCHAR(50)   NOT NULL,
-    id_registro        VARCHAR(50)   NOT NULL,   -- ej. '2-3' = (id_tratamiento, id_detalle)
+    id_registro        VARCHAR(50)   NOT NULL,   
     id_mascota         BIGINT        NULL,
     campo              VARCHAR(50)   NULL,
-    valor_antiguo      VARCHAR(255)  NULL,       -- NULL cuando no existía
+    valor_antiguo      VARCHAR(255)  NULL,       
     valor_nuevo        VARCHAR(255)  NULL,
     accion             VARCHAR(10)   NOT NULL,
     usuario            NVARCHAR(128) NOT NULL,
     fecha_modificacion DATETIME2     NOT NULL DEFAULT SYSDATETIME()
 ) WITH (LEDGER = ON (APPEND_ONLY = ON));
 GO
+
+
+

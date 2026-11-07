@@ -1,3 +1,7 @@
+--============================================================================
+--FUNCIÓN QUE RETORNA LA EDAD
+--=============================================================================
+
 CREATE OR ALTER FUNCTION gestion.fn_get_edad (@f_fecha_nacimiento DATE)
 RETURNS INT
 AS

@@ -1,0 +1,5 @@
+# Archivos temporales y de configuración de Visual Studio
+.vs/
+*.slnx.user
+*.suo
+*.user

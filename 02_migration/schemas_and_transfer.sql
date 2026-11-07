@@ -25,14 +25,14 @@
 use master;
 go
 
-if db_id(N'migracion') is null
+if db_id(N'ClinicaVeterinaria') is null
 begin
-    raiserror(N'La base migracion no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
+    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
     set noexec on;
 end
 go
 
-use migracion;
+use ClinicaVeterinaria;
 go
 
 
@@ -119,3 +119,5 @@ go
 
 set noexec off;
 go
+
+

@@ -4,8 +4,9 @@
    Requisitos:
      - Ejecutar con una cuenta sysadmin.
      - Ejecutar al final, después de:
-         02_migration/schema_and_data.sql
-         02_migration/schemas_and_transfer.sql
+         02_
+         /schema_and_data.sql
+         02_ClinicaVeterinaria/schemas_and_transfer.sql
          05_programmability/views.sql
          03_security/audits.sql y 06_backup_restore/backup_strategy.sql
        (si estos dos aún no existen, el script avisa y se puede repetir después)
@@ -29,7 +30,7 @@
    las contraseñas se guardan solo en la sesión (session_context) y
    se borran al final. mínimo 8 caracteres con mayúscula, minúscula,
    número y símbolo.
-   ------------------------------------------------------------ */
+   ------------------------------------------------------------ 
 
 -- por si una ejecución anterior quedó a medias en esta misma pestaña
 if @@trancount > 0 rollback transaction;
@@ -39,12 +40,12 @@ go
 use master;
 go
 
-declare @clave_personal nvarchar(128) = N'<escribir antes de ejecutar>';  -- cuentas de personas
+declare @clave_personal nvarchar(128) = N'<>';  -- cuentas de personas
 declare @clave_servicio nvarchar(128) = N'<escribir antes de ejecutar>';  -- lg_bi y lg_backup
 
-if db_id(N'migracion') is null
+if db_id(N'ClinicaVeterinaria') is null
 begin
-    raiserror(N'La base migracion no existe. Ejecuten primero 02_migration/schema_and_data.sql.', 16, 1);
+    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
     set noexec on;
 end
 else if @clave_personal like N'<%' or @clave_servicio like N'<%'
@@ -59,16 +60,16 @@ begin
 end
 go
 
-use migracion;
+use ClinicaVeterinaria;
 go
 
 if object_id(N'gestion.citas', N'U') is null or object_id(N'reportes.vw_citas', N'V') is null
 begin
-    raiserror(N'Primero ejecuten 02_migration/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
+    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
     set noexec on;
 end
 go
-
+*/
 
 /* ------------------------------------------------------------
    1. limpieza
@@ -108,7 +109,7 @@ go
 /* ------------------------------------------------------------
    2. roles de base de datos
    ------------------------------------------------------------ */
-use migracion;
+use ClinicaVeterinaria;
 go
 
 create role rol_admin       authorization dbo;  -- administración técnica (no para uso diario)
@@ -327,7 +328,7 @@ go
 /* ------------------------------------------------------------
    5. usuarios y pertenencia a roles
    ------------------------------------------------------------ */
-use migracion;
+use ClinicaVeterinaria;
 go
 
 create user usr_admin        for login lg_admin;
@@ -572,3 +573,5 @@ go
 
 set noexec off;
 go
+
+

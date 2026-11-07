@@ -1,3 +1,7 @@
+--===========================================================================
+-- FUNCIÓN DE HISTORIAL MÉDICO
+--===========================================================================
+
 CREATE OR ALTER FUNCTION clinica.fn_get_historial_medico (@id INT)
 RETURNS TABLE
 AS
@@ -38,3 +42,6 @@ GO
 
 -- Ejemplo de uso:
 SELECT * FROM clinica.fn_get_historial_medico(3);
+
+
+
