@@ -6,7 +6,7 @@ BEGIN
     SET NOCOUNT ON;
 
     UPDATE f
-    SET f.total_f = f.total_f + s.suma
+    SET f.total_f = ISNULL(f.total_f, 0) + s.suma
     FROM finanzas.facturas f
     JOIN (
         SELECT id_factura, SUM(subtotal_df) AS suma
@@ -26,25 +26,19 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Total solicitado por medicamento (puede haber varios renglones del mismo)
-    ;WITH solicitado AS (
-        SELECT id_medicamento, SUM(cantidad_df) AS total
-        FROM inserted
-        WHERE id_medicamento IS NOT NULL
-        GROUP BY id_medicamento
+    IF EXISTS (
+        SELECT 1
+        FROM (
+            SELECT id_medicamento, SUM(cantidad_df) AS total
+            FROM inserted
+            WHERE id_medicamento IS NOT NULL
+            GROUP BY id_medicamento
+        ) s
+        JOIN catalogos.medicamentos m ON m.id_medicamento = s.id_medicamento
+        WHERE m.stock_m < s.total
     )
-    -- Validar existencia
-    SELECT 1
-    FROM solicitado s
-    JOIN catalogos.medicamentos m ON m.id_medicamento = s.id_medicamento
-    WHERE m.stock_m < s.total;
+        THROW 50020, 'Error de Inventario: No hay suficiente stock para el medicamento solicitado.', 1;
 
-    IF @@ROWCOUNT > 0
-    BEGIN
-        ;THROW 50020, 'Error de Inventario: No hay suficiente stock para el medicamento solicitado.', 1;
-    END
-
-    -- Descontar stock
     UPDATE m
     SET m.stock_m = m.stock_m - s.total
     FROM catalogos.medicamentos m
@@ -56,3 +50,5 @@ BEGIN
     ) s ON s.id_medicamento = m.id_medicamento;
 END;
 GO
+
+

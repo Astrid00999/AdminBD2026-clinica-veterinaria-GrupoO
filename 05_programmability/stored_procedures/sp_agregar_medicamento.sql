@@ -24,18 +24,18 @@ BEGIN
         BEGIN TRAN;
 
         SELECT @v_id_medicamento = id_medicamento
-        FROM catalogo.medicamentos
+        FROM catalogos.medicamentos
         WHERE nombre_m = @p_nombre_m
           AND presentacion_m = @p_presentacion_m;
 
         IF @v_id_medicamento IS NULL
         BEGIN
-            INSERT INTO medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
+            INSERT INTO catalogos.medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
             VALUES (@p_nombre_m, @p_presentacion_m, @p_laboratorio_m, @p_precio_m, @p_cantidad);
         END
         ELSE
         BEGIN
-            UPDATE medicamentos
+            UPDATE catalogos.medicamentos
             SET stock_m  = stock_m + @p_cantidad,
                 precio_m = @p_precio_m
             WHERE id_medicamento = @v_id_medicamento;
@@ -48,4 +48,12 @@ BEGIN
         THROW;
     END CATCH
 END;
+
 GO
+
+--EJECUTAR PROCEDIMIENTO ALMACENADO
+
+exec sp_agregar_medicamento 'Meloxicam', 'Antiflamatorio', 'Bonin', 12.00, 7;
+
+--VISUALIZAR EN LA TABLA DE MEDICAMENTOS LA NUEVA INSERCIÓN
+select * from catalogos.medicamentos order by nombre_m asc;

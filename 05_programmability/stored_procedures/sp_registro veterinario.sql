@@ -58,3 +58,17 @@ BEGIN
     END CATCH
 END;
 GO
+
+
+--Ejecutar procedimiento almacenado del registro de veterinario. 
+--     @p_nombre_esp      VARCHAR(150),
+    @p_descripcion_esp VARCHAR(MAX),
+    @p_nombre_v        VARCHAR(100),
+    @p_apellido_v      VARCHAR(100),
+    @p_telefono_v      VARCHAR(20),
+    @p_correo_v        VARCHAR(150)
+AS
+
+select * from catalogos.veterinarios;
+
+EXEC catalogos.sp_registrar_veterinario ''
