@@ -114,14 +114,14 @@ CREATE TABLE [dbo].[citas](
 	[id_mascota] [bigint] NOT NULL,
 	[id_veterinario] [bigint] NOT NULL,
 	[fecha_c] [datetime] NOT NULL,
-	[motivo_c] [text] NULL,
-	[estado_c] [varchar](20) NOT NULL,
+	[motivo_c] [varchar](100) NULL,	
+    [estado_c] [varchar](20) NOT NULL,
 	[costo_c] [numeric](10, 2) NULL,
  CONSTRAINT [citas_pkey] PRIMARY KEY CLUSTERED 
 (
 	[id_cita] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 99, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF, DATA_COMPRESSION = PAGE) ON [PRIMARY]
-) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+) ON [PRIMARY]
 GO
 /****** Objeto: Table [dbo].[detalles_facturas] Fecha de script: 31/10/2026 16:31:24 ******/
 SET ANSI_NULLS ON
