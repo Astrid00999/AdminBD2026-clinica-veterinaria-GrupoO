@@ -943,6 +943,19 @@ values ((select id_especialidad from especialidades where nombre_esp = 'Medicina
        ((select id_especialidad from especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Alejandra', 'Escobar', '7000-0040', 'alejandra.escobar@veterinaria.com');
 go
 
+
+insert into catalogos.veterinario (id_especialidad, nombre_v, apellido_v, telefono_v, correo_v)
+select (select id_especialidad
+        from catalogos.especialidades
+        where nombre_esp = 'Medicina General Veterinaria'),
+       'Yospire', 'Chavez', '7000-0048', 'yospire.vasquez@veterinaria.com'
+where not exists (select 1
+                  from catalogos.veterinario
+                  where correo_v = 'yospire.vasquez@veterinaria.com');
+
+print cast(@@rowcount as varchar(10)) + N' veterinario insertado.';
+go
+
 -- ============================================================
 -- 7° insert: citas (70)
 -- Horario: lunes a sábado 7:00-20:00, domingo 7:00-13:00.
@@ -1463,6 +1476,204 @@ values (1, 1, 1, null, null, null, 'Costo de atención - Sacude la cabeza y le h
        (2, 30, null, null, null, 42, 'Procedimiento clínico: Evaluación nutricional', 1, 20.00);
 go
 
+
+--INSERTS EXTRA. 
+select count(*)        as total_facturas,
+       min(id_factura) as primera,
+       max(id_factura) as ultima
+from finanzas.facturas;
+
+select count(*) as renglones_de_medicamento,
+       count(distinct id_medicamento) as medicamentos_distintos
+from finanzas.detalles_facturas
+where id_medicamento is not null;
+-- 150 detalles de factura adicionales (medicamentos repetidos entre facturas)
+-- id_detalle_factura continúa después del último existente de cada factura.
+-- ============================================================
+
+set nocount on;
+
+declare @nuevos table (
+    seq            int identity(1, 1),
+    id_factura     int,
+    id_medicamento int,
+    id_tratamiento int,
+    descripcion_df nvarchar(500),
+    cantidad_df    int,
+    precio_unit_df decimal(10, 2)
+);
+
+insert into @nuevos (id_factura, id_medicamento, id_tratamiento, descripcion_df, cantidad_df, precio_unit_df)
+values
+    (1, 24, 1, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (1, 8, 1, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (1, 12, 1, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (1, 60, 1, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (1, 13, 1, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (1, 29, 1, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (1, 25, 1, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (1, 16, 1, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (2, 24, 2, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (2, 8, 2, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (2, 12, 2, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (2, 60, 2, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (2, 13, 2, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (2, 14, 2, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (2, 16, 2, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (4, 24, 4, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (4, 8, 4, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (4, 12, 4, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (4, 60, 4, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (4, 13, 4, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (4, 14, 4, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (4, 16, 4, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (4, 18, 4, N'Medicamento: Tramadol Gotas (Frasco gotero 20ml)', 1, 13.40),
+    (5, 24, 5, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (5, 8, 5, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (5, 60, 5, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (5, 13, 5, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (5, 29, 5, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (5, 25, 5, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (5, 51, 5, N'Medicamento: Bromhexina Jarabe (Frasco 120ml)', 1, 6.00),
+    (6, 24, 6, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (6, 8, 6, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (6, 12, 6, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (6, 60, 6, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (6, 29, 6, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (6, 14, 6, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (6, 28, 6, N'Medicamento: Rimadyl (Blíster 14 tabletas 50mg)', 1, 26.00),
+    (7, 24, 7, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (7, 8, 7, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (7, 12, 7, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (7, 60, 7, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (7, 13, 7, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (7, 29, 7, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (7, 18, 7, N'Medicamento: Tramadol Gotas (Frasco gotero 20ml)', 1, 13.40),
+    (9, 24, 9, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (9, 8, 9, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (9, 12, 9, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (9, 60, 9, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (9, 13, 9, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (9, 14, 9, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (9, 23, 9, N'Medicamento: Aureomicina Oftálmica (Tubo 3.5g)', 1, 11.50),
+    (11, 24, 12, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (11, 8, 12, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (11, 12, 12, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (11, 60, 12, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (11, 7, 12, N'Medicamento: Tobramicina Gotas (Frasco gotero oftálmico 5ml)', 1, 7.50),
+    (11, 13, 12, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (11, 1, 12, N'Medicamento: Epiotic Complete (Solución limpiadora ótica 125ml)', 1, 18.50),
+    (12, 24, 13, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (12, 8, 13, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (12, 12, 13, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (12, 60, 13, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (12, 23, 13, N'Medicamento: Aureomicina Oftálmica (Tubo 3.5g)', 1, 11.50),
+    (12, 13, 13, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (12, 43, 13, N'Medicamento: Otomax (Suspensión ótica 15g)', 1, 19.50),
+    (13, 24, 14, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (13, 12, 14, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (13, 60, 14, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (13, 13, 14, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (13, 29, 14, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (13, 28, 14, N'Medicamento: Rimadyl (Blíster 14 tabletas 50mg)', 1, 26.00),
+    (13, 25, 14, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (13, 16, 14, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (14, 24, 16, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (14, 8, 16, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (14, 12, 16, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (14, 60, 16, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (14, 13, 16, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (14, 29, 16, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (14, 18, 16, N'Medicamento: Tramadol Gotas (Frasco gotero 20ml)', 1, 13.40),
+    (15, 24, 19, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (15, 8, 19, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (15, 12, 19, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (15, 60, 19, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (15, 13, 19, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (15, 30, 19, N'Medicamento: Mupirocina Ungüento (Tubo 15g)', 1, 8.90),
+    (15, 44, 19, N'Medicamento: Panacur 10% (Suspensión oral 100ml)', 1, 14.00),
+    (16, 24, 41, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (16, 8, 41, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (16, 12, 41, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (16, 60, 41, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (16, 13, 41, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (16, 29, 41, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (16, 51, 41, N'Medicamento: Bromhexina Jarabe (Frasco 120ml)', 1, 6.00),
+    (17, 8, 42, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (17, 12, 42, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (17, 60, 42, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (17, 13, 42, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (17, 29, 42, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (17, 18, 42, N'Medicamento: Tramadol Gotas (Frasco gotero 20ml)', 1, 13.40),
+    (17, 25, 42, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (18, 8, 43, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (18, 12, 43, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (18, 13, 43, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (18, 29, 43, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (18, 25, 43, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (18, 14, 43, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (18, 16, 43, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (19, 24, 45, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (19, 12, 45, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (19, 60, 45, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (19, 13, 45, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (19, 29, 45, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (19, 25, 45, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (19, 6, 45, N'Medicamento: Doxitabs (Blíster 10 tabletas 100mg)', 2, 9.50),
+    (21, 24, 31, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (21, 8, 31, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (21, 60, 31, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (21, 29, 31, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (21, 14, 31, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (21, 16, 31, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (21, 31, 31, N'Medicamento: Vanguard Plus 5/L4 (Vial 1 dosis)', 1, 18.00),
+    (22, 24, 32, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 2, 18.75),
+    (22, 8, 32, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (22, 12, 32, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (22, 60, 32, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (22, 13, 32, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (22, 31, 32, N'Medicamento: Vanguard Plus 5/L4 (Vial 1 dosis)', 1, 18.00),
+    (22, 29, 32, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (24, 8, 34, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 2, 11.20),
+    (24, 12, 34, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (24, 13, 34, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (24, 29, 34, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (24, 25, 34, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (24, 14, 34, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (24, 30, 34, N'Medicamento: Mupirocina Ungüento (Tubo 15g)', 1, 8.90),
+    (25, 24, 35, N'Medicamento: Baytril (Blíster 10 tabletas 50mg)', 1, 18.75),
+    (25, 8, 35, N'Medicamento: Meloxicam Solución (Frasco gotas 10ml 0.5%)', 1, 11.20),
+    (25, 12, 35, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (25, 60, 35, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (25, 13, 35, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (25, 29, 35, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (25, 16, 35, N'Medicamento: Prednisolona 5mg (Blíster 10 tabletas)', 2, 4.20),
+    (29, 12, 39, N'Medicamento: Drontal Plus (Tableta individual)', 2, 4.50),
+    (29, 60, 39, N'Medicamento: Critical Care (Bolsa 141g)', 1, 16.00),
+    (29, 13, 39, N'Medicamento: NexGard Spectra (Tableta masticable 2-3.5kg)', 1, 19.75),
+    (29, 29, 39, N'Medicamento: Metronidazol Vet (Caja 20 tabletas 250mg)', 1, 14.50),
+    (29, 14, 39, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
+    (29, 25, 39, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
+    (29, 28, 39, N'Medicamento: Rimadyl (Blíster 14 tabletas 50mg)', 1, 26.00);
+
+insert into finanzas.detalles_facturas
+    (id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento,
+     id_procedimiento, descripcion_df, cantidad_df, precio_unit_df)
+select isnull((select max(d.id_detalle_factura)
+               from finanzas.detalles_facturas as d
+               where d.id_factura = n.id_factura), 0)
+         + row_number() over (partition by n.id_factura order by n.seq),
+       n.id_factura, null, n.id_medicamento, n.id_tratamiento,
+       null, n.descripcion_df, n.cantidad_df, n.precio_unit_df
+from @nuevos as n
+where exists (select 1 from finanzas.facturas      as f where f.id_factura      = n.id_factura)
+  and exists (select 1 from catalogos.medicamentos as m where m.id_medicamento  = n.id_medicamento)
+  and exists (select 1 from clinica.tratamiento    as t where t.id_tratamiento  = n.id_tratamiento)
+  and not exists (select 1 from finanzas.detalles_facturas as d
+                  where d.id_factura = n.id_factura and d.id_medicamento = n.id_medicamento);
+
+print cast(@@rowcount as varchar(10)) + N' filas insertadas de 150.';
+go
 
 /* ============================================================
    CARGA MASIVA (datos sintéticos deterministas)
@@ -3689,3 +3900,5 @@ use [master]
 go
 alter database [ClinicaVeterinaria] set read_write
 go
+
+

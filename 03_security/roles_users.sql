@@ -31,7 +31,53 @@
    se borran al final. mínimo 8 caracteres con mayúscula, minúscula,
    número y símbolo.
    ------------------------------------------------------------ 
+   */
+   
 
+   /* ------------------------------------------------------------
+   0. verificación y contraseñas
+   ------------------------------------------------------------ */
+
+-- por si una ejecución anterior quedó a medias en esta misma pestaña
+if @@trancount > 0 rollback transaction;
+if original_login() <> suser_sname() revert;
+go
+
+use master;
+go
+
+declare @clave_personal nvarchar(128) = N'Vet#Clinica2026!k7';  -- cuentas de personas
+declare @clave_servicio nvarchar(128) = N'Srv$Backup2026!m4Q';  -- lg_bi y lg_backup
+
+if db_id(N'ClinicaVeterinaria') is null
+begin
+    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
+    set noexec on;
+end
+else if @clave_personal like N'<%' or @clave_servicio like N'<%'
+begin
+    raiserror(N'Escriban las dos contraseñas en la sección 0 antes de ejecutar.', 16, 1);
+    set noexec on;
+end
+else
+begin
+    exec sp_set_session_context N'clave_personal', @clave_personal;
+    exec sp_set_session_context N'clave_servicio', @clave_servicio;
+end
+go
+
+use ClinicaVeterinaria;
+go
+
+if object_id(N'gestion.citas', N'U') is null or object_id(N'reportes.vw_citas', N'V') is null
+begin
+    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
+    set noexec on;
+end
+go
+   
+   
+   /*
 -- por si una ejecución anterior quedó a medias en esta misma pestaña
 if @@trancount > 0 rollback transaction;
 if original_login() <> suser_sname() revert;
@@ -155,7 +201,14 @@ grant alter on clinica.tratamiento            to rol_admin;
 grant alter on clinica.detalles_tratamientos  to rol_admin;
 grant alter on clinica.procedimientos         to rol_admin;
 grant alter on finanzas.facturas              to rol_admin;
-grant alter on finanzas.detalles_facturas     to rol_admin;
+grant alter on finanzas.
+
+
+
+
+
+
+s     to rol_admin;
 
 -- planes de ejecución, fragmentación y query store; respaldos manuales
 grant showplan, view database state to rol_admin;
@@ -223,6 +276,7 @@ grant select on reportes.vw_detalle_facturacion       to rol_bi;
 grant select on reportes.vw_resumen_financiero        to rol_bi;
 grant select on reportes.vw_productividad_veterinaria to rol_bi;
 grant select on reportes.vw_indicadores_mascotas      to rol_bi;
+grant select on reportes.vw_facturacion to rol_bi;
 go
 
 -- 3.6 rol_respaldo: solo respaldar (no lee ni modifica datos)
