@@ -1,27 +1,39 @@
+set statistics io on;
+set statistics time on;
 -- =========================================================================
 -- Consultas analíticas avanzadas utilizando Funciones Ventana
 -- ESQUEMAS: catalogos, gestion, clinica, finanzas
 -- =========================================================================
 
-USE [migracion];
+USE [ClinicaVeterinaria];
 GO
 
 -- -------------------------------------------------------------------------
--- Consulta 1: Secuenciación cronológica de citas por paciente (ROW_NUMBER)
+-- Consulta 1: Última visita completada de cada mascota (ROW_NUMBER)
 -- Esquema: gestion.citas, gestion.mascotas
 -- -------------------------------------------------------------------------
-SELECT 
-    m.nombre_m AS Mascota,
-    c.fecha_c AS FechaCita,
-    c.motivo_c AS Motivo,
-    c.estado_c AS Estado,
-    ROW_NUMBER() OVER (
-        PARTITION BY c.id_mascota 
-        ORDER BY c.fecha_c ASC
-    ) AS NumeroVisita
-FROM gestion.citas c
-JOIN gestion.mascotas m ON c.id_mascota = m.id_mascota;
+USE ClinicaVeterinaria;
 
+WITH visitas AS (
+    SELECT
+        c.id_mascota,
+        c.id_cita,
+        c.fecha_c,
+        ROW_NUMBER() OVER (
+            PARTITION BY c.id_mascota
+            ORDER BY c.fecha_c DESC, c.id_cita DESC
+        ) AS rn
+    FROM gestion.citas c
+    WHERE c.estado_c = 'Completada'
+)
+SELECT
+    m.id_mascota,
+    m.nombre_m AS Mascota,
+    v.fecha_c  AS UltimaVisita
+FROM visitas v
+JOIN gestion.mascotas m ON m.id_mascota = v.id_mascota
+WHERE v.rn = 1
+ORDER BY v.fecha_c DESC;
 
 -- -------------------------------------------------------------------------
 -- Consulta 2: Cálculo financiero acumulado por propietario (SUM OVER con Frame)
