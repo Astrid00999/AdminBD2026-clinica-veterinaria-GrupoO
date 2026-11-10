@@ -173,3 +173,91 @@ values ((select id_especie from especies where nombre_e = 'Canino'), 'Mestizo'),
        ((select id_especie from especies where nombre_e = 'Felino'), 'Doméstico de Pelo Corto'),
        ((select id_especie from especies where nombre_e = 'Felino'), 'Doméstico de Pelo Largo');
 go
+
+
+
+-- ============================================================
+-- 5° insert: especialidades (20)
+-- ============================================================
+insert into especialidades (nombre_esp, descripcion_esp)
+values ('Medicina General Veterinaria', 'Atención médica integral para animales domésticos.'),
+       ('Cirugía Veterinaria', 'Procedimientos quirúrgicos preventivos y correctivos.'),
+       ('Dermatología Veterinaria', 'Diagnóstico y tratamiento de enfermedades de la piel.'),
+       ('Odontología Veterinaria', 'Prevención y tratamiento de enfermedades dentales.'),
+       ('Cardiología Veterinaria', 'Diagnóstico y tratamiento de enfermedades cardiovasculares.'),
+       ('Neurología Veterinaria', 'Atención de trastornos del sistema nervioso.'),
+       ('Oftalmología Veterinaria', 'Diagnóstico y tratamiento de enfermedades oculares.'),
+       ('Oncología Veterinaria', 'Diagnóstico y tratamiento del cáncer en animales.'),
+       ('Traumatología Veterinaria', 'Tratamiento de fracturas y lesiones musculoesqueléticas.'),
+       ('Ortopedia Veterinaria', 'Corrección y tratamiento de problemas óseos y articulares.'),
+       ('Medicina Interna Veterinaria', 'Diagnóstico y tratamiento de enfermedades complejas.'),
+       ('Nutrición Veterinaria', 'Planes alimenticios y control nutricional.'),
+       ('Etología Veterinaria', 'Estudio y tratamiento de problemas de comportamiento animal.'),
+       ('Anestesiología Veterinaria', 'Administración y monitoreo de anestesia.'),
+       ('Medicina Preventiva', 'Vacunación, desparasitación y control sanitario.'),
+       ('Reproducción Animal', 'Manejo reproductivo y fertilidad animal.'),
+       ('Medicina de Animales Exóticos', 'Atención de reptiles, aves y pequeños mamíferos.'),
+       ('Urgencias Veterinarias', 'Atención de emergencias médicas y quirúrgicas.'),
+       ('Diagnóstico por Imágenes', 'Radiografías, ecografías y otros estudios diagnósticos.'),
+       ('Fisioterapia y Rehabilitación', 'Recuperación funcional tras lesiones o cirugías.');
+go
+
+-- ============================================================
+-- 6° insert: veterinario (40)
+-- 2 veterinarios por especialidad; trabajan en turnos rotativos
+-- ============================================================
+insert into veterinario (id_especialidad, nombre_v, apellido_v, telefono_v, correo_v)
+values ((select id_especialidad from especialidades where nombre_esp = 'Medicina General Veterinaria'), 'Carlos', 'Martínez', '7000-0001', 'carlos.martinez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina General Veterinaria'), 'Laura', 'Torres', '7000-0002', 'laura.torres@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Cirugía Veterinaria'), 'Ana', 'López', '7000-0003', 'ana.lopez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Cirugía Veterinaria'), 'Javier', 'Castillo', '7000-0004', 'javier.castillo@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Dermatología Veterinaria'), 'Jorge', 'Ramírez', '7000-0005', 'jorge.ramirez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Dermatología Veterinaria'), 'Daniela', 'Romero', '7000-0006', 'daniela.romero@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Odontología Veterinaria'), 'Sofía', 'Castro', '7000-0007', 'sofia.castro@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Odontología Veterinaria'), 'Andrés', 'Flores', '7000-0008', 'andres.flores@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Cardiología Veterinaria'), 'Ricardo', 'Mendoza', '7000-0009', 'ricardo.mendoza@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Cardiología Veterinaria'), 'Patricia', 'Vega', '7000-0010', 'patricia.vega@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Neurología Veterinaria'), 'Miguel', 'Herrera', '7000-0011', 'miguel.herrera@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Neurología Veterinaria'), 'Valeria', 'Reyes', '7000-0012', 'valeria.reyes@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Oftalmología Veterinaria'), 'Diego', 'Silva', '7000-0013', 'diego.silva@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Oftalmología Veterinaria'), 'María', 'Campos', '7000-0014', 'maria.campos@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Oncología Veterinaria'), 'Fernando', 'Vega', '7000-0015', 'fernando.vega@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Oncología Veterinaria'), 'Gabriela', 'Morales', '7000-0016', 'gabriela.morales@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Traumatología Veterinaria'), 'Eduardo', 'Cruz', '7000-0017', 'eduardo.cruz@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Traumatología Veterinaria'), 'Andrea', 'Navarro', '7000-0018', 'andrea.navarro@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Ortopedia Veterinaria'), 'Luis', 'Pérez', '7000-0019', 'luis.perez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Ortopedia Veterinaria'), 'Karen', 'Rivas', '7000-0020', 'karen.rivas@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina Interna Veterinaria'), 'Óscar', 'Ruiz', '7000-0021', 'oscar.ruiz@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina Interna Veterinaria'), 'Lucía', 'Benítez', '7000-0022', 'lucia.benitez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Nutrición Veterinaria'), 'Roberto', 'Aguilar', '7000-0023', 'roberto.aguilar@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Nutrición Veterinaria'), 'Paula', 'Gómez', '7000-0024', 'paula.gomez@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Etología Veterinaria'), 'Tomás', 'Molina', '7000-0025', 'tomas.molina@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Etología Veterinaria'), 'Camila', 'Ortiz', '7000-0026', 'camila.ortiz@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Anestesiología Veterinaria'), 'Raúl', 'Fuentes', '7000-0027', 'raul.fuentes@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Anestesiología Veterinaria'), 'Natalia', 'Arias', '7000-0028', 'natalia.arias@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina Preventiva'), 'Héctor', 'Salazar', '7000-0029', 'hector.salazar@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina Preventiva'), 'Elena', 'Mejía', '7000-0030', 'elena.mejia@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Reproducción Animal'), 'Samuel', 'Castillo', '7000-0031', 'samuel.castillo@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Reproducción Animal'), 'Verónica', 'Lara', '7000-0032', 'veronica.lara@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina de Animales Exóticos'), 'Esteban', 'Santos', '7000-0033', 'esteban.santos@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Medicina de Animales Exóticos'), 'Tatiana', 'Rojas', '7000-0034', 'tatiana.rojas@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Iván', 'Peña', '7000-0035', 'ivan.pena@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Mónica', 'Vargas', '7000-0036', 'monica.vargas@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Roberto', 'León', '7000-0037', 'roberto.leon@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Melissa', 'Pineda', '7000-0038', 'melissa.pineda@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Cristian', 'Durán', '7000-0039', 'cristian.duran@veterinaria.com'),
+       ((select id_especialidad from especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Alejandra', 'Escobar', '7000-0040', 'alejandra.escobar@veterinaria.com');
+go
+
+
+insert into catalogos.veterinario (id_especialidad, nombre_v, apellido_v, telefono_v, correo_v)
+select (select id_especialidad
+        from catalogos.especialidades
+        where nombre_esp = 'Medicina General Veterinaria'),
+       'Yospire', 'Chavez', '7000-0048', 'yospire.vasquez@veterinaria.com'
+where not exists (select 1
+                  from catalogos.veterinario
+                  where correo_v = 'yospire.vasquez@veterinaria.com');
+
+print cast(@@rowcount as varchar(10)) + N' veterinario insertado.';
+go
