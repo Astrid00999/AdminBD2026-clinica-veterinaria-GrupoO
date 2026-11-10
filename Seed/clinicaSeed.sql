@@ -1,0 +1,1 @@
+-- Insertar datos en diagnosticos..
