@@ -1,147 +1,102 @@
-set statistics io on;
-set statistics time on;
--- =========================================================================
--- Consultas analíticas avanzadas utilizando Funciones Ventana
--- ESQUEMAS: catalogos, gestion, clinica, finanzas
--- =========================================================================
+-- =====================================================================
+-- Clínica veterinaria · Consultas con funciones ventana
+-- Ejecutar cada consulta por separado, con el plan real activado
+-- (Ctrl+M). Los valores del WHERE (5, 100, 1234, 1000, 10) son de ejemplo.
+-- Los índices de cada consulta están en indexes.sql
+-- =====================================================================
 
-USE [ClinicaVeterinaria];
+SET STATISTICS IO, TIME ON;
 GO
 
--- -------------------------------------------------------------------------
--- Consulta 1: Última visita completada de cada mascota (ROW_NUMBER)
--- Esquema: gestion.citas, gestion.mascotas
--- -------------------------------------------------------------------------
-USE ClinicaVeterinaria;
-
-WITH visitas AS (
-    SELECT
-        c.id_mascota,
-        c.id_cita,
-        c.fecha_c,
-        ROW_NUMBER() OVER (
-            PARTITION BY c.id_mascota
-            ORDER BY c.fecha_c DESC, c.id_cita DESC
-        ) AS rn
-    FROM gestion.citas c
-    WHERE c.estado_c = 'Completada'
+-- ---------------------------------------------------------------------
+-- CONSULTA 1: las 3 citas más recientes de cada mes de un veterinario
+-- Ventana: row_number() particionada por año y mes
+-- ---------------------------------------------------------------------
+with citas_mes as (
+    select c.id_cita,
+           c.fecha_c,
+           c.motivo_c,
+           c.estado_c,
+           row_number() over (partition by year(c.fecha_c), month(c.fecha_c)
+                              order by c.fecha_c desc, c.id_cita desc) as rn
+    from gestion.citas c
+    where c.id_veterinario = 5
 )
-SELECT
-    m.id_mascota,
-    m.nombre_m AS Mascota,
-    v.fecha_c  AS UltimaVisita
-FROM visitas v
-JOIN gestion.mascotas m ON m.id_mascota = v.id_mascota
-WHERE v.rn = 1
-ORDER BY v.fecha_c DESC;
-
--- -------------------------------------------------------------------------
--- Consulta 2: Cálculo financiero acumulado por propietario (SUM OVER con Frame)
--- Esquema: finanzas.facturas, gestion.citas, gestion.mascotas, gestion.propietarios
--- -------------------------------------------------------------------------
-SELECT 
-    p.nombre_p + ' ' + p.apellido_p AS Propietario,
-    f.id_factura AS IDFactura,
-    f.fecha_emision_f AS FechaEmision,
-    f.total_f AS TotalFactura,
-    SUM(f.total_f) OVER (
-        PARTITION BY m.id_propietario 
-        ORDER BY f.fecha_emision_f, f.id_factura
-        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW
-    ) AS GastoAcumuladoCliente
-FROM finanzas.facturas f
-JOIN gestion.citas c ON f.id_cita = c.id_cita
-JOIN gestion.mascotas m ON c.id_mascota = m.id_mascota
-JOIN gestion.propietarios p ON m.id_propietario = p.id_propietario;
+select year(fecha_c) as anio, month(fecha_c) as mes,
+       fecha_c, motivo_c, estado_c, rn
+from citas_mes
+where rn <= 3
+order by anio desc, mes desc, rn;
 
 
--- -------------------------------------------------------------------------
--- Consulta 3: Navegación retrospectiva del historial médico (LAG)
--- Esquema: gestion.citas, gestion.mascotas
--- -------------------------------------------------------------------------
-SELECT 
-    m.nombre_m AS Mascota,
-    c.fecha_c AS FechaCitaActual,
-    c.motivo_c AS MotivoActual,
-    LAG(c.fecha_c, 1) OVER (
-        PARTITION BY c.id_mascota 
-        ORDER BY c.fecha_c ASC
-    ) AS FechaCitaAnterior,
-    LAG(c.motivo_c, 1) OVER (
-        PARTITION BY c.id_mascota 
-        ORDER BY c.fecha_c ASC
-    ) AS MotivoCitaAnterior
-FROM gestion.citas c
-JOIN gestion.mascotas m ON c.id_mascota = m.id_mascota;
+-- ---------------------------------------------------------------------
+-- CONSULTA 2: las 2 citas más recientes de cada mascota de un propietario
+-- Ventana: row_number() particionada por mascota
+-- ---------------------------------------------------------------------
+with citas_mascota as (
+    select m.id_mascota,
+           m.nombre_m,
+           c.id_cita,
+           c.fecha_c,
+           c.motivo_c,
+           row_number() over (partition by m.id_mascota
+                              order by c.fecha_c desc, c.id_cita desc) as rn
+    from gestion.mascotas m
+    join gestion.citas c on c.id_mascota = m.id_mascota
+    where m.id_propietario = 100
+)
+select id_mascota, nombre_m, fecha_c, motivo_c, rn
+from citas_mascota
+where rn <= 2
+order by id_mascota, rn;
 
 
--- -------------------------------------------------------------------------
--- Consulta 4: Ranking de productividad de veterinarios (DENSE_RANK)
--- Esquema: catalogos.veterinario, gestion.citas
--- -------------------------------------------------------------------------
-SELECT 
-    v.id_veterinario,
-    v.nombre_v + ' ' + v.apellido_v AS Veterinario,
-    COUNT(c.id_cita) AS TotalCitasAtendidas,
-    DENSE_RANK() OVER (ORDER BY COUNT(c.id_cita) DESC) AS RankingVeterinario
-FROM catalogos.veterinario v
-LEFT JOIN gestion.citas c ON v.id_veterinario = c.id_veterinario
-GROUP BY v.id_veterinario, v.nombre_v, v.apellido_v;
+-- ---------------------------------------------------------------------
+-- CONSULTA 3: procedimientos de un diagnóstico, con número de orden
+--             y costo acumulado
+-- Ventanas: row_number() y sum() over con acumulado
+-- ---------------------------------------------------------------------
+select p.id_procedimiento, p.nombre_p, p.costo_p,
+       row_number() over (order by p.id_procedimiento)             as n,
+       sum(p.costo_p) over (order by p.id_procedimiento
+                            rows unbounded preceding)              as costo_acumulado
+from clinica.procedimientos p
+where p.id_diagnostico = 1234;
 
 
--- -------------------------------------------------------------------------
--- Consulta 5: Análisis estadístico de inventario y prescripción (DENSE_RANK)
--- Esquema: catalogos.medicamentos, clinica.detalles_tratamientos
--- -------------------------------------------------------------------------
-SELECT 
-    m.nombre_m AS Medicamento,
-    m.presentacion_m AS Presentacion,
-    m.laboratorio_m AS Laboratorio,
-    COUNT(dt.id_medicamento) AS VecesRecetado,
-    DENSE_RANK() OVER (ORDER BY COUNT(dt.id_medicamento) DESC) AS RankingUso
-FROM catalogos.medicamentos m
-JOIN clinica.detalles_tratamientos dt ON m.id_medicamento = dt.id_medicamento
-GROUP BY m.id_medicamento, m.nombre_m, m.presentacion_m, m.laboratorio_m;
+-- ---------------------------------------------------------------------
+-- CONSULTA 4: los 2 procedimientos más caros de cada diagnóstico de una cita
+-- Ventana: row_number() particionada por diagnóstico
+-- ---------------------------------------------------------------------
+with procs as (
+    select d.id_diagnostico,
+           d.descripcion_d,
+           p.nombre_p,
+           p.costo_p,
+           row_number() over (partition by d.id_diagnostico
+                              order by p.costo_p desc, p.id_procedimiento) as rn
+    from clinica.diagnosticos d
+    join clinica.procedimientos p on p.id_diagnostico = d.id_diagnostico
+    where d.id_cita = 1000
+)
+select id_diagnostico, descripcion_d, nombre_p, costo_p, rn
+from procs
+where rn <= 2
+order by id_diagnostico, rn;
 
 
--- -------------------------------------------------------------------------
--- Consulta 6: Navegación prospectiva o proyección de citas futuras (LEAD)
--- Esquema: gestion.citas, gestion.mascotas
--- -------------------------------------------------------------------------
-SELECT 
-    m.nombre_m AS Mascota,
-    c.fecha_c AS FechaCitaActual,
-    c.motivo_c AS MotivoActual,
-    LEAD(c.fecha_c, 1) OVER (
-        PARTITION BY c.id_mascota 
-        ORDER BY c.fecha_c ASC
-    ) AS FechaSiguienteCita,
-    LEAD(c.motivo_c, 1) OVER (
-        PARTITION BY c.id_mascota 
-        ORDER BY c.fecha_c ASC
-    ) AS MotivoSiguienteCita
-FROM gestion.citas c
-JOIN gestion.mascotas m ON c.id_mascota = m.id_mascota;
-
-
--- -------------------------------------------------------------------------
--- Consulta 7: Extracción de extremos analíticos iniciales y finales (FIRST_VALUE y LAST_VALUE)
--- Esquema: gestion.citas, catalogos.veterinario, gestion.mascotas
--- -------------------------------------------------------------------------
-SELECT 
-    v.nombre_v + ' ' + v.apellido_v AS Veterinario,
-    m.nombre_m AS MascotaAtendidaActual,
-    c.fecha_c AS FechaCita,
-    FIRST_VALUE(m.nombre_m) OVER (
-        PARTITION BY c.id_veterinario 
-        ORDER BY c.fecha_c ASC
-        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
-    ) AS PrimeraMascotaAtendida,
-    LAST_VALUE(m.nombre_m) OVER (
-        PARTITION BY c.id_veterinario 
-        ORDER BY c.fecha_c ASC
-        ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
-    ) AS UltimaMascotaAtendida
-FROM gestion.citas c
-JOIN catalogos.veterinario v ON c.id_veterinario = v.id_veterinario
-JOIN gestion.mascotas m ON c.id_mascota = m.id_mascota;
+-- ---------------------------------------------------------------------
+-- CONSULTA 5: las 3 mascotas más pesadas de cada tamaño dentro de una raza
+-- Ventana: row_number() particionada por tamaño
+-- ---------------------------------------------------------------------
+with ranking as (
+    select m.id_mascota, m.nombre_m, m.tamanio_m, m.peso_m,
+           row_number() over (partition by m.tamanio_m
+                              order by m.peso_m desc, m.id_mascota) as rn
+    from gestion.mascotas m
+    where m.id_raza = 10
+)
+select tamanio_m, rn, id_mascota, nombre_m, peso_m
+from ranking
+where rn <= 3
+order by tamanio_m, rn;
