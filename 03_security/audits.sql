@@ -106,7 +106,7 @@ select
     client_ip,
     application_name,
     host_name
-from sys.fn_get_audit_file('/var/opt/mssql/audit/*.sqlaudit', default, default);
+from sys.fn_get_audit_file('/audit/*.sqlaudit', default, default);
 -- Windows: 'D:\Audit\*.sqlaudit'
 go
 
