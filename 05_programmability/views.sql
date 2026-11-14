@@ -18,7 +18,7 @@
      - no se usa schemabinding, para no bloquear cambios de tipo en
        las tablas (por ejemplo, pasar text a varchar(max)).
 
-   Vistas:
+   Vistas (esquema reportes):
      1. vw_propietarios              recepción: clientes y contacto
      2. vw_mascotas                  mascotas con especie y raza
      3. vw_citas                     agenda y estado de citas
@@ -28,6 +28,17 @@
      7. vw_resumen_financiero        resumen mensual para análisis
      8. vw_productividad_veterinaria indicadores por veterinario
      9. vw_indicadores_mascotas      indicadores sin datos personales (bi)
+
+   Vistas del dashboard de power bi (esquema reportes):
+    10. vw_procedimientos                  apoyo: detalle de procedimientos
+    11. vw_ultimas_citas_veterinario       consulta 1
+    12. vw_ultimas_citas_mascota           consulta 2
+    13. vw_procedimientos_acumulado        consulta 3
+    14. vw_top_procedimientos_diagnostico  consulta 4
+    15. vw_mascotas_mas_pesadas            consulta 5
+
+   Nota: la vista seguridad.vw_bitacora_auditoria no está aquí,
+   se crea en 03_security/audits.sql.
    ============================================================ */
 
 
@@ -315,67 +326,26 @@ group by e.nombre_e, r.nombre_r;
 go
 
 
+/* ============================================================
+   VISTAS PARA EL DASHBOARD DE POWER BI
+   Dependen de vw_citas, vw_facturacion y vw_mascotas (arriba).
+   ============================================================ */
+
 /* ------------------------------------------------------------
-   10. verificación
+   10. vw_procedimientos
+   vista de apoyo para el dashboard (consultas 3 y 4): detalle de
+   cada procedimiento con la descripción del diagnóstico y la cita.
    ------------------------------------------------------------ */
-
--- 10.1 vistas creadas (deben salir 9)
-select s.name as esquema, v.name as vista, v.create_date, v.modify_date
-from sys.views as v
-join sys.schemas as s on s.schema_id = v.schema_id
-where s.name = N'reportes'
-order by v.name;
-
--- 10.2 sin filas duplicadas ni perdidas
--- filas = llaves distintas = filas esperadas según la tabla base
-select
-    vista, filas, llaves, esperadas,
-    case when filas = llaves and filas = esperadas then N'OK' else N'REVISAR' end as estado
-from (
-    select N'vw_propietarios' as vista, count(*) as filas, count(distinct id_propietario) as llaves,
-           (select count(*) from gestion.propietarios) as esperadas
-    from reportes.vw_propietarios
-    union all
-    select N'vw_mascotas', count(*), count(distinct id_mascota),
-           (select count(*) from gestion.mascotas)
-    from reportes.vw_mascotas
-    union all
-    select N'vw_citas', count(*), count(distinct id_cita),
-           (select count(*) from gestion.citas)
-    from reportes.vw_citas
-    union all
-    select N'vw_historial_clinico', count(*), count(distinct id_diagnostico),
-           (select count(*) from clinica.diagnosticos)
-    from reportes.vw_historial_clinico
-    union all
-    select N'vw_facturacion', count(*), count(distinct id_factura),
-           (select count(*) from finanzas.facturas)
-    from reportes.vw_facturacion
-    union all
-    select N'vw_detalle_facturacion', count(*), count(distinct concat(id_factura, '-', id_detalle_factura)),
-           (select count(*) from finanzas.detalles_facturas)
-    from reportes.vw_detalle_facturacion
-    union all
-    select N'vw_resumen_financiero', count(*), count(distinct concat(anio, '-', mes)),
-           (select count(*) from (select distinct year(fecha_emision_f) as a, month(fecha_emision_f) as m
-                                  from finanzas.facturas) as x)
-    from reportes.vw_resumen_financiero
-    union all
-    select N'vw_productividad_veterinaria', count(*), count(distinct id_veterinario),
-           (select count(*) from catalogos.veterinario)
-    from reportes.vw_productividad_veterinaria
-    union all
-    select N'vw_indicadores_mascotas', count(*), count(distinct concat(especie, '|', raza)),
-           (select count(distinct m.id_raza) from gestion.mascotas as m)
-    from reportes.vw_indicadores_mascotas
-) as v;
+create or alter view reportes.vw_procedimientos as
+select p.id_procedimiento,
+       p.nombre_p,
+       p.costo_p,
+       p.id_diagnostico,
+       d.descripcion_d,
+       d.id_cita
+from clinica.procedimientos p
+join clinica.diagnosticos d on d.id_diagnostico = p.id_diagnostico
 go
-
-set noexec off;
-go
-
---Consultas gráficas en el dashboard 
-
 
 -- Consulta 1: las 3 citas más recientes de cada mes, por veterinario
 create or alter view reportes.vw_ultimas_citas_veterinario as
@@ -478,9 +448,71 @@ left join reportes.vw_mascotas vm on vm.id_mascota = r.id_mascota
 where r.rn <= 3
 go
 
--- Comprobación rápida
+-- Comprobación rápida de las vistas del dashboard
+select top 5 * from reportes.vw_procedimientos;
 select top 5 * from reportes.vw_ultimas_citas_veterinario;
 select top 5 * from reportes.vw_ultimas_citas_mascota;
 select top 5 * from reportes.vw_procedimientos_acumulado;
 select top 5 * from reportes.vw_top_procedimientos_diagnostico;
 select top 5 * from reportes.vw_mascotas_mas_pesadas;
+go
+
+
+/* ------------------------------------------------------------
+   11. verificación
+   ------------------------------------------------------------ */
+
+-- 11.1 vistas creadas en reportes (deben salir 15)
+select s.name as esquema, v.name as vista, v.create_date, v.modify_date
+from sys.views as v
+join sys.schemas as s on s.schema_id = v.schema_id
+where s.name = N'reportes'
+order by v.name;
+
+-- 11.2 sin filas duplicadas ni perdidas (vistas del bloque principal)
+-- filas = llaves distintas = filas esperadas según la tabla base
+select
+    vista, filas, llaves, esperadas,
+    case when filas = llaves and filas = esperadas then N'OK' else N'REVISAR' end as estado
+from (
+    select N'vw_propietarios' as vista, count(*) as filas, count(distinct id_propietario) as llaves,
+           (select count(*) from gestion.propietarios) as esperadas
+    from reportes.vw_propietarios
+    union all
+    select N'vw_mascotas', count(*), count(distinct id_mascota),
+           (select count(*) from gestion.mascotas)
+    from reportes.vw_mascotas
+    union all
+    select N'vw_citas', count(*), count(distinct id_cita),
+           (select count(*) from gestion.citas)
+    from reportes.vw_citas
+    union all
+    select N'vw_historial_clinico', count(*), count(distinct id_diagnostico),
+           (select count(*) from clinica.diagnosticos)
+    from reportes.vw_historial_clinico
+    union all
+    select N'vw_facturacion', count(*), count(distinct id_factura),
+           (select count(*) from finanzas.facturas)
+    from reportes.vw_facturacion
+    union all
+    select N'vw_detalle_facturacion', count(*), count(distinct concat(id_factura, '-', id_detalle_factura)),
+           (select count(*) from finanzas.detalles_facturas)
+    from reportes.vw_detalle_facturacion
+    union all
+    select N'vw_resumen_financiero', count(*), count(distinct concat(anio, '-', mes)),
+           (select count(*) from (select distinct year(fecha_emision_f) as a, month(fecha_emision_f) as m
+                                  from finanzas.facturas) as x)
+    from reportes.vw_resumen_financiero
+    union all
+    select N'vw_productividad_veterinaria', count(*), count(distinct id_veterinario),
+           (select count(*) from catalogos.veterinario)
+    from reportes.vw_productividad_veterinaria
+    union all
+    select N'vw_indicadores_mascotas', count(*), count(distinct concat(especie, '|', raza)),
+           (select count(distinct m.id_raza) from gestion.mascotas as m)
+    from reportes.vw_indicadores_mascotas
+) as v;
+go
+
+set noexec off;
+go
