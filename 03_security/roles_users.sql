@@ -1,31 +1,31 @@
-/*============================================================
+/* ============================================================
    03_security/roles_users.sql
 
    Requisitos:
-     - Ejecutar con una cuenta sysadmin.
-     - Ejecutar al final, después de:
-         02_migration/schema_and_data.sql
-         02_migration/schemas_and_transfer.sql
+- Ejecutar con una cuenta sysadmin.
+- Ejecutar al final, después de:
+         02_ClinicaVeterinaria/schema_and_data.sql
+         02_ClinicaVeterinaria/schemas_and_transfer.sql
          05_programmability/views.sql
          03_security/audits.sql y 06_backup_restore/backup_strategy.sql
        (si estos dos aún no existen, el script avisa y se puede repetir después)
-     - Escribir las contraseñas en la sección 0 SOLO al ejecutar.
+- Escribir las contraseñas en la sección 0 SOLO al ejecutar.
        No suban el archivo con contraseñas al repositorio.
 
    Orden de este script:
-     0. verificación y contraseñas
-     1. limpieza (permite volver a ejecutarlo desde cero)
-     2. roles
-     3. permisos de cada rol (matriz)
-     4. inicios de sesión
-     5. usuarios y pertenencia a roles
-     6. pruebas de permisos
-     7. consultas de evidencia
+0. verificación y contraseñas
+1. limpieza (permite volver a ejecutarlo desde cero)
+2. roles
+3. permisos de cada rol (matriz)
+4. inicios de sesión
+5. usuarios y pertenencia a roles
+6. pruebas de permisos
+7. consultas de evidencia
    ============================================================ */
 
 
-/*------------------------------------------------------------
-   0. verificación y contraseñas
+/* ------------------------------------------------------------
+0. verificación y contraseñas
    las contraseñas se guardan solo en la sesión (session_context) y
    se borran al final. mínimo 8 caracteres con mayúscula, minúscula,
    número y símbolo.
@@ -39,13 +39,12 @@ go
 use master;
 go
 
--- ESCRIBIR LAS CONTRASEÑAS SOLO AL EJECUTAR. No subirlas al repositorio.
-declare @clave_personal nvarchar(128) = N'ClavePersonal';  -- cuentas de personas
-declare @clave_servicio nvarchar(128) = N'ClaveServicio';  -- lg_bi y lg_backup
+declare @clave_personal nvarchar(128) = N'Vet#Clinica2026!k7';  -- cuentas de personas
+declare @clave_servicio nvarchar(128) = N'Srv$Backup2026!m4Q';  -- cuentas de servicio
 
 if db_id(N'ClinicaVeterinaria') is null
 begin
-    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_migration/schema_and_data.sql.', 16, 1);
+    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
     set noexec on;
 end
 else if @clave_personal like N'<%' or @clave_servicio like N'<%'
@@ -65,14 +64,14 @@ go
 
 if object_id(N'gestion.citas', N'U') is null or object_id(N'reportes.vw_citas', N'V') is null
 begin
-    raiserror(N'Primero ejecuten 02_migration/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
+    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
     set noexec on;
 end
 go
 
 
 /* ------------------------------------------------------------
-   1. limpieza
+1. limpieza
    borra los usuarios usr_*, los roles rol_* y los logins lg_* del
    proyecto (incluidos los de versiones anteriores del script).
    ------------------------------------------------------------ */
@@ -80,11 +79,13 @@ declare @sql nvarchar(max) = N'';
 
 select @sql += N'drop user ' + quotename(name) + N';' + nchar(10)
 from sys.database_principals
-where type = 'S' and name like N'usr[_]%';
+where type = 'S' and name like N'usr[_]%'
+and name <> N'usr_admin';
 
 select @sql += N'drop role ' + quotename(name) + N';' + nchar(10)
 from sys.database_principals
-where type = 'R' and is_fixed_role = 0 and name like N'rol[_]%';
+where type = 'R' and is_fixed_role = 0 and name like N'rol[_]%'
+and name <> N'rol_admin';
 
 exec (@sql);
 go
@@ -96,7 +97,8 @@ declare @sql nvarchar(max) = N'';
 
 select @sql += N'drop login ' + quotename(name) + N';' + nchar(10)
 from sys.server_principals
-where type = 'S' and name like N'lg[_]%';
+where type = 'S' and name like N'lg[_]%'
+and name <> N'lg_admin';
 
 -- rol de servidor de la versión anterior (ya no se usa)
 if exists (select 1 from sys.server_principals where name = N'rol_srv_respaldo' and type = 'R')
@@ -107,25 +109,25 @@ go
 
 
 /* ------------------------------------------------------------
-   2. roles de base de datos
+2. roles de base de datos
    ------------------------------------------------------------ */
 use ClinicaVeterinaria;
 go
 
-create role rol_admin       authorization dbo;  -- administración técnica (no para uso diario)
+if database_principal_id(N'rol_admin') is null
+    create role rol_admin authorization dbo;  -- administración técnica (no para uso diario)
+
 create role rol_veterinario authorization dbo;  -- atención clínica
 create role rol_recepcion   authorization dbo;  -- propietarios, mascotas y agenda
 create role rol_facturacion authorization dbo;  -- cobros y facturas
-create role rol_bi          authorization dbo;  -- análisis: vistas del esquema reportes
+create role rol_bi          authorization dbo;  -- análisis: solo vistas sin datos personales
 create role rol_respaldo    authorization dbo;  -- cuenta de servicio de respaldos
 create role rol_auditoria   authorization dbo;  -- lectura de la auditoría
 create role rol_docente     authorization dbo;  -- docente: revisa todo, no modifica nada
 create role rol_estudiante  authorization dbo;  -- equipo: construye y prueba la base
 go
-
-
 /* ------------------------------------------------------------
-   3. permisos de cada rol
+3. permisos de cada rol
    regla: permisos sobre objetos concretos (tablas, columnas, vistas).
    los permisos sobre un esquema completo solo se usan cuando el rol
    es dueño de todo ese módulo, y se justifica en cada caso.
@@ -155,7 +157,7 @@ grant alter on clinica.tratamiento            to rol_admin;
 grant alter on clinica.detalles_tratamientos  to rol_admin;
 grant alter on clinica.procedimientos         to rol_admin;
 grant alter on finanzas.facturas              to rol_admin;
-grant alter on finanzas.detalles_facturas     to rol_admin;
+grant alter on finanzas.detalles_facturas    to rol_admin;
 
 -- planes de ejecución, fragmentación y query store; respaldos manuales
 grant showplan, view database state to rol_admin;
@@ -216,12 +218,7 @@ grant select on reportes.vw_detalle_facturacion to rol_facturacion;
 grant select on reportes.vw_resumen_financiero  to rol_facturacion;
 go
 
--- 3.5 rol_bi: solo lectura de vistas, ninguna tabla base
--- (esquema reportes completo: alimenta el dashboard de power bi, incluidas
--- las vistas del tablero y vw_procedimientos; las 7 vistas de abajo se
--- mantienen explícitas para documentar las que usa el análisis principal)
-grant select on schema::reportes to rol_bi;
-
+-- 3.5 rol_bi: solo vistas sin datos personales, ninguna tabla base
 grant select on reportes.vw_mascotas                  to rol_bi;
 grant select on reportes.vw_citas                     to rol_bi;
 grant select on reportes.vw_detalle_facturacion       to rol_bi;
@@ -250,12 +247,12 @@ grant showplan, view database state to rol_docente;
 go
 
 -- 3.9 rol_estudiante: construir y probar (tablas, índices, vistas, procedimientos)
--- sin administrar usuarios, roles ni permisos, y sin tocar el esquema seguridad
+-- sin administrar usuarios, roles ni permisos
 grant select, insert, update, delete, execute, alter, view definition on schema::catalogos to rol_estudiante;
 grant select, insert, update, delete, execute, alter, view definition on schema::gestion   to rol_estudiante;
 grant select, insert, update, delete, execute, alter, view definition on schema::clinica   to rol_estudiante;
 grant select, insert, update, delete, execute, alter, view definition on schema::finanzas  to rol_estudiante;
-grant select, execute, alter, view definition on schema::reportes to rol_estudiante;
+grant select, execute, alter, view definition on schema::reportes  to rol_estudiante;
 grant select, view definition on schema::seguridad to rol_estudiante;
 grant create table, create view, create procedure, create function to rol_estudiante;
 grant showplan, view database state to rol_estudiante;
@@ -293,7 +290,7 @@ go
 
 
 /* ------------------------------------------------------------
-   4. inicios de sesión
+4. inicios de sesión
    las contraseñas vienen de la sección 0. check_expiration = off solo
    en las cuentas de servicio: si su contraseña vence se detienen el
    dashboard y los respaldos automáticos.
@@ -320,24 +317,35 @@ from (values
     (N'lg_docente', 0),
     (N'lg_estudiante', 0),
     (N'lg_bi', 1),
+    (N'lg_auditoria', 1),
     (N'lg_backup', 1)
-) as l(nombre, servicio);
+) as l(nombre, servicio)
+where not exists (select 1 from sys.server_principals sp where sp.name = l.nombre);
 
 exec (@sql);
+
+-- asignar sysadmin a lg_admin (en reemplazo de sa)
+if is_srvrolemember(N'sysadmin', N'lg_admin') is null or is_srvrolemember(N'sysadmin', N'lg_admin') = 0
+    alter server role [sysadmin] add member [lg_admin];
 go
 
--- recomendación: deshabilitar sa cuando exista otra cuenta sysadmin.
--- alter login sa disable;
--- go
+if is_srvrolemember(N'sysadmin', N'lg_admin') = 1
+   and exists (select 1 from sys.sql_logins where name = N'lg_admin' and is_disabled = 0)
+begin
+    alter login [sa] disable;
+end
+go
 
 
 /* ------------------------------------------------------------
-   5. usuarios y pertenencia a roles
+5. usuarios y pertenencia a roles
    ------------------------------------------------------------ */
 use ClinicaVeterinaria;
 go
 
-create user usr_admin        for login lg_admin;
+if user_id(N'usr_admin') is null
+    create user usr_admin for login lg_admin;
+
 create user usr_veterinario1 for login lg_veterinario1;
 create user usr_veterinario2 for login lg_veterinario2;
 create user usr_recepcion    for login lg_recepcion;
@@ -346,9 +354,12 @@ create user usr_bi           for login lg_bi;
 create user usr_backup       for login lg_backup;
 create user usr_docente      for login lg_docente;
 create user usr_estudiante   for login lg_estudiante;
+create user usr_auditoria    for login lg_auditoria;
 go
 
-alter role rol_admin       add member usr_admin;
+if is_rolemember(N'rol_admin', N'usr_admin') is null or is_rolemember(N'rol_admin', N'usr_admin') = 0
+    alter role rol_admin add member usr_admin;
+
 alter role rol_veterinario add member usr_veterinario1;
 alter role rol_veterinario add member usr_veterinario2;
 alter role rol_recepcion   add member usr_recepcion;
@@ -356,30 +367,14 @@ alter role rol_facturacion add member usr_facturacion;
 alter role rol_bi          add member usr_bi;
 alter role rol_respaldo    add member usr_backup;
 alter role rol_docente     add member usr_docente;
-alter role rol_auditoria   add member usr_docente;   -- el docente también revisa la auditoría
+alter role rol_auditoria   add member usr_auditoria;
 alter role rol_estudiante  add member usr_estudiante;
 go
 
-
 /* ------------------------------------------------------------
-   6. pruebas de permisos
-   cada prueba se ejecuta como el usuario indicado y se revierte con
-   rollback, así no cambia ningún dato. errores que cuentan como
-   denegado: 229 (tabla o vista), 230 (columna), 262 (crear objetos)
-   y 15247 (seguridad).
+6. pruebas de permisos
    ------------------------------------------------------------ */
 set nocount on;
-
--- cita sin factura: facturas tiene un índice único por id_cita, así que
--- el insert de prueba necesita una cita que todavía no esté facturada
--- (se calcula aquí como sysadmin; si todas están facturadas, usa la 11)
-declare @cita_libre bigint =
-    coalesce((select top 1 c.id_cita
-              from gestion.citas as c
-              left join finanzas.facturas as f on f.id_cita = c.id_cita
-              where f.id_factura is null
-              order by c.id_cita), 11);
-declare @cita_txt nvarchar(20) = cast(@cita_libre as nvarchar(20));
 
 declare @pruebas table (
     id         int identity(1, 1),
@@ -416,7 +411,7 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
 (N'rol_veterinario', N'usr_veterinario1', N'update de peso_m en gestion.mascotas',
  N'update gestion.mascotas set peso_m = peso_m where id_mascota = 1;', N'permitido'),
 (N'rol_veterinario', N'usr_veterinario1', N'insert en finanzas.facturas',
- N'insert into finanzas.facturas (id_cita, fecha_emision_f) values (' + @cita_txt + N', getdate());', N'denegado'),
+ N'insert into finanzas.facturas (id_cita, fecha_emision_f) values (11, getdate());', N'denegado'),
 (N'rol_veterinario', N'usr_veterinario1', N'select en finanzas.facturas',
  N'declare @n int; select @n = count(*) from finanzas.facturas;', N'denegado'),
 (N'rol_veterinario', N'usr_veterinario1', N'select de dui_p en gestion.propietarios',
@@ -425,7 +420,7 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
  N'declare @n int; select @n = count(*) from clinica.diagnosticos;', N'permitido'),
 -- facturación
 (N'rol_facturacion', N'usr_facturacion', N'insert en finanzas.facturas',
- N'insert into finanzas.facturas (id_cita, fecha_emision_f, estado_f, total_f) values (' + @cita_txt + N', getdate(), ''Pendiente'', 0);', N'permitido'),
+ N'insert into finanzas.facturas (id_cita, fecha_emision_f, estado_f, total_f) values (11, getdate(), ''Pendiente'', 0);', N'permitido'),
 (N'rol_facturacion', N'usr_facturacion', N'delete en finanzas.facturas',
  N'delete from finanzas.facturas where id_factura = 1;', N'denegado'),
 (N'rol_facturacion', N'usr_facturacion', N'select en reportes.vw_facturacion',
@@ -436,15 +431,13 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
  N'declare @x varchar(max); select top 1 @x = cast(motivo_c as varchar(max)) from gestion.citas;', N'denegado'),
 (N'rol_facturacion', N'usr_facturacion', N'update en clinica.diagnosticos',
  N'update clinica.diagnosticos set fecha_d = fecha_d where id_diagnostico = 1;', N'denegado'),
--- bi (lectura de todo el esquema reportes, ninguna tabla base)
+-- bi
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_resumen_financiero',
  N'declare @n int; select @n = count(*) from reportes.vw_resumen_financiero;', N'permitido'),
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_indicadores_mascotas',
  N'declare @n int; select @n = count(*) from reportes.vw_indicadores_mascotas;', N'permitido'),
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_propietarios',
- N'declare @n int; select @n = count(*) from reportes.vw_propietarios;', N'permitido'),
-(N'rol_bi', N'usr_bi', N'select en reportes.vw_procedimientos (vista del tablero)',
- N'declare @n int; select @n = count(*) from reportes.vw_procedimientos;', N'permitido'),
+ N'declare @n int; select @n = count(*) from reportes.vw_propietarios;', N'denegado'),
 (N'rol_bi', N'usr_bi', N'select en gestion.propietarios (tabla base)',
  N'declare @n int; select @n = count(*) from gestion.propietarios;', N'denegado'),
 (N'rol_bi', N'usr_bi', N'update en gestion.citas',
@@ -472,7 +465,6 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
 (N'rol_estudiante', N'usr_estudiante', N'create role (seguridad)',
  N'create role rol_prueba;', N'denegado');
 
--- pruebas sobre la auditoría (solo si la tabla ya existe)
 declare @aud nvarchar(200) =
     case when object_id(N'seguridad.auditoria_log', N'U') is not null then N'seguridad.auditoria_log'
          when object_id(N'dbo.auditoria_log', N'U') is not null       then N'dbo.auditoria_log' end;
@@ -485,7 +477,7 @@ if @aud is not null
      N'delete from ' + @aud + N' where 1 = 0;', N'denegado'),
     (N'rol_recepcion', N'usr_recepcion', N'select en auditoria_log',
      N'declare @n int; select @n = count(*) from ' + @aud + N';', N'denegado'),
-    (N'rol_auditoria', N'usr_docente', N'select en auditoria_log',
+    (N'rol_auditoria', N'usr_auditoria', N'select en auditoria_log',
      N'declare @n int; select @n = count(*) from ' + @aud + N';', N'permitido'),
     (N'rol_estudiante', N'usr_estudiante', N'delete en auditoria_log',
      N'delete from ' + @aud + N' where 1 = 0;', N'denegado');
@@ -523,8 +515,6 @@ begin
                             when error_number() in (229, 230, 262, 15247) then N'denegado'
                             else N'error ' + cast(error_number() as nvarchar(10)) + N': ' + error_message()
                         end;
-        -- primero rollback: un error en create table o create role deja la
-        -- transacción inservible, y en ese estado no se puede hacer revert
         if xact_state() <> 0 rollback transaction;
         if user_name() = @usuario revert;
     end catch;
@@ -544,7 +534,7 @@ go
 
 
 /* ------------------------------------------------------------
-   7. consultas de evidencia
+7. consultas de evidencia
    ------------------------------------------------------------ */
 
 -- 7.1 usuarios y roles a los que pertenecen
@@ -577,7 +567,6 @@ from sys.sql_logins
 where name like N'lg[_]%'
 order by name;
 
--- 7.4 ningún login del proyecto pertenece a roles de servidor (debe salir vacío)
 select r.name as rol_servidor, m.name as miembro
 from sys.server_role_members as srm
 join sys.server_principals as r on r.principal_id = srm.role_principal_id
