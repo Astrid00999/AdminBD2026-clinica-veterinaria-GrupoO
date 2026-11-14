@@ -2424,3 +2424,7 @@ alter database [ClinicaVeterinaria] set read_write
 go
 
 
+
+select COUNT(id_mascota), id_raza
+from gestion.mascotas
+group by id_raza;

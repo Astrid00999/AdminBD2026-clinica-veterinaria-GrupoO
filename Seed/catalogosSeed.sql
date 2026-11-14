@@ -506,3 +506,6 @@ values
     (29, 14, 39, N'Medicamento: Clindamicina (Caja 16 cápsulas 150mg)', 1, 13.10),
     (29, 25, 39, N'Medicamento: Omeprazol Vet (Caja 14 cápsulas 20mg)', 1, 9.80),
     (29, 28, 39, N'Medicamento: Rimadyl (Blíster 14 tabletas 50mg)', 1, 26.00);
+
+
+

@@ -125,6 +125,134 @@ values (1, 1, 'Max', '2021-03-15', 'Macho', 30.50, 'Grande'),
        (11, 46, 'Borrego', '2022-07-09', 'Macho', 65, 'Mediano');
 go
 
+--Agregar nuevos datos de mascotas. 
+
+-- =========================================================
+-- AGREGAR NUEVOS DATOS DE MASCOTAS
+-- 45 Caninos | 35 Felinos | 20 Aves
+-- =========================================================
+
+INSERT INTO gestion
+(id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
+VALUES
+
+-- =========================================================
+-- CANINOS (45 MASCOTAS)
+-- =========================================================
+
+(20, 1, 'Amaretto', '2021-08-12', 'Macho', 28.50, 'Grande'),
+(5, 2, 'Frijolito', '2024-03-23', 'Hembra', 29.00, 'Grande'),
+(4, 3, 'Pochoclo', '2019-10-07', 'Macho', 2.10, 'Pequeño'),
+(20, 4, 'Bombón', '2022-05-18', 'Hembra', 27.00, 'Grande'),
+(11, 5, 'Churro', '2025-12-02', 'Macho', 11.50, 'Mediano'),
+(2, 1, 'Merlín', '2020-07-13', 'Hembra', 30.00, 'Grande'),
+(2, 2, 'Waffles', '2023-02-24', 'Macho', 32.00, 'Grande'),
+(8, 3, 'Muffin', '2018-09-08', 'Hembra', 2.50, 'Pequeño'),
+(9, 4, 'Don Ramón', '2021-04-19', 'Macho', 29.00, 'Grande'),
+(1, 5, 'Trufa', '2024-11-03', 'Hembra', 10.50, 'Mediano'),
+(3, 1, 'Pistacho', '2019-06-14', 'Macho', 31.00, 'Grande'),
+(6, 2, 'Castañita', '2022-01-25', 'Hembra', 28.00, 'Grande'),
+(10, 3, 'Chimuelo', '2025-08-09', 'Macho', 3.00, 'Pequeño'),
+(7, 4, 'Dulcinea', '2020-03-20', 'Hembra', 26.00, 'Grande'),
+(12, 5, 'Nachito', '2023-10-04', 'Macho', 12.00, 'Mediano'),
+(13, 1, 'Baltazar', '2018-05-15', 'Hembra', 29.00, 'Grande'),
+(14, 2, 'Croquetón', '2021-12-26', 'Macho', 35.00, 'Grande'),
+(15, 3, 'Avellana', '2024-07-10', 'Hembra', 2.00, 'Pequeño'),
+(16, 4, 'Cosme', '2019-02-21', 'Macho', 28.00, 'Grande'),
+(17, 5, 'Mielito', '2022-09-05', 'Hembra', 9.50, 'Mediano'),
+(20, 1, 'Otto', '2025-04-16', 'Macho', 27.00, 'Grande'),
+(5, 2, 'Lulú', '2020-11-27', 'Hembra', 30.00, 'Grande'),
+(4, 3, 'Tamalito', '2023-06-11', 'Macho', 2.80, 'Pequeño'),
+(20, 4, 'Bambú', '2018-01-22', 'Hembra', 25.00, 'Grande'),
+(11, 5, 'Mostacho', '2021-08-06', 'Macho', 13.00, 'Mediano'),
+(2, 1, 'Dobby', '2024-03-17', 'Hembra', 32.00, 'Grande'),
+(2, 2, 'Canelón', '2019-10-01', 'Macho', 34.00, 'Grande'),
+(8, 3, 'Nuez', '2022-05-12', 'Hembra', 2.30, 'Pequeño'),
+(9, 4, 'Ícaro', '2025-12-23', 'Macho', 30.00, 'Grande'),
+(1, 5, 'Mora', '2020-07-07', 'Hembra', 11.00, 'Mediano'),
+(3, 1, 'Bosco', '2023-02-18', 'Macho', 33.00, 'Grande'),
+(6, 2, 'Clementina', '2018-09-02', 'Hembra', 27.00, 'Grande'),
+(10, 3, 'Ñoño', '2021-04-13', 'Macho', 2.50, 'Pequeño'),
+(7, 4, 'Amapola', '2024-11-24', 'Hembra', 31.00, 'Grande'),
+(12, 5, 'Pulgoso', '2019-06-08', 'Macho', 10.00, 'Mediano'),
+(13, 1, 'Anouk', '2022-01-19', 'Hembra', 29.00, 'Grande'),
+(14, 2, 'Bongo', '2025-08-03', 'Macho', 36.00, 'Grande'),
+(15, 3, 'Mochi', '2020-03-14', 'Hembra', 1.90, 'Pequeño'),
+(16, 4, 'Amadeo', '2023-10-25', 'Macho', 28.00, 'Grande'),
+(17, 5, 'Canela', '2018-05-09', 'Hembra', 12.50, 'Mediano'),
+(20, 1, 'Rufus', '2021-12-20', 'Macho', 30.00, 'Grande'),
+(5, 2, 'Magnolia', '2024-07-04', 'Hembra', 31.00, 'Grande'),
+(4, 3, 'Chisguete', '2019-02-15', 'Macho', 3.20, 'Pequeño'),
+(20, 4, 'Nácar', '2022-09-26', 'Hembra', 27.00, 'Grande'),
+(11, 5, 'Galletón', '2025-04-10', 'Macho', 11.00, 'Mediano'),
+
+-- =========================================================
+-- FELINOS (35 MASCOTAS)
+-- =========================================================
+
+(2, 6, 'Michifús', '2020-11-21', 'Hembra', 4.20, 'Mediano'),
+(2, 7, 'Salem', '2023-06-05', 'Macho', 5.50, 'Mediano'),
+(8, 8, 'Almendra', '2018-01-16', 'Hembra', 4.80, 'Mediano'),
+(9, 9, 'Azrael', '2021-08-27', 'Macho', 6.20, 'Mediano'),
+(1, 10, 'Calipso', '2024-03-11', 'Hembra', 3.80, 'Pequeño'),
+(3, 6, 'Chilaquil', '2019-10-22', 'Macho', 5.00, 'Mediano'),
+(6, 7, 'Amatista', '2022-05-06', 'Hembra', 3.50, 'Pequeño'),
+(10, 8, 'Ñoqui', '2025-12-17', 'Macho', 4.20, 'Mediano'),
+(7, 9, 'Freya', '2020-07-01', 'Hembra', 5.50, 'Mediano'),
+(12, 10, 'Croissant', '2023-02-12', 'Macho', 4.80, 'Mediano'),
+(13, 6, 'Nébula', '2018-09-23', 'Hembra', 6.20, 'Mediano'),
+(14, 7, 'Tofu', '2021-04-07', 'Macho', 3.80, 'Pequeño'),
+(15, 8, 'Duna', '2024-11-18', 'Hembra', 5.00, 'Mediano'),
+(16, 9, 'Onyx', '2019-06-02', 'Macho', 3.50, 'Pequeño'),
+(17, 10, 'Menta', '2022-01-13', 'Hembra', 4.20, 'Mediano'),
+(20, 6, 'Gandalf', '2025-08-24', 'Macho', 5.50, 'Mediano'),
+(5, 7, 'Lichi', '2020-03-08', 'Hembra', 4.80, 'Mediano'),
+(4, 8, 'Sirius', '2023-10-19', 'Macho', 6.20, 'Mediano'),
+(20, 9, 'Cereza', '2018-05-03', 'Hembra', 3.80, 'Pequeño'),
+(11, 10, 'Mousse', '2021-12-14', 'Macho', 5.00, 'Mediano'),
+(2, 6, 'Nácar', '2024-07-25', 'Hembra', 3.50, 'Pequeño'),
+(2, 7, 'Bizcocho', '2019-02-09', 'Macho', 4.20, 'Mediano'),
+(8, 8, 'Ébano', '2022-09-20', 'Hembra', 5.50, 'Mediano'),
+(9, 9, 'Artemisa', '2025-04-04', 'Macho', 4.80, 'Mediano'),
+(1, 10, 'Pompón', '2020-11-15', 'Hembra', 6.20, 'Mediano'),
+(3, 6, 'Zafiro', '2023-06-26', 'Macho', 3.80, 'Pequeño'),
+(6, 7, 'Mishka', '2018-01-10', 'Hembra', 5.00, 'Mediano'),
+(10, 8, 'Calcetín', '2021-08-21', 'Macho', 3.50, 'Pequeño'),
+(7, 9, 'Lila', '2024-03-05', 'Hembra', 4.20, 'Mediano'),
+(12, 10, 'Don Gato', '2019-10-16', 'Macho', 5.50, 'Mediano'),
+(13, 6, 'Avellana', '2022-05-27', 'Hembra', 4.80, 'Mediano'),
+(14, 7, 'Cosmo', '2025-12-11', 'Macho', 6.20, 'Mediano'),
+(15, 8, 'Mimosa', '2020-07-22', 'Hembra', 3.80, 'Pequeño'),
+(16, 9, 'Peluche', '2023-02-06', 'Macho', 5.00, 'Mediano'),
+(17, 10, 'Nyx', '2018-09-17', 'Hembra', 3.50, 'Pequeño'),
+
+-- =========================================================
+-- AVES (20 MASCOTAS)
+-- =========================================================
+
+(20, 11, 'Pistachín', '2021-04-01', 'Macho', 0.45, 'Mediano'),
+(5, 12, 'Pepinillo', '2024-11-12', 'Hembra', 0.03, 'Pequeño'),
+(4, 13, 'Chismoso', '2019-06-23', 'Macho', 0.80, 'Mediano'),
+(20, 14, 'Pompita', '2022-01-07', 'Hembra', 0.03, 'Pequeño'),
+(11, 15, 'Zazu', '2025-08-18', 'Macho', 0.05, 'Pequeño'),
+(2, 11, 'Tuiter', '2020-03-02', 'Hembra', 0.50, 'Mediano'),
+(2, 12, 'Limoncita', '2023-10-13', 'Macho', 0.03, 'Pequeño'),
+(8, 13, 'Don Pío', '2018-05-24', 'Hembra', 0.90, 'Mediano'),
+(9, 14, 'Kiwiwi', '2021-12-08', 'Macho', 0.04, 'Pequeño'),
+(1, 15, 'Azura', '2024-07-19', 'Hembra', 0.06, 'Pequeño'),
+(3, 11, 'Siroco', '2019-02-03', 'Macho', 0.60, 'Mediano'),
+(6, 12, 'Dátil', '2022-09-14', 'Hembra', 0.03, 'Pequeño'),
+(10, 13, 'Calypso', '2025-04-25', 'Macho', 0.85, 'Mediano'),
+(7, 14, 'Choclito', '2020-11-09', 'Hembra', 0.04, 'Pequeño'),
+(12, 15, 'Orión', '2023-06-20', 'Macho', 0.06, 'Pequeño'),
+(13, 11, 'Celestina', '2018-01-04', 'Hembra', 0.40, 'Mediano'),
+(14, 12, 'Pío Lindo', '2021-08-15', 'Macho', 0.03, 'Pequeño'),
+(15, 13, 'Ámbar', '2024-03-26', 'Hembra', 0.90, 'Mediano'),
+(16, 14, 'Frijol', '2019-10-10', 'Macho', 0.03, 'Pequeño'),
+(17, 15, 'Burbujita', '2022-05-21', 'Hembra', 0.05, 'Pequeño');
+
+GO
+
 
 -- ============================================================
 -- 7° insert: citas (70)
@@ -205,3 +333,5 @@ values (1, 5, '2025-01-10T09:00:00', 'Sacude la cabeza y le huelen las orejas', 
        (45, 34, '2026-10-14T09:20:00', 'Estornuda y tiene moco', 'Completada', 30.00),
        (50, 33, '2026-10-28T10:40:00', 'Control de peso', 'Completada', 25.00);
 go
+
+
