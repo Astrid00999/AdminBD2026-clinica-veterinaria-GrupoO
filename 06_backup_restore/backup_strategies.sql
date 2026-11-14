@@ -301,4 +301,3 @@ EXEC msdb.dbo.sp_add_jobschedule @job_name = N'Backup_Revision', @name = N'Diari
 EXEC msdb.dbo.sp_add_jobserver @job_name = N'Backup_Revision', @server_name = N'(LOCAL)';
 GO
 
-
