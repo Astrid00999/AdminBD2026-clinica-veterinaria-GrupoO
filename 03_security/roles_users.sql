@@ -201,14 +201,7 @@ grant alter on clinica.tratamiento            to rol_admin;
 grant alter on clinica.detalles_tratamientos  to rol_admin;
 grant alter on clinica.procedimientos         to rol_admin;
 grant alter on finanzas.facturas              to rol_admin;
-grant alter on finanzas.
-
-
-
-
-
-
-s     to rol_admin;
+grant alter on finanzas.detalles_facturas    to rol_admin;
 
 -- planes de ejecución, fragmentación y query store; respaldos manuales
 grant showplan, view database state to rol_admin;
@@ -307,6 +300,9 @@ grant select, execute, alter, view definition on schema::reportes to rol_estudia
 grant select, view definition on schema::seguridad to rol_estudiante;
 grant create table, create view, create procedure, create function to rol_estudiante;
 grant showplan, view database state to rol_estudiante;
+go
+
+grant select on schema::reportes to rol_bi;
 go
 
 -- 3.10 objetos de otros scripts (se aplican solo si ya existen)
@@ -627,5 +623,4 @@ go
 
 set noexec off;
 go
-
 
