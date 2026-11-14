@@ -52,5 +52,5 @@ GO
 
 --Ejecutar el procedimiento almacenado
 
-EXEC finanzas.sp_cancelar_factura 4, 'Error en la asignación de medicamentos', 1;
+EXEC finanzas.sp_cancelar_factura 6, 'Error en la asignación de medicamentos', 1;
 
