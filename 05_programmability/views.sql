@@ -373,3 +373,114 @@ go
 
 set noexec off;
 go
+
+--Consultas gráficas en el dashboard 
+
+
+-- Consulta 1: las 3 citas más recientes de cada mes, por veterinario
+create or alter view reportes.vw_ultimas_citas_veterinario as
+with citas_mes as (
+    select c.id_cita,
+           c.fecha_c,
+           c.motivo_c,
+           c.estado_c,
+           c.id_veterinario,
+           year(c.fecha_c)  as anio,
+           month(c.fecha_c) as mes,
+           row_number() over (partition by c.id_veterinario, year(c.fecha_c), month(c.fecha_c)
+                              order by c.fecha_c desc, c.id_cita desc) as rn
+    from gestion.citas c
+)
+select cm.id_cita, cm.fecha_c, cm.motivo_c, cm.estado_c, cm.id_veterinario,
+       v.veterinario, cm.anio, cm.mes, cm.rn
+from citas_mes cm
+left join reportes.vw_citas v on v.id_cita = cm.id_cita
+where cm.rn <= 3
+go
+
+-- Consulta 2: las 2 citas más recientes de cada mascota
+create or alter view reportes.vw_ultimas_citas_mascota as
+with citas_mascota as (
+    select m.id_mascota,
+           m.nombre_m,
+           m.id_propietario,
+           c.id_cita,
+           c.fecha_c,
+           c.motivo_c,
+           c.estado_c,
+           row_number() over (partition by m.id_mascota
+                              order by c.fecha_c desc, c.id_cita desc) as rn
+    from gestion.mascotas m
+    join gestion.citas c on c.id_mascota = m.id_mascota
+)
+select cm.id_mascota, cm.nombre_m, cm.id_propietario,
+       coalesce(p.propietario, concat('Propietario ', cm.id_propietario)) as propietario,
+       cm.id_cita, cm.fecha_c, cm.motivo_c, cm.estado_c, cm.rn
+from citas_mascota cm
+outer apply (select top 1 f.propietario
+             from reportes.vw_facturacion f
+             where f.id_propietario = cm.id_propietario) p
+where cm.rn <= 2
+go
+
+-- Consulta 3: procedimientos de cada diagnóstico con número de orden y costo acumulado
+create or alter view reportes.vw_procedimientos_acumulado as
+select p.id_procedimiento,
+       p.nombre_p,
+       p.costo_p,
+       d.id_diagnostico,
+       d.descripcion_d,
+       d.id_cita,
+       row_number() over (partition by p.id_diagnostico
+                          order by p.id_procedimiento)                as n,
+       sum(p.costo_p) over (partition by p.id_diagnostico
+                            order by p.id_procedimiento
+                            rows unbounded preceding)                 as costo_acumulado
+from clinica.procedimientos p
+join clinica.diagnosticos d on d.id_diagnostico = p.id_diagnostico
+go
+
+-- Consulta 4: los 2 procedimientos más caros de cada diagnóstico
+create or alter view reportes.vw_top_procedimientos_diagnostico as
+with procs as (
+    select d.id_cita,
+           d.id_diagnostico,
+           d.descripcion_d,
+           p.id_procedimiento,
+           p.nombre_p,
+           p.costo_p,
+           row_number() over (partition by d.id_diagnostico
+                              order by p.costo_p desc, p.id_procedimiento) as rn
+    from clinica.diagnosticos d
+    join clinica.procedimientos p on p.id_diagnostico = d.id_diagnostico
+)
+select id_cita, id_diagnostico, descripcion_d, id_procedimiento, nombre_p, costo_p, rn
+from procs
+where rn <= 2
+go
+
+-- Consulta 5: las 3 mascotas más pesadas de cada tamaño dentro de cada raza
+create or alter view reportes.vw_mascotas_mas_pesadas as
+with ranking as (
+    select m.id_mascota,
+           m.nombre_m,
+           m.tamanio_m,
+           m.peso_m,
+           m.id_raza,
+           row_number() over (partition by m.id_raza, m.tamanio_m
+                              order by m.peso_m desc, m.id_mascota) as rn
+    from gestion.mascotas m
+)
+select r.id_mascota, r.nombre_m, r.tamanio_m, r.peso_m, r.id_raza,
+       vm.raza, vm.especie, r.rn
+from ranking r
+left join reportes.vw_mascotas vm on vm.id_mascota = r.id_mascota
+where r.rn <= 3
+go
+
+-- Comprobación rápida
+select top 5 * from reportes.vw_ultimas_citas_veterinario;
+select top 5 * from reportes.vw_ultimas_citas_mascota;
+select top 5 * from reportes.vw_procedimientos_acumulado;
+select top 5 * from reportes.vw_top_procedimientos_diagnostico;
+select top 5 * from reportes.vw_mascotas_mas_pesadas;
