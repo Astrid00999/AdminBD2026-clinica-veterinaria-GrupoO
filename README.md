@@ -421,18 +421,22 @@ A continuación se muestran algunas de las principales visualizaciones desarroll
 
 ### Vista general
 
-![Dashboard general](07_bi/screenshots/dashboard_general.png)
+![Dashboard general](07_bi/dashboard_general.png)
+
+### Citas y Operaciones
+
+![Citas y Operaciones](07_bi/dashboard_citas.png)
+
+### Pacientes
+
+![Pacientes](07_bi/dashboard_pacientes.png)
 
 ### Análisis financiero
 
-![Dashboard financiero](07_bi/screenshots/dashboard_finanzas.png)
+![Dashboard financiero](07_bi/dashboard_finanzas.png)
 
-### Productividad de veterinarios
+### Análisis de Temporadas
 
-![Dashboard de productividad](07_bi/screenshots/dashboard_productividad.png)
-
-### Atención de mascotas
-
-![Dashboard de atención](07_bi/screenshots/dashboard_atencion.png)
+![Temporadas](07_bi/dashboard_temporadas.png)
 
 Estas visualizaciones permiten analizar diferentes aspectos del funcionamiento de Fast Paws, incluyendo la atención de pacientes, productividad del personal veterinario y comportamiento financiero de la clínica.
