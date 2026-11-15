@@ -3,7 +3,7 @@
 -- ============================================================
 -- 3° insert: propietarios (20)
 -- ============================================================
-insert into propietarios (dui_p, nombre_p, apellido_p, genero_p, telefono_p, telefono_secundario_p, correo_p,
+insert into gestion.propietarios (dui_p, nombre_p, apellido_p, genero_p, telefono_p, telefono_secundario_p, correo_p,
                           direccion_p)
 values ('01234567-8', 'Adriana', 'Mejía', 'F', '7123-4567', '2234-5678', 'adriana.mejia@gmail.com',
         'Colonia Escalón, San Salvador'),
@@ -51,7 +51,7 @@ go
 -- 4° insert: mascotas (71)
 -- 2 por cada raza común y 1 por cada raza menos común
 -- ============================================================
-insert into mascotas (id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
+insert into gestion.mascotas (id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
 values (1, 1, 'Max', '2021-03-15', 'Macho', 30.50, 'Grande'),
        (2, 1, 'Luna', '2020-07-22', 'Hembra', 28.00, 'Grande'),
        (3, 2, 'Rex', '2019-11-10', 'Macho', 35.00, 'Grande'),
@@ -132,7 +132,7 @@ go
 -- 45 Caninos | 35 Felinos | 20 Aves
 -- =========================================================
 
-INSERT INTO gestion
+INSERT INTO gestion.mascotas
 (id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
 VALUES
 
@@ -261,7 +261,7 @@ GO
 --   Completada: antes del corte | En curso: internados el día del corte
 --   Cancelada: no se atendieron | Programada: después del corte
 -- ============================================================
-insert into citas (id_mascota, id_veterinario, fecha_c, motivo_c, estado_c, costo_c)
+insert into gestion.citas (id_mascota, id_veterinario, fecha_c, motivo_c, estado_c, costo_c)
 values (1, 5, '2025-01-10T09:00:00', 'Sacude la cabeza y le huelen las orejas', 'Completada', 30.00),
        (2, 29, '2025-01-15T10:30:00', 'Vacunación anual', 'Completada', 15.00),
        (3, 23, '2025-01-20T14:00:00', 'Control de peso', 'Completada', 25.00),

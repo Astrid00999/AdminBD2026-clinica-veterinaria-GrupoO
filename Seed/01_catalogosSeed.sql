@@ -7,7 +7,7 @@ go
 -- Caprino, Ave de corral, Primate, Marsupial y Arácnido no tienen
 -- mascotas: se eliminarán después.
 -- ============================================================
-insert into especies (nombre_e, descripcion_e)
+insert into catalogos.especies (nombre_e, descripcion_e)
 values ('Canino', 'Mamífero doméstico de la familia Canidae, comúnmente conocido como perro.'),
        ('Felino', 'Mamífero de la familia Felidae, incluye gatos domésticos y felinos salvajes.'),
        ('Ave', 'Animal vertebrado de sangre caliente con plumas, pico y alas.'),
@@ -33,7 +33,7 @@ go
 -- las razas más vistas en El Salvador (mestizos y razas pequeñas).
 -- ============================================================
 -- Canino (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Canino'), 'Labrador Retriever'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Pastor Alemán'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Chihuahua'),
@@ -179,7 +179,7 @@ go
 -- ============================================================
 -- 5° insert: especialidades (20)
 -- ============================================================
-insert into especialidades (nombre_esp, descripcion_esp)
+insert into catalogos.especialidades (nombre_esp, descripcion_esp)
 values ('Medicina General Veterinaria', 'Atención médica integral para animales domésticos.'),
        ('Cirugía Veterinaria', 'Procedimientos quirúrgicos preventivos y correctivos.'),
        ('Dermatología Veterinaria', 'Diagnóstico y tratamiento de enfermedades de la piel.'),
@@ -268,7 +268,7 @@ go
 -- 1-30: catálogo original | 31 en adelante: vacunas y medicamentos que
 -- piden las enfermedades del documento
 -- ============================================================
-insert into medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
+insert into catalogos.medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
 values ('Epiotic Complete', 'Solución limpiadora ótica 125ml', 'Virbac', 18.50, 25),
        ('Synulox Tablets', 'Blíster 10 tabletas 250mg', 'Zoetis', 14.25, 40),
        ('Metonil Jarabe', 'Frasco 30ml', 'Calox', 8.00, 30),

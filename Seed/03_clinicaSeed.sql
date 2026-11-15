@@ -2,7 +2,7 @@
 -- 12° insert: detalles_tratamientos
 -- id_detalle_tratamiento es el número de renglón dentro de cada tratamiento
 -- ============================================================
-insert into detalles_tratamientos (id_detalle_tratamiento, id_tratamiento, id_medicamento, dosis_dt, frecuencia_dt,
+insert into clinica.detalles_tratamientos (id_detalle_tratamiento, id_tratamiento, id_medicamento, dosis_dt, frecuencia_dt,
                                    duracion_dias_dt)
 values (1, 1, 1, 'Llenar el conducto y masajear la base de la oreja', 'Cada 24 horas', 10),  -- Epiotic Complete
        (2, 1, 43, '4 gotas por oído afectado', 'Cada 12 horas', 7),  -- Otomax
@@ -70,7 +70,7 @@ go
 -- Las enfermedades del documento usan el mismo nombre del documento;
 -- los controles sin enfermedad empiezan con "Paciente sano:".
 -- ============================================================
-insert into diagnosticos (id_cita, descripcion_d, observaciones_d, fecha_d)
+insert into clinica.diagnosticos (id_cita, descripcion_d, observaciones_d, fecha_d)
 values (1, 'Otitis', 'Otitis externa bilateral con secreción de mal olor; bacilos en citología.', '2025-01-10'),
        (2, 'Paciente sano: vacunación anual', 'Sin hallazgos clínicos anormales; se aplican vacuna polivalente y antirrábica.', '2025-01-15'),
        (3, 'Obesidad', 'Obesidad grado I; se recomienda estrictamente cambio a dieta metabólica.', '2025-01-20'),
@@ -131,7 +131,7 @@ go
 -- ============================================================
 -- 9° insert: procedimientos (42)
 -- ============================================================
-insert into procedimientos (id_diagnostico, nombre_p, descripcion_p, costo_p)
+insert into clinica.procedimientos (id_diagnostico, nombre_p, descripcion_p, costo_p)
 values (1, 'Citología ótica', 'Toma de muestra del conducto auditivo y tinción.', 12.00),
        (1, 'Limpieza ótica profunda', 'Lavado clínico del conducto auditivo externo.', 15.00),
        (2, 'Revisión física pre-vacunación', 'Exploración de ganglios y temperatura.', 10.00),
@@ -179,7 +179,7 @@ go
 -- ============================================================
 -- 10° insert: tratamiento (45)
 -- ============================================================
-insert into tratamiento (id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
+insert into clinica.tratamiento (id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
 values (1, '2025-01-10', '2025-01-20', 'Tratamiento ótico tópico', 'Limpiar el oído antes de cada aplicación; no usar hisopos.'),
        (2, '2025-01-15', '2025-01-15', 'Esquema de vacunación anual', 'Reportar decaimiento o fiebre; refuerzo en un año.'),
        (3, '2025-01-20', '2025-04-20', 'Plan de reducción de peso', 'Pesar la ración exacta indicada; nada de premios.'),

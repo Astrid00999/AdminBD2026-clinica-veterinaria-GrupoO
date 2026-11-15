@@ -1474,8 +1474,8 @@ from (select rp.*, r.id_raza,
              sum(rp.popularidad) over (partition by rp.especie order by r.id_raza rows unbounded preceding) as acum,
              sum(rp.popularidad) over (partition by rp.especie) as total
       from #raza_perfil rp
-      join dbo.especies e on e.nombre_e = rp.especie
-      join dbo.razas r on r.id_especie = e.id_especie and r.nombre_r = rp.raza) x;
+      join catalogos.especies e on e.nombre_e = rp.especie
+      join catalogos.razas r on r.id_especie = e.id_especie and r.nombre_r = rp.raza) x;
 
 -- 2.3 nombres, apellidos y direcciones
 create table #nombre_mascota (sexo varchar(10), idx int, nombre varchar(100));
@@ -1761,7 +1761,7 @@ into #base_franja
 from (select year(c.fecha_c) as anio, month(c.fecha_c) as mes,
              datediff(day, cast('1900-01-01' as date), cast(c.fecha_c as date)) % 7 + 1 as dia,
              datepart(hour, c.fecha_c) as hora
-      from dbo.citas c
+      from gestion.citas c
       where c.estado_c = 'Completada'
         and cast(c.fecha_c as date) between cast('2024-11-01' as date) and cast('2026-10-31' as date)) b
 group by b.anio, b.mes, b.dia, b.hora;
@@ -1793,8 +1793,8 @@ into #base_cat
 from (select year(c.fecha_c) as anio, month(c.fecha_c) as mes,
              case when cast(d.descripcion_d as varchar(200)) like 'Paciente sano%' then 13
                   else isnull(k.id_categoria, 14) end as id_categoria
-      from dbo.diagnosticos d
-      join dbo.citas c on c.id_cita = d.id_cita
+      from clinica.diagnosticos d
+      join gestion.citas c on c.id_cita = d.id_cita
       left join #categoria k on k.nombre = cast(d.descripcion_d as varchar(200)) and k.id_categoria <= 12
       where cast(c.fecha_c as date) between cast('2024-11-01' as date) and cast('2026-10-31' as date)) x
 group by x.anio, x.mes, x.id_categoria;
@@ -1913,9 +1913,9 @@ from (select d.especie, count(*) as visitas
       where not (c.tipo = 'C' and isnull(d.edad, '') = 'cria')
       group by d.especie) x
 left join (select e.nombre_e as especie, count(*) as cantidad
-           from dbo.mascotas m
-           join dbo.razas r on r.id_raza = m.id_raza
-           join dbo.especies e on e.id_especie = r.id_especie
+           from gestion.mascotas m
+           join catalogos.razas r on r.id_raza = m.id_raza
+           join catalogos.especies e on e.id_especie = r.id_especie
            group by e.nombre_e) b on b.especie = x.especie;
 
 -- 9.2 mascotas nuevas: primero adultos (especies con más mascotas primero), luego crías
@@ -1943,7 +1943,7 @@ select m.*,
 into #mascota1
 from #mascota0 m;
 
-select (select max(id_mascota) from dbo.mascotas) + m.k as id_mascota,
+select (select max(id_mascota) from gestion.mascotas) + m.k as id_mascota,
        m.k, m.grupo, m.id_tmp2, m.especie, rr.id_raza, rr.tamanio,
        rr.peso_min + (rr.peso_max - rr.peso_min) * m.u_peso as peso_adulto,
        case when m.u_sexo < 0.5 then 'Macho' else 'Hembra' end as sexo,
@@ -1972,7 +1972,7 @@ join #nombre_mascota nm on nm.sexo = m.sexo and nm.idx = cast(floor(m.u_nombre *
 
 -- 9.3 propietarios nuevos: uno por cada 1.5 mascotas nuevas (todos con al menos una mascota)
 select n.n as k,
-       (select max(id_propietario) from dbo.propietarios) + n.n as id_propietario,
+       (select max(id_propietario) from gestion.propietarios) + n.n as id_propietario,
        ((cast(n.n as bigint) * 7919 + 61) % 1000003) * 2654435761 % 4294967296 / 4294967296.0 as u_genero,
        ((cast(n.n as bigint) * 7919 + 67) % 1000003) * 2654435761 % 4294967296 / 4294967296.0 as u_nombre,
        ((cast(n.n as bigint) * 7919 + 71) % 1000003) * 2654435761 % 4294967296 / 4294967296.0 as u_ap1,
@@ -2019,19 +2019,19 @@ join #calle ca on ca.idx = cast(floor(p.u_calle * (select count(*) from #calle))
 join #dominio d on p.u_dominio * 100 >= d.desde and p.u_dominio * 100 < d.hasta;
 go
 
-set identity_insert dbo.propietarios on;
-insert into dbo.propietarios (id_propietario, dui_p, nombre_p, apellido_p, genero_p, telefono_p, telefono_secundario_p,
+set identity_insert gestion.propietarios on;
+insert into gestion.propietarios (id_propietario, dui_p, nombre_p, apellido_p, genero_p, telefono_p, telefono_secundario_p,
                               correo_p, direccion_p)
 select id_propietario, dui, nombre, apellido, genero, telefono, telefono_fijo, correo, direccion
 from #propietario_nuevo
 order by id_propietario;
-set identity_insert dbo.propietarios off;
+set identity_insert gestion.propietarios off;
 go
 
 -- 9.4 dueño de cada mascota: las primeras tienen un dueño propio; las demás se reparten
 --     (familias con 2 o 3 mascotas)
-set identity_insert dbo.mascotas on;
-insert into dbo.mascotas (id_mascota, id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
+set identity_insert gestion.mascotas on;
+insert into gestion.mascotas (id_mascota, id_propietario, id_raza, nombre_m, fecha_nacimiento, sexo_m, peso_m, tamanio_m)
 select m.id_mascota,
        case when m.k <= p.total then p.primero + m.k - 1
             else p.primero + cast(floor(m.u_dueno * p.total) as int) end,
@@ -2042,7 +2042,7 @@ select m.id_mascota,
 from #mascota_nueva m
 cross join (select min(id_propietario) as primero, count(*) as total from #propietario_nuevo) p
 order by m.id_mascota;
-set identity_insert dbo.mascotas off;
+set identity_insert gestion.mascotas off;
 go
 
 /* ------------------------------------------------------------
@@ -2055,9 +2055,9 @@ go
 select m.id_mascota, e.nombre_e as especie, m.sexo_m as sexo,
        case when m.fecha_nacimiento <= cast('2017-11-01' as date) then 1 else 0 end as senior
 into #paciente
-from dbo.mascotas m
-join dbo.razas r on r.id_raza = m.id_raza
-join dbo.especies e on e.id_especie = r.id_especie
+from gestion.mascotas m
+join catalogos.razas r on r.id_raza = m.id_raza
+join catalogos.especies e on e.id_especie = r.id_especie
 where not exists (select 1 from #mascota_nueva c where c.id_mascota = m.id_mascota and c.grupo = 2);
 
 select p.clave, p.id_mascota,
@@ -2105,8 +2105,8 @@ go
    ------------------------------------------------------------ */
 select e.nombre_esp, min(v.id_veterinario) as vet1, count(*) as cantidad
 into #vet
-from dbo.veterinario v
-join dbo.especialidades e on e.id_especialidad = v.id_especialidad
+from catalogos.veterinario v
+join catalogos.especialidades e on e.id_especialidad = v.id_especialidad
 group by e.nombre_esp;
 
 select c.*, d.motivo, d.costo,
@@ -2132,7 +2132,7 @@ from (select c.*,
                + c.id_veterinario) * 7919 + 101) % 1000003 % 4 as desfase
       from #cita3 c) c;
 
-select c.*, (select max(id_cita) from dbo.citas) + row_number() over (order by c.fecha_c, c.id_tmp2) as id_cita
+select c.*, (select max(id_cita) from gestion.citas) + row_number() over (order by c.fecha_c, c.id_tmp2) as id_cita
 into #cita
 from #cita4 c;
 go
@@ -2142,8 +2142,8 @@ go
    Las canceladas y programadas de cachorros, o de enfermedades,
    quedan como control de seguimiento.
    ------------------------------------------------------------ */
-set identity_insert dbo.citas on;
-insert into dbo.citas (id_cita, id_mascota, id_veterinario, fecha_c, motivo_c, estado_c, costo_c)
+set identity_insert gestion.citas on;
+insert into gestion.citas (id_cita, id_mascota, id_veterinario, fecha_c, motivo_c, estado_c, costo_c)
 select c.id_cita, c.id_mascota, c.id_veterinario, c.fecha_c,
        case when c.tipo = 'C' then c.motivo
             when isnull(c.edad, '') = 'cria' or (c.tipo = 'P' and c.id_categoria <> 13) then 'Control de seguimiento'
@@ -2152,14 +2152,14 @@ select c.id_cita, c.id_mascota, c.id_veterinario, c.fecha_c,
        case when c.tipo = 'X' then 0 else c.costo end
 from #cita c
 order by c.id_cita;
-set identity_insert dbo.citas off;
+set identity_insert gestion.citas off;
 
 -- si coincide con una cita base del mismo veterinario y minuto, se corre 2 minutos
 update c
 set fecha_c = dateadd(minute, 2, c.fecha_c)
-from dbo.citas c
+from gestion.citas c
 where c.id_cita >= (select min(id_cita) from #cita)
-  and exists (select 1 from dbo.citas b
+  and exists (select 1 from gestion.citas b
               where b.id_cita < (select min(id_cita) from #cita)
                 and b.id_veterinario = c.id_veterinario
                 and b.fecha_c = c.fecha_c);
@@ -2169,20 +2169,20 @@ go
    13. diagnósticos, procedimientos y tratamientos
    ------------------------------------------------------------ */
 select c.id_cita, c.id_dx, c.fecha,
-       (select max(id_diagnostico) from dbo.diagnosticos) + row_number() over (order by c.id_cita) as id_diagnostico
+       (select max(id_diagnostico) from clinica.diagnosticos) + row_number() over (order by c.id_cita) as id_diagnostico
 into #dx_cita
 from #cita c
 where c.tipo = 'C';
 
-set identity_insert dbo.diagnosticos on;
-insert into dbo.diagnosticos (id_diagnostico, id_cita, descripcion_d, observaciones_d, fecha_d)
+set identity_insert clinica.diagnosticos on;
+insert into clinica.diagnosticos (id_diagnostico, id_cita, descripcion_d, observaciones_d, fecha_d)
 select x.id_diagnostico, x.id_cita, d.descripcion, d.observaciones, x.fecha
 from #dx_cita x
 join #dx d on d.id_dx = x.id_dx
 order by x.id_diagnostico;
-set identity_insert dbo.diagnosticos off;
+set identity_insert clinica.diagnosticos off;
 
-insert into dbo.procedimientos (id_diagnostico, nombre_p, descripcion_p, costo_p)
+insert into clinica.procedimientos (id_diagnostico, nombre_p, descripcion_p, costo_p)
 select x.id_diagnostico, p.nombre, p.descripcion, p.costo
 from (select x.id_diagnostico, d.proc1 as codigo, 1 as orden
       from #dx_cita x
@@ -2198,25 +2198,25 @@ join #proc_cat p on p.codigo = x.codigo
 order by x.id_diagnostico, x.orden;
 
 select x.id_diagnostico, x.id_dx, x.fecha, d.tratamiento, d.indicaciones, d.dias,
-       (select max(id_tratamiento) from dbo.tratamiento) + row_number() over (order by x.id_diagnostico) as id_tratamiento
+       (select max(id_tratamiento) from clinica.tratamiento) + row_number() over (order by x.id_diagnostico) as id_tratamiento
 into #trat
 from #dx_cita x
 join #dx d on d.id_dx = x.id_dx
 where d.tratamiento is not null;
 
-set identity_insert dbo.tratamiento on;
-insert into dbo.tratamiento (id_tratamiento, id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
+set identity_insert clinica.tratamiento on;
+insert into clinica.tratamiento (id_tratamiento, id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
 select t.id_tratamiento, t.id_diagnostico, t.fecha, dateadd(day, t.dias, t.fecha), t.tratamiento, t.indicaciones
 from #trat t
 order by t.id_tratamiento;
-set identity_insert dbo.tratamiento off;
+set identity_insert clinica.tratamiento off;
 
-insert into dbo.detalles_tratamientos (id_detalle_tratamiento, id_tratamiento, id_medicamento, dosis_dt, frecuencia_dt,
+insert into clinica.detalles_tratamientos (id_detalle_tratamiento, id_tratamiento, id_medicamento, dosis_dt, frecuencia_dt,
                                        duracion_dias_dt)
 select dm.orden, t.id_tratamiento, m.id_medicamento, dm.dosis, dm.frecuencia, dm.dias
 from #trat t
 join #dx_med dm on dm.id_dx = t.id_dx
-join dbo.medicamentos m on m.nombre_m = dm.medicamento
+join catalogos.medicamentos m on m.nombre_m = dm.medicamento
 order by t.id_tratamiento, dm.orden;
 go
 
@@ -2227,15 +2227,15 @@ go
    Renglones: consulta, procedimientos y medicamentos del tratamiento.
    ------------------------------------------------------------ */
 select c.id_cita, cast(c.fecha_c as date) as fecha,
-       (select max(id_factura) from dbo.facturas) + row_number() over (order by c.fecha_c, c.id_cita) as id_factura,
+       (select max(id_factura) from finanzas.facturas) + row_number() over (order by c.fecha_c, c.id_cita) as id_factura,
        ((cast(c.id_cita as bigint) * 7919 + 61) % 1000003) * 2654435761 % 4294967296 / 4294967296.0 as u
 into #factura_nueva
-from dbo.citas c
+from gestion.citas c
 where c.estado_c = 'Completada'
-  and not exists (select 1 from dbo.facturas f where f.id_cita = c.id_cita);
+  and not exists (select 1 from finanzas.facturas f where f.id_cita = c.id_cita);
 
-set identity_insert dbo.facturas on;
-insert into dbo.facturas (id_factura, id_cita, fecha_emision_f, estado_f, total_f)
+set identity_insert finanzas.facturas on;
+insert into finanzas.facturas (id_factura, id_cita, fecha_emision_f, estado_f, total_f)
 select f.id_factura, f.id_cita, f.fecha,
        case when f.fecha > cast('2026-10-21' as date) and f.u < 0.25 then 'Pendiente'
             when f.u < 0.005 then 'Pendiente'
@@ -2243,19 +2243,19 @@ select f.id_factura, f.id_cita, f.fecha,
        0
 from #factura_nueva f
 order by f.id_factura;
-set identity_insert dbo.facturas off;
+set identity_insert finanzas.facturas off;
 
 -- unidades que se cobran de cada medicamento (los tratamientos base cobran 1)
 select t.id_tratamiento, m.id_medicamento, dm.cantidad
 into #cantidad
 from #trat t
 join #dx_med dm on dm.id_dx = t.id_dx
-join dbo.medicamentos m on m.nombre_m = dm.medicamento;
+join catalogos.medicamentos m on m.nombre_m = dm.medicamento;
 
 select f.id_factura, f.id_cita
 into #sin_detalle
-from dbo.facturas f
-where not exists (select 1 from dbo.detalles_facturas df where df.id_factura = f.id_factura);
+from finanzas.facturas f
+where not exists (select 1 from finanzas.detalles_facturas df where df.id_factura = f.id_factura);
 
 select l.*, row_number() over (partition by l.id_factura order by l.tipo, l.orden) as renglon
 into #linea
@@ -2265,25 +2265,25 @@ from (select s.id_factura, 1 as tipo, cast(0 as bigint) as orden, s.id_cita,
              concat('Costo de atención - ', cast(c.motivo_c as varchar(200))) as descripcion,
              1 as cantidad, c.costo_c as precio
       from #sin_detalle s
-      join dbo.citas c on c.id_cita = s.id_cita
+      join gestion.citas c on c.id_cita = s.id_cita
       union all
       select s.id_factura, 2, p.id_procedimiento, null, null, null, p.id_procedimiento,
              concat('Procedimiento clínico: ', p.nombre_p), 1, p.costo_p
       from #sin_detalle s
-      join dbo.diagnosticos d on d.id_cita = s.id_cita
-      join dbo.procedimientos p on p.id_diagnostico = d.id_diagnostico
+      join clinica.diagnosticos d on d.id_cita = s.id_cita
+      join clinica.procedimientos p on p.id_diagnostico = d.id_diagnostico
       union all
       select s.id_factura, 3, t.id_tratamiento * 100 + dt.id_detalle_tratamiento, null, m.id_medicamento,
              t.id_tratamiento, null,
              concat('Medicamento: ', m.nombre_m, ' (', m.presentacion_m, ')'), isnull(q.cantidad, 1), m.precio_m
       from #sin_detalle s
-      join dbo.diagnosticos d on d.id_cita = s.id_cita
-      join dbo.tratamiento t on t.id_diagnostico = d.id_diagnostico
-      join dbo.detalles_tratamientos dt on dt.id_tratamiento = t.id_tratamiento
-      join dbo.medicamentos m on m.id_medicamento = dt.id_medicamento
+      join clinica.diagnosticos d on d.id_cita = s.id_cita
+      join clinica.tratamiento t on t.id_diagnostico = d.id_diagnostico
+      join clinica.detalles_tratamientos dt on dt.id_tratamiento = t.id_tratamiento
+      join catalogos.medicamentos m on m.id_medicamento = dt.id_medicamento
       left join #cantidad q on q.id_tratamiento = t.id_tratamiento and q.id_medicamento = m.id_medicamento) l;
 
-insert into dbo.detalles_facturas (id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento,
+insert into finanzas.detalles_facturas (id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento,
                                    id_procedimiento, descripcion_df, cantidad_df, precio_unit_df)
 select l.renglon, l.id_factura, l.id_cita, l.id_medicamento, l.id_tratamiento, l.id_procedimiento,
        l.descripcion, l.cantidad, l.precio
@@ -2293,8 +2293,8 @@ order by l.id_factura, l.renglon;
 -- total de cada factura = suma de sus renglones
 update f
 set total_f = d.total
-from dbo.facturas f
-join (select id_factura, sum(subtotal_df) as total from dbo.detalles_facturas group by id_factura) d
+from finanzas.facturas f
+join (select id_factura, sum(subtotal_df) as total from finanzas.detalles_facturas group by id_factura) d
   on d.id_factura = f.id_factura;
 go
 
@@ -2306,7 +2306,7 @@ go
 select m.mes, m.temporada, m.consultas as documento, isnull(x.atendidas, 0) as base_de_datos
 from #mes m
 left join (select month(c.fecha_c) as mes, count(*) as atendidas
-           from dbo.citas c
+           from gestion.citas c
            where c.estado_c = 'Completada'
              and cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)
            group by month(c.fecha_c)) x on x.mes = m.mes
@@ -2320,7 +2320,7 @@ full outer join (select m.temporada, y.dia, y.hora, count(*) as atendidas
                  from (select month(c.fecha_c) as mes,
                               datediff(day, cast('1900-01-01' as date), cast(c.fecha_c as date)) % 7 + 1 as dia,
                               datepart(hour, c.fecha_c) as hora
-                       from dbo.citas c
+                       from gestion.citas c
                        where c.estado_c = 'Completada'
                          and cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)) y
                  join #mes m on m.mes = y.mes
@@ -2336,8 +2336,8 @@ full outer join (select y.mes, y.id_categoria, count(*) as casos
                  from (select month(c.fecha_c) as mes,
                               case when cast(d.descripcion_d as varchar(200)) like 'Paciente sano%' then 13
                                    else isnull(k.id_categoria, 14) end as id_categoria
-                       from dbo.diagnosticos d
-                       join dbo.citas c on c.id_cita = d.id_cita
+                       from clinica.diagnosticos d
+                       join gestion.citas c on c.id_cita = d.id_cita
                        left join #categoria k on k.nombre = cast(d.descripcion_d as varchar(200)) and k.id_categoria <= 12
                        where cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)) y
                  group by y.mes, y.id_categoria) x
@@ -2350,8 +2350,8 @@ select y.mes, y.puesto, y.enfermedad, y.casos,
 from (select month(c.fecha_c) as mes, cast(d.descripcion_d as varchar(100)) as enfermedad, count(*) as casos,
              row_number() over (partition by month(c.fecha_c)
                                 order by count(*) desc, cast(d.descripcion_d as varchar(100))) as puesto
-      from dbo.diagnosticos d
-      join dbo.citas c on c.id_cita = d.id_cita
+      from clinica.diagnosticos d
+      join gestion.citas c on c.id_cita = d.id_cita
       where cast(c.fecha_c as date) between cast('2025-11-01' as date) and cast('2026-10-31' as date)
         and cast(d.descripcion_d as varchar(100)) not like 'Paciente sano%'
       group by month(c.fecha_c), cast(d.descripcion_d as varchar(100))) y
@@ -2363,25 +2363,25 @@ order by y.mes, y.puesto;
 select count(*) as citas_fuera_de_horario
 from (select datediff(day, cast('1900-01-01' as date), cast(c.fecha_c as date)) % 7 + 1 as dia,
              datepart(hour, c.fecha_c) as hora
-      from dbo.citas c) x
+      from gestion.citas c) x
 where (x.dia <= 6 and x.hora not between 7 and 19)
    or (x.dia = 7 and x.hora not between 7 and 12);
 
 -- 15.6 diagnósticos que no son enfermedad ("Paciente sano: ...")
 select cast(100.0 * sum(case when cast(descripcion_d as varchar(200)) like 'Paciente sano%' then 1 else 0 end)
             / count(*) as decimal(4, 1)) as porcentaje_sin_enfermedad
-from dbo.diagnosticos;
+from clinica.diagnosticos;
 
 -- 15.7 los 3 medicamentos más usados en cada enfermedad del documento
 select y.enfermedad, y.puesto, y.medicamento, y.veces
 from (select cast(d.descripcion_d as varchar(100)) as enfermedad, m.nombre_m as medicamento, count(*) as veces,
              row_number() over (partition by cast(d.descripcion_d as varchar(100))
                                 order by count(*) desc, m.nombre_m) as puesto
-      from dbo.diagnosticos d
+      from clinica.diagnosticos d
       join #categoria k on k.nombre = cast(d.descripcion_d as varchar(100)) and k.id_categoria <= 12
-      join dbo.tratamiento t on t.id_diagnostico = d.id_diagnostico
-      join dbo.detalles_tratamientos dt on dt.id_tratamiento = t.id_tratamiento
-      join dbo.medicamentos m on m.id_medicamento = dt.id_medicamento
+      join clinica.tratamiento t on t.id_diagnostico = d.id_diagnostico
+      join clinica.detalles_tratamientos dt on dt.id_tratamiento = t.id_tratamiento
+      join catalogos.medicamentos m on m.id_medicamento = dt.id_medicamento
       group by cast(d.descripcion_d as varchar(100)), m.nombre_m) y
 where y.puesto <= 3
 order by y.enfermedad, y.puesto;
@@ -2401,25 +2401,24 @@ go
 /* ============================================================
    VERIFICACIÓN: filas por tabla
    ============================================================ */
-select 'citas' as tabla, count(*) as filas from dbo.citas
-union all select 'detalles_facturas', count(*) from dbo.detalles_facturas
-union all select 'detalles_tratamientos', count(*) from dbo.detalles_tratamientos
-union all select 'diagnosticos', count(*) from dbo.diagnosticos
-union all select 'especialidades', count(*) from dbo.especialidades
-union all select 'especies', count(*) from dbo.especies
-union all select 'facturas', count(*) from dbo.facturas
-union all select 'mascotas', count(*) from dbo.mascotas
-union all select 'medicamentos', count(*) from dbo.medicamentos
-union all select 'procedimientos', count(*) from dbo.procedimientos
-union all select 'propietarios', count(*) from dbo.propietarios
-union all select 'razas', count(*) from dbo.razas
-union all select 'tratamiento', count(*) from dbo.tratamiento
-union all select 'veterinario', count(*) from dbo.veterinario
+select 'citas' as tabla, count(*) as filas from gestion.citas
+union all select 'detalles_facturas', count(*) from finanzas.detalles_facturas
+union all select 'detalles_tratamientos', count(*) from clinica.detalles_tratamientos
+union all select 'diagnosticos', count(*) from clinica.diagnosticos
+union all select 'especialidades', count(*) from catalogos.especialidades
+union all select 'especies', count(*) from catalogos.especies
+union all select 'facturas', count(*) from finanzas.facturas
+union all select 'mascotas', count(*) from gestion.mascotas
+union all select 'medicamentos', count(*) from catalogos.medicamentos
+union all select 'procedimientos', count(*) from clinica.procedimientos
+union all select 'propietarios', count(*) from gestion.propietarios
+union all select 'razas', count(*) from catalogos.razas
+union all select 'tratamiento', count(*) from clinica.tratamiento
+union all select 'veterinario', count(*) from catalogos.veterinario
 order by tabla
 go
 
-use [master]
-go
+
 alter database [ClinicaVeterinaria] set read_write
 go
 

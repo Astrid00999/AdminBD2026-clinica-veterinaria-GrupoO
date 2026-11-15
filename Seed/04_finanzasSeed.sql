@@ -4,7 +4,7 @@
 -- 13° insert: facturas (30)
 -- total_f = suma de sus renglones
 -- ============================================================
-insert into facturas (id_cita, fecha_emision_f, estado_f, total_f)
+insert into finanzas.facturas (id_cita, fecha_emision_f, estado_f, total_f)
 values (1, '2025-01-10', 'Pagada', 95.00),
        (2, '2025-01-15', 'Pagada', 52.00),
        (3, '2025-01-20', 'Pagada', 45.00),
@@ -42,7 +42,7 @@ go
 -- id_detalle_factura es el número de renglón dentro de cada factura:
 -- consulta, procedimientos y medicamentos del tratamiento
 -- ============================================================
-insert into detalles_facturas (id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento,
+insert into finanzas.detalles_facturas (id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento,
                                id_procedimiento, descripcion_df, cantidad_df, precio_unit_df)
 values (1, 1, 1, null, null, null, 'Costo de atención - Sacude la cabeza y le huelen las orejas', 1, 30.00),
        (2, 1, null, null, null, 1, 'Procedimiento clínico: Citología ótica', 1, 12.00),
