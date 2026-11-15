@@ -1,96 +1,86 @@
---=========================================================================
---TRIGGERS TABLAS DE FACTURACIÓN. 
---=========================================================================
-
-DROP TRIGGER IF EXISTS finanzas.trg_facturas_audit;
-GO
-
-DROP TRIGGER IF EXISTS finanzas.tgg_DetallesFactura_Auditoria;
-GO
-
-
-CREATE TRIGGER finanzas.trg_facturas_audit 
-ON finanzas.facturas
-AFTER INSERT, UPDATE, DELETE 
-AS 
+--============================================================================
+-- TRIGGER PARA TABLA CRÍTICA: detalles_tratamientos
+--============================================================================
+CREATE OR ALTER TRIGGER clinica.tr_auditoria_detalles_tratamientos
+ON clinica.detalles_tratamientos
+AFTER INSERT, UPDATE, DELETE
+AS
 BEGIN
     SET NOCOUNT ON;
 
-    -- Auditoría para INSERCIÓN
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
-    BEGIN
-        INSERT INTO seguridad.facturas_auditoria (id_factura, estado_f, accion, usuario, fecha_modificacion)
-        SELECT id_factura, estado_f, 'INSERT', SUSER_SNAME(), GETDATE()
-        FROM inserted;
-    END
+    ;WITH cambios AS (
+        SELECT
+            COALESCE(i.id_tratamiento, d.id_tratamiento) AS id_tratamiento,
+            COALESCE(i.id_detalle_tratamiento, d.id_detalle_tratamiento) AS id_detalle,
 
-    -- Auditoría para ACTUALIZACIÓN
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
-    BEGIN
-        INSERT INTO seguridad.facturas_auditoria (id_factura, estado_antiguo, estado_nuevo, accion, usuario, fecha_modificacion)
-        SELECT i.id_factura, d.estado_f, i.estado_f, 'UPDATE', SUSER_SNAME(), GETDATE()
+            CASE
+                WHEN d.id_tratamiento IS NULL THEN 'INSERT'
+                WHEN i.id_tratamiento IS NULL THEN 'DELETE'
+                ELSE 'UPDATE'
+            END AS accion,
+
+            v.campo,
+            v.antiguo,
+            v.nuevo
+
         FROM inserted i
-        INNER JOIN deleted d ON i.id_factura = d.id_factura;
-    END
-    
-    -- Auditoría para ELIMINACIÓN
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
-    BEGIN
-        INSERT INTO seguridad.facturas_auditoria (id_factura, estado_f, accion, usuario, fecha_modificacion)
-        SELECT id_factura, estado_f, 'DELETE', SUSER_SNAME(), GETDATE()
-        FROM deleted;
-    END
-END;
-GO
+        FULL OUTER JOIN deleted d
+            ON  d.id_tratamiento = i.id_tratamiento
+            AND d.id_detalle_tratamiento = i.id_detalle_tratamiento
 
---==============================================================================
--- 3. Crear Trigger para la tabla DETALLES_FACTURAS
---==============================================================================
-CREATE TRIGGER finanzas.tgg_DetallesFactura_Auditoria 
-ON finanzas.detalles_facturas
-AFTER INSERT, UPDATE, DELETE 
-AS 
-BEGIN
-    SET NOCOUNT ON;
+        CROSS APPLY (VALUES
+            (
+                'id_medicamento',
+                CAST(d.id_medicamento AS VARCHAR(255)),
+                CAST(i.id_medicamento AS VARCHAR(255))
+            ),
+            (
+                'dosis_dt',
+                d.dosis_dt,
+                i.dosis_dt
+            ),
+            (
+                'frecuencia_dt',
+                d.frecuencia_dt,
+                i.frecuencia_dt
+            ),
+            (
+                'duracion_dias_dt',
+                CAST(d.duracion_dias_dt AS VARCHAR(255)),
+                CAST(i.duracion_dias_dt AS VARCHAR(255))
+            )
+        ) v(campo, antiguo, nuevo)
+    )
 
-    -- 1. Auditoría para INSERCIONES
-    IF EXISTS (SELECT * FROM inserted) AND NOT EXISTS (SELECT * FROM deleted)
-    BEGIN
-        INSERT INTO seguridad.detalles_factura_auditoria(
-            id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento, 
-            id_procedimiento, descripcion, cantidad_nueva, precio_nuevo, accion, usuario, fecha_modificacion
+    INSERT INTO seguridad.historial_clinico_auditoria
+        (
+            tabla_afectada,
+            id_registro,
+            id_mascota,
+            campo,
+            valor_antiguo,
+            valor_nuevo,
+            accion,
+            usuario
         )
-        SELECT 
-            id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento, 
-            id_procedimiento, descripcion_df, cantidad_df, precio_unit_df, 'INSERT', SUSER_SNAME(), GETDATE()
-        FROM inserted;
-    END
+    SELECT
+        'detalles_tratamientos',
+        CONCAT(c.id_tratamiento, '-', c.id_detalle),
+        ci.id_mascota,
+        c.campo,
+        c.antiguo,
+        c.nuevo,
+        c.accion,
+        SUSER_SNAME()
+    FROM cambios c
+    LEFT JOIN clinica.tratamiento t
+        ON t.id_tratamiento = c.id_tratamiento
+    LEFT JOIN clinica.diagnosticos dg
+        ON dg.id_diagnostico = t.id_diagnostico
+    LEFT JOIN gestion.citas ci
+        ON ci.id_cita = dg.id_cita
 
-    -- 2. Auditoría para ELIMINACIONES
-    IF EXISTS (SELECT * FROM deleted) AND NOT EXISTS (SELECT * FROM inserted)
-    BEGIN
-        INSERT INTO seguridad.detalles_factura_auditoria(
-            id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento, 
-            id_procedimiento, descripcion, cantidad_antigua, precio_antiguo, accion, usuario, fecha_modificacion
-        )
-        SELECT 
-            id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento, 
-            id_procedimiento, descripcion_df, cantidad_df, precio_unit_df, 'DELETE', SUSER_SNAME(), GETDATE()
-        FROM deleted;
-    END
-
-    -- 3. Auditoría para ACTUALIZACIONES
-    IF EXISTS (SELECT * FROM inserted) AND EXISTS (SELECT * FROM deleted)
-    BEGIN
-        INSERT INTO seguridad.detalles_factura_auditoria(
-            id_detalle_factura, id_factura, id_cita, id_medicamento, id_tratamiento, 
-            id_procedimiento, descripcion, cantidad_antigua, cantidad_nueva, precio_antiguo, precio_nuevo, accion, usuario, fecha_modificacion
-        )
-        SELECT 
-            i.id_detalle_factura, i.id_factura, i.id_cita, i.id_medicamento, i.id_tratamiento, 
-            i.id_procedimiento, i.descripcion_df, d.cantidad_df, i.cantidad_df, d.precio_unit_df, i.precio_unit_df, 'UPDATE', SUSER_SNAME(), GETDATE()
-        FROM inserted i
-        INNER JOIN deleted d ON i.id_detalle_factura = d.id_detalle_factura;
-    END
+    WHERE c.accion <> 'UPDATE'
+       OR ISNULL(c.antiguo, '') <> ISNULL(c.nuevo, '');
 END;
 GO
