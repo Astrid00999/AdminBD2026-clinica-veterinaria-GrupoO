@@ -440,4 +440,3 @@ A continuación se muestran algunas de las principales visualizaciones desarroll
 ![Temporadas](07_bi/dashboard_temporadas.png)
 
 Estas visualizaciones permiten analizar diferentes aspectos del funcionamiento de Fast Paws, incluyendo la atención de pacientes, productividad del personal veterinario y comportamiento financiero de la clínica.
-
