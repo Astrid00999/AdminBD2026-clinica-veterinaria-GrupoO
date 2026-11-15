@@ -7,7 +7,7 @@ go
 -- Caprino, Ave de corral, Primate, Marsupial y Arácnido no tienen
 -- mascotas: se eliminarán después.
 -- ============================================================
-insert into especies (nombre_e, descripcion_e)
+insert into catalogos.especies (nombre_e, descripcion_e)
 values ('Canino', 'Mamífero doméstico de la familia Canidae, comúnmente conocido como perro.'),
        ('Felino', 'Mamífero de la familia Felidae, incluye gatos domésticos y felinos salvajes.'),
        ('Ave', 'Animal vertebrado de sangre caliente con plumas, pico y alas.'),
@@ -33,7 +33,7 @@ go
 -- las razas más vistas en El Salvador (mestizos y razas pequeñas).
 -- ============================================================
 -- Canino (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Canino'), 'Labrador Retriever'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Pastor Alemán'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Chihuahua'),
@@ -42,7 +42,7 @@ values ((select id_especie from especies where nombre_e = 'Canino'), 'Labrador R
 go
 
 -- Felino (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Felino'), 'Siamés'),
        ((select id_especie from especies where nombre_e = 'Felino'), 'Persa'),
        ((select id_especie from especies where nombre_e = 'Felino'), 'Bengalí'),
@@ -51,7 +51,7 @@ values ((select id_especie from especies where nombre_e = 'Felino'), 'Siamés'),
 go
 
 -- Ave (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Ave'), 'Loro'),
        ((select id_especie from especies where nombre_e = 'Ave'), 'Canario'),
        ((select id_especie from especies where nombre_e = 'Ave'), 'Cacatúa'),
@@ -60,7 +60,7 @@ values ((select id_especie from especies where nombre_e = 'Ave'), 'Loro'),
 go
 
 -- Roedor (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Roedor'), 'Hámster Sirio'),
        ((select id_especie from especies where nombre_e = 'Roedor'), 'Cobaya'),
        ((select id_especie from especies where nombre_e = 'Roedor'), 'Chinchilla'),
@@ -69,7 +69,7 @@ values ((select id_especie from especies where nombre_e = 'Roedor'), 'Hámster S
 go
 
 -- Conejo (5 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Conejo'), 'Holandés'),
        ((select id_especie from especies where nombre_e = 'Conejo'), 'Angora'),
        ((select id_especie from especies where nombre_e = 'Conejo'), 'Rex'),
@@ -78,91 +78,91 @@ values ((select id_especie from especies where nombre_e = 'Conejo'), 'Holandés'
 go
 
 -- Reptil (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Reptil'), 'Dragón Barbudo'),
        ((select id_especie from especies where nombre_e = 'Reptil'), 'Gecko Leopardo'),
        ((select id_especie from especies where nombre_e = 'Reptil'), 'Iguana Verde');
 go
 
 -- Pez (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Pez'), 'Betta'),
        ((select id_especie from especies where nombre_e = 'Pez'), 'Goldfish'),
        ((select id_especie from especies where nombre_e = 'Pez'), 'Guppy');
 go
 
 -- Hurón (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Hurón'), 'Hurón Estándar'),
        ((select id_especie from especies where nombre_e = 'Hurón'), 'Hurón Angora'),
        ((select id_especie from especies where nombre_e = 'Hurón'), 'Hurón Albino');
 go
 
 -- Anfibio (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Anfibio'), 'Axolotl'),
        ((select id_especie from especies where nombre_e = 'Anfibio'), 'Rana Africana'),
        ((select id_especie from especies where nombre_e = 'Anfibio'), 'Salamandra Tigre');
 go
 
 -- Équido (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Équido'), 'Caballo Árabe'),
        ((select id_especie from especies where nombre_e = 'Équido'), 'Poni Shetland'),
        ((select id_especie from especies where nombre_e = 'Équido'), 'Burro Andaluz');
 go
 
 -- Porcino (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Porcino'), 'Cerdo Vietnamita'),
        ((select id_especie from especies where nombre_e = 'Porcino'), 'Duroc'),
        ((select id_especie from especies where nombre_e = 'Porcino'), 'Landrace');
 go
 
 -- Ovino (3 razas)
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Ovino'), 'Merino'),
        ((select id_especie from especies where nombre_e = 'Ovino'), 'Suffolk'),
        ((select id_especie from especies where nombre_e = 'Ovino'), 'Dorper');
 go
 
 -- Caprino (3 razas) - se eliminará después
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Caprino'), 'Boer'),
        ((select id_especie from especies where nombre_e = 'Caprino'), 'Nubia'),
        ((select id_especie from especies where nombre_e = 'Caprino'), 'Saanen');
 go
 
 -- Ave de corral (3 razas) - se eliminará después
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Ave de corral'), 'Gallina Leghorn'),
        ((select id_especie from especies where nombre_e = 'Ave de corral'), 'Pato Pekín'),
        ((select id_especie from especies where nombre_e = 'Ave de corral'), 'Pavo Real');
 go
 
 -- Primate (3 razas) - se eliminará después
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Primate'), 'Tití Común'),
        ((select id_especie from especies where nombre_e = 'Primate'), 'Mono Ardilla'),
        ((select id_especie from especies where nombre_e = 'Primate'), 'Lémur');
 go
 
 -- Marsupial (3 razas) - se eliminará después
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Marsupial'), 'Zarigüeya'),
        ((select id_especie from especies where nombre_e = 'Marsupial'), 'Canguro Enano'),
        ((select id_especie from especies where nombre_e = 'Marsupial'), 'Petauro del Azúcar');
 go
 
 -- Arácnido (3 razas) - se eliminará después
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Arácnido'), 'Tarántula Rosa'),
        ((select id_especie from especies where nombre_e = 'Arácnido'), 'Escorpión Emperador'),
        ((select id_especie from especies where nombre_e = 'Arácnido'), 'Tarántula Patas Rojas');
 go
 
 -- razas más comunes en la clínica
-insert into razas (id_especie, nombre_r)
+insert into catalogos.razas (id_especie, nombre_r)
 values ((select id_especie from especies where nombre_e = 'Canino'), 'Mestizo'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Schnauzer Miniatura'),
        ((select id_especie from especies where nombre_e = 'Canino'), 'Shih Tzu'),
@@ -179,7 +179,7 @@ go
 -- ============================================================
 -- 5° insert: especialidades (20)
 -- ============================================================
-insert into especialidades (nombre_esp, descripcion_esp)
+insert into catalogos.especialidades (nombre_esp, descripcion_esp)
 values ('Medicina General Veterinaria', 'Atención médica integral para animales domésticos.'),
        ('Cirugía Veterinaria', 'Procedimientos quirúrgicos preventivos y correctivos.'),
        ('Dermatología Veterinaria', 'Diagnóstico y tratamiento de enfermedades de la piel.'),
@@ -206,7 +206,7 @@ go
 -- 6° insert: veterinario (40)
 -- 2 veterinarios por especialidad; trabajan en turnos rotativos
 -- ============================================================
-insert into veterinario (id_especialidad, nombre_v, apellido_v, telefono_v, correo_v)
+insert into catalogos.veterinario (id_especialidad, nombre_v, apellido_v, telefono_v, correo_v)
 values ((select id_especialidad from especialidades where nombre_esp = 'Medicina General Veterinaria'), 'Carlos', 'Martínez', '7000-0001', 'carlos.martinez@veterinaria.com'),
        ((select id_especialidad from especialidades where nombre_esp = 'Medicina General Veterinaria'), 'Laura', 'Torres', '7000-0002', 'laura.torres@veterinaria.com'),
        ((select id_especialidad from especialidades where nombre_esp = 'Cirugía Veterinaria'), 'Ana', 'López', '7000-0003', 'ana.lopez@veterinaria.com'),
@@ -268,7 +268,7 @@ go
 -- 1-30: catálogo original | 31 en adelante: vacunas y medicamentos que
 -- piden las enfermedades del documento
 -- ============================================================
-insert into medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
+insert into catalogos.medicamentos (nombre_m, presentacion_m, laboratorio_m, precio_m, stock_m)
 values ('Epiotic Complete', 'Solución limpiadora ótica 125ml', 'Virbac', 18.50, 25),
        ('Synulox Tablets', 'Blíster 10 tabletas 250mg', 'Zoetis', 14.25, 40),
        ('Metonil Jarabe', 'Frasco 30ml', 'Calox', 8.00, 30),
