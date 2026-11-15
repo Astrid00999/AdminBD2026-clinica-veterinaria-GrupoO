@@ -1,0 +1,89 @@
+/// Tabla de fechas para filtrar citas y facturas por año y mes
+table Calendario
+	lineageTag: 2706e9da-0bf4-4f15-ada2-81e4256eeecd
+	dataCategory: Time
+
+	column Fecha
+		dataType: dateTime
+		isKey
+		formatString: Long Date
+		lineageTag: 1794ab13-5b82-4243-8f0e-bffddbb5bd68
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Fecha]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		dataType: int64
+		formatString: 0
+		lineageTag: 8335e1aa-4a8b-41ed-a24e-407d5614ac57
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Num'
+		dataType: int64
+		formatString: 0
+		lineageTag: 429e2353-7040-4491-bcbe-c9a085dbb0ad
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes Num]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes
+		dataType: string
+		lineageTag: 1743a1f9-0a9d-4d90-80ea-ed67e7606ad7
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes]
+		sortByColumn: 'Mes Num'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Nombre'
+		dataType: string
+		lineageTag: 47f42143-1ebe-4a4e-a9fe-7672e98ab16f
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes Nombre]
+		sortByColumn: 'Mes Num'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendario = calculated
+		mode: import
+		source =
+				VAR _ini =
+				    MIN(
+				        COALESCE( MIN(Citas[fecha]), TODAY() ),
+				        COALESCE( MIN(Facturas[fecha_emision_f]), TODAY() )
+				    )
+				VAR _fin =
+				    MAX(
+				        COALESCE( MAX(Citas[fecha]), TODAY() ),
+				        COALESCE( MAX(Facturas[fecha_emision_f]), TODAY() )
+				    )
+				VAR _base =
+				    SELECTCOLUMNS(
+				        CALENDAR( DATE( YEAR(_ini), 1, 1 ), DATE( YEAR(_fin), 12, 31 ) ),
+				        "Fecha", [Date]
+				    )
+				RETURN
+				    ADDCOLUMNS(
+				        _base,
+				        "Año", YEAR([Fecha]),
+				        "Mes Num", MONTH([Fecha]),
+				        "Mes", SWITCH( MONTH([Fecha]),
+				            1, "Ene", 2, "Feb", 3, "Mar", 4, "Abr", 5, "May", 6, "Jun",
+				            7, "Jul", 8, "Ago", 9, "Sep", 10, "Oct", 11, "Nov", "Dic" ),
+				        "Mes Nombre", SWITCH( MONTH([Fecha]),
+				            1, "Enero", 2, "Febrero", 3, "Marzo", 4, "Abril", 5, "Mayo", 6, "Junio",
+				            7, "Julio", 8, "Agosto", 9, "Septiembre", 10, "Octubre", 11, "Noviembre", "Diciembre" )
+				    )
+
+	annotation PBI_ResultType = Table
+

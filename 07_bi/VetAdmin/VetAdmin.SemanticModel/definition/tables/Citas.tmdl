@@ -1,0 +1,318 @@
+/// Vista reportes.vw_citas
+table Citas
+	lineageTag: 1319fa43-42c8-44fa-8142-5be18adeaec6
+
+	measure 'Total Citas' = DISTINCTCOUNT(Citas[id_cita])
+		formatString: #,0
+		displayFolder: Citas
+		lineageTag: 431b7e6e-5873-4301-9ff5-c22716712c20
+
+	measure 'Citas Completadas' = CALCULATE( [Total Citas], Citas[Estado Cita] = "Completada" )
+		formatString: #,0
+		displayFolder: Citas
+		lineageTag: 9bc9fa9f-438a-4340-90f5-856f5148c5fb
+
+	measure 'Citas Canceladas' = CALCULATE( [Total Citas], Citas[Estado Cita] = "Cancelada" )
+		formatString: #,0
+		displayFolder: Citas
+		lineageTag: 95231345-cc01-47d4-a961-92898b3d8e24
+
+	measure 'Citas Programadas' = CALCULATE( [Total Citas], Citas[Estado Cita] = "Programada" )
+		formatString: #,0
+		displayFolder: Citas
+		lineageTag: ce68e6cc-a00d-413f-a485-922851befce4
+
+	measure '% Canceladas' = DIVIDE([Citas Canceladas], [Total Citas])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Citas
+		lineageTag: b34bc33a-c69d-4f88-8701-b437ebd0f5ee
+
+	measure '% del Total de Citas' =
+			DIVIDE(
+			    [Total Citas],
+			    CALCULATE( [Total Citas], REMOVEFILTERS(Citas[veterinario], Citas[especialidad]) )
+			)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Citas
+		lineageTag: 8830332f-9266-4070-a2ba-2b198307741d
+
+	measure 'Ingresos por Consultas' = SUM(Citas[costo_c])
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Citas
+		lineageTag: ae6a2dad-5274-49ba-90f5-d27f4e95645e
+
+	measure 'Citas Temporada Alta' = CALCULATE( [Total Citas], Citas[Temporada] = "Alta" )
+		formatString: #,0
+		displayFolder: Temporadas
+		lineageTag: 07ed499b-5fbd-4d46-af37-aa17db22e2c2
+
+	measure 'Citas Temporada Normal' = CALCULATE( [Total Citas], Citas[Temporada] = "Normal" )
+		formatString: #,0
+		displayFolder: Temporadas
+		lineageTag: 95782050-6bd4-4b75-8f26-f3f56e4cd79b
+
+	measure 'Citas Temporada Baja' = CALCULATE( [Total Citas], Citas[Temporada] = "Baja" )
+		formatString: #,0
+		displayFolder: Temporadas
+		lineageTag: 251179b7-c1e7-49b7-87e9-6d633635664d
+
+	measure 'Citas Todas las Temporadas' = CALCULATE( [Total Citas], REMOVEFILTERS(Citas[Temporada], Citas[Temporada Orden]) )
+		formatString: #,0
+		displayFolder: Temporadas
+		lineageTag: a46d4e66-c055-4edd-892f-149e189c6f4b
+
+	measure 'Detalle Temporada Alta' =
+			FORMAT( DIVIDE([Citas Temporada Alta], [Citas Todas las Temporadas]), "0.0%" )
+			    & " del total · Jun, Jul, Ago, Dic"
+		displayFolder: Temporadas
+		lineageTag: 9253010b-4508-4711-9e48-661c7b2e5322
+
+	measure 'Detalle Temporada Normal' =
+			FORMAT( DIVIDE([Citas Temporada Normal], [Citas Todas las Temporadas]), "0.0%" )
+			    & " del total · Ene, Mar, May, Sep, Oct, Nov"
+		displayFolder: Temporadas
+		lineageTag: afeaf126-adf3-4a65-b489-22b82a4ee258
+
+	measure 'Detalle Temporada Baja' =
+			FORMAT( DIVIDE([Citas Temporada Baja], [Citas Todas las Temporadas]), "0.0%" )
+			    & " del total · Feb, Abr"
+		displayFolder: Temporadas
+		lineageTag: 2e2f0462-0ecd-4c62-b6c6-9370a83ec7a7
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: 3334156b-55e2-497e-8008-08cd2a7497f7
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_c
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: d9fe06d5-a84d-45f0-ad2e-e49e9a2ca981
+		summarizeBy: none
+		sourceColumn: fecha_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c7cdac21-8c74-415a-bb3e-c845aeba32ad
+		summarizeBy: none
+		sourceColumn: fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column hora
+		dataType: dateTime
+		formatString: Long Time
+		lineageTag: b9dc46cb-ac89-4045-949a-ae9f47e41f46
+		summarizeBy: none
+		sourceColumn: hora
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Time
+
+	column estado_c
+		dataType: string
+		lineageTag: 3cbfb6a3-c78d-4785-b49b-4f90090a35e4
+		summarizeBy: none
+		sourceColumn: estado_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo
+		dataType: string
+		lineageTag: 808d32d7-b199-4164-96ed-66387cca0ea5
+		summarizeBy: none
+		sourceColumn: motivo
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_c
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 7585abc7-9f66-456f-8060-8d8e43e2d2a6
+		summarizeBy: sum
+		sourceColumn: costo_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_mascota
+		dataType: int64
+		formatString: 0
+		lineageTag: 9bc1bfc0-05a3-4044-9a8c-9eabc54c236d
+		summarizeBy: none
+		sourceColumn: id_mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column mascota
+		dataType: string
+		lineageTag: da39dd79-ab59-4666-9327-f6466c62cf87
+		summarizeBy: none
+		sourceColumn: mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column especie
+		dataType: string
+		lineageTag: ca5c6bf3-3f36-4c33-9d4d-9debf0376309
+		summarizeBy: none
+		sourceColumn: especie
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_veterinario
+		dataType: int64
+		formatString: 0
+		lineageTag: c268d589-88b6-4e32-988b-c03ef2e9450b
+		summarizeBy: none
+		sourceColumn: id_veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column veterinario
+		dataType: string
+		lineageTag: 7b57cd50-d09e-40cf-ae47-148edc88fcfa
+		summarizeBy: none
+		sourceColumn: veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column especialidad
+		dataType: string
+		lineageTag: c47dc377-15f8-4517-bde5-032450d01de5
+		summarizeBy: none
+		sourceColumn: especialidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año = YEAR(Citas[fecha_c])
+		dataType: int64
+		formatString: 0
+		lineageTag: 7311e9bc-3250-48e3-80dc-6e735bd83164
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes = MONTH(Citas[fecha_c])
+		dataType: int64
+		formatString: 0
+		lineageTag: cff43a62-da14-4982-a4de-9bb5d15186a5
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nombre Mes' =
+			SWITCH(
+			    Citas[mes],
+			    1, "Enero", 2, "Febrero", 3, "Marzo", 4, "Abril",
+			    5, "Mayo", 6, "Junio", 7, "Julio", 8, "Agosto",
+			    9, "Septiembre", 10, "Octubre", 11, "Noviembre", 12, "Diciembre"
+			)
+		dataType: string
+		lineageTag: feafe784-2738-45c7-811c-8d9cb9e0a41c
+		summarizeBy: none
+		sortByColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column Temporada =
+			SWITCH(
+			    TRUE(),
+			    Citas[mes] IN { 6, 7, 8, 12 }, "Alta",
+			    Citas[mes] IN { 2, 4 }, "Baja",
+			    "Normal"
+			)
+		dataType: string
+		lineageTag: 5ce6d357-c8a6-45bd-9074-6c6860da97fd
+		summarizeBy: none
+		sortByColumn: 'Temporada Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Temporada Orden' =
+			SWITCH(
+			    TRUE(),
+			    Citas[mes] IN { 6, 7, 8, 12 }, 1,
+			    Citas[mes] IN { 2, 4 }, 3,
+			    2
+			)
+		dataType: int64
+		formatString: 0
+		lineageTag: e80e2ff1-21af-493e-9c44-61af38074fdc
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia Num' = WEEKDAY(Citas[fecha_c], 2)
+		dataType: int64
+		formatString: 0
+		lineageTag: 22918942-733f-4903-bd82-6bf34a795ef8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Dia Semana' =
+			SWITCH(
+			    Citas[Dia Num],
+			    1, "Lun", 2, "Mar", 3, "Mié", 4, "Jue", 5, "Vie", 6, "Sáb", "Dom"
+			)
+		dataType: string
+		lineageTag: f6f374b4-d794-4a85-8489-d196f0a3bed9
+		summarizeBy: none
+		sortByColumn: 'Dia Num'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Franja Horaria' =
+			VAR h = HOUR(Citas[hora])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        ISBLANK(Citas[hora]), "Sin hora",
+			        h < 10, "07 - 10 h",
+			        h < 13, "10 - 13 h",
+			        h < 17, "13 - 17 h",
+			        "17 - 20 h"
+			    )
+		dataType: string
+		lineageTag: 8bbce0fa-ad54-488b-8105-0da9a1e53ac9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estado Cita' =
+			VAR e = LOWER(Citas[estado_c])
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        CONTAINSSTRING(e, "complet"), "Completada",
+			        CONTAINSSTRING(e, "cancel"), "Cancelada",
+			        CONTAINSSTRING(e, "program"), "Programada",
+			        Citas[estado_c]
+			    )
+		dataType: string
+		lineageTag: e00a00df-b51c-4272-aa52-517e5cc10c85
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Citas = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_citas"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

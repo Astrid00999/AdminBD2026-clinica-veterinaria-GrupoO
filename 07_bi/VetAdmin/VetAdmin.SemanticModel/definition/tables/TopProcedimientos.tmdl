@@ -1,0 +1,77 @@
+/// Consulta 4: los 2 procedimientos más caros de cada diagnóstico
+table TopProcedimientos
+	lineageTag: b37c37f1-344e-4773-a070-98736cb2da42
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: 7ebb639a-ad78-45f7-9c7e-3d1cad247ffa
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_diagnostico
+		dataType: int64
+		formatString: 0
+		lineageTag: fd70e792-2744-45f1-8eba-3b0cf439ee9e
+		summarizeBy: none
+		sourceColumn: id_diagnostico
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion_d
+		dataType: string
+		lineageTag: d30c6a96-ccc8-490d-86f3-ecd55e1c3ed7
+		summarizeBy: none
+		sourceColumn: descripcion_d
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_procedimiento
+		dataType: int64
+		formatString: 0
+		lineageTag: a1a328a5-0e60-4951-8846-242ce26fa389
+		summarizeBy: none
+		sourceColumn: id_procedimiento
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_p
+		dataType: string
+		lineageTag: fc8c4b54-1746-4373-9b0d-9e384edead05
+		summarizeBy: none
+		sourceColumn: nombre_p
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_p
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 37d67dc1-d5cd-45bd-8758-95d60d9fd424
+		summarizeBy: none
+		sourceColumn: costo_p
+
+		annotation SummarizationSetBy = Automatic
+
+	column rn
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f09e5b0-431c-42df-9fe9-9ea83226fb5d
+		summarizeBy: none
+		sourceColumn: rn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition TopProcedimientos = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_top_procedimientos_diagnostico"]}[Data],
+				    Tipos = Table.TransformColumnTypes(#"Navegación 1", {{"id_cita", Int64.Type}, {"id_diagnostico", Int64.Type}, {"descripcion_d", type text}, {"id_procedimiento", Int64.Type}, {"nombre_p", type text}, {"costo_p", type number}, {"rn", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

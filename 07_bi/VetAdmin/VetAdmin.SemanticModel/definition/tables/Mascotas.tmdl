@@ -1,0 +1,135 @@
+/// Vista reportes.vw_mascotas
+table Mascotas
+	lineageTag: a6da9627-f426-4542-940b-5200c36042ac
+
+	measure 'Mascotas Registradas' = DISTINCTCOUNT(Mascotas[id_mascota])
+		formatString: #,0
+		displayFolder: Pacientes
+		lineageTag: 01ecf9dc-622a-4b02-b517-64a5be22827b
+
+	measure 'Edad Promedio' = AVERAGE(Mascotas[Edad])
+		formatString: 0.0" años"
+		displayFolder: Pacientes
+		lineageTag: a12d8b58-7e6e-406a-bcaa-b3fb73804775
+
+	measure 'Peso Promedio' = AVERAGE(Mascotas[peso_m])
+		formatString: 0.0" kg"
+		displayFolder: Pacientes
+		lineageTag: b4d60721-f128-4646-9aa5-d79962b8fde9
+
+	measure 'Ranking Razas' =
+			VAR TotalMascotas = DISTINCTCOUNT(Mascotas[id_mascota])
+			RETURN
+			    IF(
+			        ISINSCOPE(Mascotas[raza]),
+			        RANKX(
+			            ALLSELECTED(Mascotas[raza]),
+			            TotalMascotas * 10000
+			                - RANKX(ALLSELECTED(Mascotas[raza]), CALCULATE(MIN(Mascotas[raza])), , ASC),
+			            ,
+			            DESC,
+			            DENSE
+			        )
+			    )
+		formatString: 0
+		displayFolder: Pacientes
+		lineageTag: 301e0695-8949-4467-be90-532baa0bdcf8
+
+	column id_mascota
+		dataType: int64
+		formatString: 0
+		lineageTag: aea4bb41-7c19-49dd-939b-ef0145589836
+		summarizeBy: none
+		sourceColumn: id_mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column mascota
+		dataType: string
+		lineageTag: 046546aa-c2c0-4472-aab6-a5e50d70a9ad
+		summarizeBy: none
+		sourceColumn: mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column especie
+		dataType: string
+		lineageTag: 5c848120-d62f-47b5-8af3-8fb70e70eb6e
+		summarizeBy: none
+		sourceColumn: especie
+
+		annotation SummarizationSetBy = Automatic
+
+	column raza
+		dataType: string
+		lineageTag: b6ce9e43-4ba7-47ce-8562-4bbda9656b17
+		summarizeBy: none
+		sourceColumn: raza
+
+		annotation SummarizationSetBy = Automatic
+
+	column sexo_m
+		dataType: string
+		lineageTag: 5385f6e7-2de4-4c97-a38d-0bae89293626
+		summarizeBy: none
+		sourceColumn: sexo_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_nacimiento
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: d0e3f771-cd0b-4b24-9d0f-55df83646f81
+		summarizeBy: none
+		sourceColumn: fecha_nacimiento
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column peso_m
+		dataType: double
+		formatString: 0.0
+		lineageTag: 97c04e77-e2f6-4752-9863-4742ed7836ac
+		summarizeBy: average
+		sourceColumn: peso_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column tamanio_m
+		dataType: string
+		lineageTag: a46ea4fe-c32f-4236-a878-c35c6e035137
+		summarizeBy: none
+		sourceColumn: tamanio_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_propietario
+		dataType: int64
+		formatString: 0
+		lineageTag: f0eb5e00-5b4d-4ee0-8bb2-8b3403defd12
+		summarizeBy: none
+		sourceColumn: id_propietario
+
+		annotation SummarizationSetBy = Automatic
+
+	column Edad = INT( DATEDIFF(Mascotas[fecha_nacimiento], TODAY(), DAY) / 365.25 )
+		dataType: int64
+		formatString: 0
+		lineageTag: 5d6b364b-d64b-45ec-b408-818f6cc18a0b
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Mascotas = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_mascotas"]}[Data],
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Navegación 1", {"edad_anios"})
+				in
+				    #"Columnas quitadas"
+
+	annotation PBI_ResultType = Table
+

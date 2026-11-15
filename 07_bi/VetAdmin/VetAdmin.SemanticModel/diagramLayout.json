@@ -1,0 +1,191 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 838.34904591830821,
+            "y": 718.22474834791956
+          },
+          "nodeIndex": "Calendario",
+          "nodeLineageTag": "2706e9da-0bf4-4f15-ada2-81e4256eeecd",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 566.2130220998132,
+            "y": 303.255443035908
+          },
+          "nodeIndex": "Citas",
+          "nodeLineageTag": "1319fa43-42c8-44fa-8142-5be18adeaec6",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 870.26086372015652,
+            "y": 1323.8738670144739
+          },
+          "nodeIndex": "DetalleFactura",
+          "nodeLineageTag": "d377aebb-2c0d-43c9-8c21-141f58c1c07b",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 626.1815825975782,
+            "y": 973.17615528597469
+          },
+          "nodeIndex": "Facturas",
+          "nodeLineageTag": "e96fa86d-0ed0-4f33-a1de-d8ad14ba4d8c",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1164.6613374176998,
+            "y": 712.936933507237
+          },
+          "nodeIndex": "IndicadoresMascotas",
+          "nodeLineageTag": "00028e02-8bc0-443f-b88d-b0d11575dd10",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 339.87824018554,
+            "y": 660.01101186054939
+          },
+          "nodeIndex": "Mascotas",
+          "nodeLineageTag": "a6da9627-f426-4542-940b-5200c36042ac",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": 1010.4191878646178
+          },
+          "nodeIndex": "MascotasPesadas",
+          "nodeLineageTag": "30420758-3f02-416c-8533-1bf038af92be",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 132.05151425598876,
+            "y": 302.96731966011612
+          },
+          "nodeIndex": "ProcedimientosDiag",
+          "nodeLineageTag": "1ce7aaf6-1274-4d5b-b895-83881361175e",
+          "size": {
+            "height": 272,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1448.6613374176998,
+            "y": 686.936933507237
+          },
+          "nodeIndex": "ProductividadVet",
+          "nodeLineageTag": "92bd9ca4-7700-41f7-95f5-6944d7c7a690",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 1732.6613374176998,
+            "y": 688.936933507237
+          },
+          "nodeIndex": "ResumenFinanciero",
+          "nodeLineageTag": "58ae0949-ba46-4de7-80d0-3c5ec8286d97",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 930.66133741769977,
+            "y": 184.81405111121467
+          },
+          "nodeIndex": "TopProcedimientos",
+          "nodeLineageTag": "b37c37f1-344e-4773-a070-98736cb2da42",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 640.77519542370453,
+            "y": -50
+          },
+          "nodeIndex": "UltimasCitasMascota",
+          "nodeLineageTag": "81d2a07c-4bb6-41ef-af70-4292c01af311",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        },
+        {
+          "location": {
+            "x": 302.63857955684773,
+            "y": -49.960294620211926
+          },
+          "nodeIndex": "UltimasCitasVet",
+          "nodeLineageTag": "923345f5-8ec9-4d37-aa4d-96c391770c7f",
+          "size": {
+            "height": 296,
+            "width": 234
+          },
+          "zIndex": 0
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

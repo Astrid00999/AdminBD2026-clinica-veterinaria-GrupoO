@@ -1,0 +1,93 @@
+/// Consulta 2: las 2 citas más recientes de cada mascota
+table UltimasCitasMascota
+	lineageTag: 81d2a07c-4bb6-41ef-af70-4292c01af311
+
+	column id_mascota
+		dataType: int64
+		formatString: 0
+		lineageTag: 3f15b25c-2ed0-44b5-90dc-c9abf379706d
+		summarizeBy: none
+		sourceColumn: id_mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_m
+		dataType: string
+		lineageTag: c8061754-0ad2-4bc0-ab29-7124790b05f7
+		summarizeBy: none
+		sourceColumn: nombre_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_propietario
+		dataType: int64
+		formatString: 0
+		lineageTag: 9c352a82-543f-4210-a39a-73339849677f
+		summarizeBy: none
+		sourceColumn: id_propietario
+
+		annotation SummarizationSetBy = Automatic
+
+	column propietario
+		dataType: string
+		lineageTag: f9822a41-2745-4e67-8ea0-6b47c5b418a2
+		summarizeBy: none
+		sourceColumn: propietario
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: a9874ea7-1961-445a-8ff7-ffb338178e3c
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_c
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: bc9cb57e-317d-4068-b28f-d23db9bd37e9
+		summarizeBy: none
+		sourceColumn: fecha_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo_c
+		dataType: string
+		lineageTag: 21780f3d-82eb-4159-9664-bbabd5113b4f
+		summarizeBy: none
+		sourceColumn: motivo_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado_c
+		dataType: string
+		lineageTag: a5ccb7fe-57f9-49b5-9b37-523a056b82ee
+		summarizeBy: none
+		sourceColumn: estado_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column rn
+		dataType: int64
+		formatString: 0
+		lineageTag: d1d36d09-35f5-45f2-84d7-773b6b237d62
+		summarizeBy: none
+		sourceColumn: rn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition UltimasCitasMascota = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_ultimas_citas_mascota"]}[Data],
+				    Tipos = Table.TransformColumnTypes(#"Navegación 1", {{"id_mascota", Int64.Type}, {"nombre_m", type text}, {"id_propietario", Int64.Type}, {"propietario", type text}, {"id_cita", Int64.Type}, {"fecha_c", type datetime}, {"motivo_c", type text}, {"estado_c", type text}, {"rn", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

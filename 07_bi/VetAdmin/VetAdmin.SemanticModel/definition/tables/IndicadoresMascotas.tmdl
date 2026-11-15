@@ -1,0 +1,76 @@
+/// Vista reportes.vw_indicadores_mascotas
+table IndicadoresMascotas
+	lineageTag: 00028e02-8bc0-443f-b88d-b0d11575dd10
+
+	column especie
+		dataType: string
+		lineageTag: ab8f21da-cdcc-4303-92ee-2c9ac5b4b7df
+		summarizeBy: none
+		sourceColumn: especie
+
+		annotation SummarizationSetBy = Automatic
+
+	column raza
+		dataType: string
+		lineageTag: a97704f1-cb3f-4cb2-a6ba-f5e9ae9fae2a
+		summarizeBy: none
+		sourceColumn: raza
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_mascotas
+		dataType: int64
+		formatString: 0
+		lineageTag: 2e6e981e-3fe9-45db-82bb-302ec11552e7
+		summarizeBy: sum
+		sourceColumn: total_mascotas
+
+		annotation SummarizationSetBy = Automatic
+
+	column machos
+		dataType: int64
+		formatString: 0
+		lineageTag: d14f405d-0f50-46a3-ae7b-b9db17c81674
+		summarizeBy: sum
+		sourceColumn: machos
+
+		annotation SummarizationSetBy = Automatic
+
+	column hembras
+		dataType: int64
+		formatString: 0
+		lineageTag: 64fecb22-e14a-418e-afc8-324dfcdd4ee0
+		summarizeBy: sum
+		sourceColumn: hembras
+
+		annotation SummarizationSetBy = Automatic
+
+	column peso_promedio
+		dataType: double
+		formatString: 0.0
+		lineageTag: e980b28e-5fdd-499d-bc73-fd122d50b86c
+		summarizeBy: average
+		sourceColumn: peso_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+	column edad_promedio_anios
+		dataType: double
+		formatString: 0.0
+		lineageTag: 9f6478c1-9b9e-4658-bf6e-984e6b66445a
+		summarizeBy: average
+		sourceColumn: edad_promedio_anios
+
+		annotation SummarizationSetBy = Automatic
+
+	partition IndicadoresMascotas = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_indicadores_mascotas"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

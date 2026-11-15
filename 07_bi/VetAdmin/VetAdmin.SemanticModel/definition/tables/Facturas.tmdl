@@ -1,0 +1,260 @@
+/// Vista reportes.vw_facturacion
+table Facturas
+	lineageTag: e96fa86d-0ed0-4f33-a1de-d8ad14ba4d8c
+
+	measure 'Total Facturado' =
+			CALCULATE(
+			    SUM(DetalleFactura[subtotal_df]),
+			    DetalleFactura[estado_f] <> "Anulada"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: c6b9d513-0c76-4649-be4f-4648489734b5
+
+	measure 'Total Cobrado' =
+			CALCULATE(
+			    SUM(DetalleFactura[subtotal_df]),
+			    DetalleFactura[estado_f] = "Pagada"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: 3535fb58-07f4-4471-9f82-24ba8e336e54
+
+	measure 'Pendiente de Cobro' =
+			CALCULATE(
+			    SUM(DetalleFactura[subtotal_df]),
+			    DetalleFactura[estado_f] = "Pendiente"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: 786aec1e-a84b-4eac-9815-cadcd10d96ee
+
+	measure 'Total Anulado' =
+			CALCULATE(
+			    SUM(DetalleFactura[subtotal_df]),
+			    DetalleFactura[estado_f] = "Anulada"
+			)
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: e8c39aed-dc83-4bd7-9b47-dc6bd111dc62
+
+	measure Ingresos = SUM(DetalleFactura[subtotal_df])
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: 7c70dae9-17b8-43cf-a380-b98f8355d0d6
+
+	measure 'Num Facturas' = DISTINCTCOUNT(Facturas[id_factura])
+		formatString: #,0
+		displayFolder: Finanzas
+		lineageTag: e7e7ca8c-c1cc-4389-8165-a3f21feefd57
+
+	measure 'Ticket Promedio' =
+			DIVIDE(
+			    [Total Facturado],
+			    CALCULATE( [Num Facturas], Facturas[estado_f] <> "Anulada" )
+			)
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		displayFolder: Finanzas
+		lineageTag: d0211087-8a3e-42f5-8807-80c0e8c6a0df
+
+	measure '% Cobrado' = DIVIDE([Total Cobrado], [Total Facturado])
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Finanzas
+		lineageTag: cd29068a-29d0-49a6-87a3-ff2b1bcb0258
+
+	measure 'Facturas Descuadradas' =
+			COALESCE(
+			    COUNTROWS(
+			        FILTER(
+			            Facturas,
+			            ROUND(Facturas[total_f], 2) <> ROUND(Facturas[total_calculado], 2)
+			        )
+			    ),
+			    0
+			)
+		formatString: #,0
+		displayFolder: Finanzas
+		lineageTag: 39bd5f33-cef6-4f85-b226-1f1bc91dc52c
+
+	measure 'Facturas por Cobrar' = CALCULATE( [Num Facturas], Facturas[estado_f] = "Pendiente" )
+		formatString: #,0
+		displayFolder: Finanzas
+		lineageTag: 5b3fc4a2-a993-4268-bbb1-602fec527cbf
+
+	measure 'Monto por Cobrar' = CALCULATE( SUM(Facturas[total_f]), Facturas[estado_f] = "Pendiente" )
+		formatString: \$#,0;(\$#,0);\$#,0
+		displayFolder: Finanzas
+		lineageTag: 5783a460-5c34-4ef5-aa64-f8b00b5f7ad9
+
+	column id_factura
+		dataType: int64
+		formatString: 0
+		lineageTag: 7db8113a-5f62-4454-b9ea-2fd694d98039
+		summarizeBy: none
+		sourceColumn: id_factura
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_emision_f
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1b54d0d0-dc05-49b2-8559-86fc25d2937c
+		summarizeBy: none
+		sourceColumn: fecha_emision_f
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column estado_f
+		dataType: string
+		lineageTag: 37d144d4-4d74-4a37-b70f-f50c3c655c0c
+		summarizeBy: none
+		sourceColumn: estado_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_f
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 0789de72-da8c-453d-9564-0895ee45fd9e
+		summarizeBy: sum
+		sourceColumn: total_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column lineas
+		dataType: int64
+		formatString: 0
+		lineageTag: 6d415563-e07a-4441-8c17-7e3a4d92b62b
+		summarizeBy: sum
+		sourceColumn: lineas
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_calculado
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 24957292-9ef4-4895-818f-69878c885474
+		summarizeBy: sum
+		sourceColumn: total_calculado
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: 2b5f8bac-f0d1-4d3d-b7e2-01870a23c695
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_c
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 059e1854-4c9f-46de-8ead-c3860c3c06e3
+		summarizeBy: none
+		sourceColumn: fecha_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_mascota
+		dataType: int64
+		formatString: 0
+		lineageTag: 68cfb031-faf8-46b3-ad27-6dc168aee277
+		summarizeBy: none
+		sourceColumn: id_mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column mascota
+		dataType: string
+		lineageTag: 0fe83a2b-13af-411b-bb98-0cbe75159523
+		summarizeBy: none
+		sourceColumn: mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_propietario
+		dataType: int64
+		formatString: 0
+		lineageTag: 452a4994-118a-4eba-9734-3ca1ff1b6c8a
+		summarizeBy: none
+		sourceColumn: id_propietario
+
+		annotation SummarizationSetBy = Automatic
+
+	column propietario
+		dataType: string
+		lineageTag: 89d74620-a03e-400c-94e7-b157d47ec058
+		summarizeBy: none
+		sourceColumn: propietario
+
+		annotation SummarizationSetBy = Automatic
+
+	column Antiguedad =
+			VAR Dias = DATEDIFF(Facturas[fecha_emision_f], TODAY(), DAY)
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        Facturas[estado_f] <> "Pendiente", BLANK(),
+			        Dias <= 30, "0 a 30 días",
+			        Dias <= 60, "31 a 60 días",
+			        "Más de 60 días"
+			    )
+		dataType: string
+		lineageTag: 9703b8fc-00e9-482b-939e-013d67e83d40
+		summarizeBy: none
+		sortByColumn: 'Antiguedad Orden'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Antiguedad Orden' =
+			VAR Dias = DATEDIFF(Facturas[fecha_emision_f], TODAY(), DAY)
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        Facturas[estado_f] <> "Pendiente", BLANK(),
+			        Dias <= 30, 1,
+			        Dias <= 60, 2,
+			        3
+			    )
+		dataType: int64
+		formatString: 0
+		lineageTag: 1fec18b6-fa50-4a11-bd36-bbf7a40729d0
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Cuadre =
+			IF(
+			    ROUND(Facturas[total_f], 2) <> ROUND(Facturas[total_calculado], 2),
+			    "Descuadrada",
+			    "Cuadrada"
+			)
+		dataType: string
+		lineageTag: 36e4063d-7987-4803-b978-dec930ff51c8
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Diferencia = Facturas[total_f] - Facturas[total_calculado]
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: c9b39785-2fbc-426b-8937-d0b76e3d04c3
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Facturas = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_facturacion"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

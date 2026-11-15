@@ -1,0 +1,96 @@
+/// Vista reportes.vw_resumen_financiero
+table ResumenFinanciero
+	lineageTag: 58ae0949-ba46-4de7-80d0-3c5ec8286d97
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 90c88990-ab01-453a-a309-01f0f51e73e6
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: a8784603-2273-47c8-99f0-36d7748660f6
+		summarizeBy: none
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_facturas
+		dataType: int64
+		formatString: 0
+		lineageTag: 48b090a7-936b-4834-9c19-28232e14011c
+		summarizeBy: sum
+		sourceColumn: total_facturas
+
+		annotation SummarizationSetBy = Automatic
+
+	column facturas_pagadas
+		dataType: int64
+		formatString: 0
+		lineageTag: 6c002eb5-920f-4c09-b622-f3af65a4ec2e
+		summarizeBy: sum
+		sourceColumn: facturas_pagadas
+
+		annotation SummarizationSetBy = Automatic
+
+	column facturas_pendientes
+		dataType: int64
+		formatString: 0
+		lineageTag: 8799ff37-12dc-4778-be1b-f8ddce603dbf
+		summarizeBy: sum
+		sourceColumn: facturas_pendientes
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_facturado
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 17d13201-c4f8-42f7-9105-ce988770439e
+		summarizeBy: sum
+		sourceColumn: monto_facturado
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_cobrado
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a4752f98-6757-485f-aae6-d5bf0801965b
+		summarizeBy: sum
+		sourceColumn: monto_cobrado
+
+		annotation SummarizationSetBy = Automatic
+
+	column monto_pendiente
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: a7ca65c9-299b-4ef2-85cf-b2ee2b625ba5
+		summarizeBy: sum
+		sourceColumn: monto_pendiente
+
+		annotation SummarizationSetBy = Automatic
+
+	column ticket_promedio
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 04455b50-ae53-4f86-8f61-a0fa088d1cad
+		summarizeBy: average
+		sourceColumn: ticket_promedio
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ResumenFinanciero = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_resumen_financiero"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

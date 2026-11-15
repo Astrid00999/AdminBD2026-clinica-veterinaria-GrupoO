@@ -1,0 +1,1625 @@
+cultureInfo es-ES
+
+	linguisticMetadata =
+			{
+			  "Version": "2.0.0",
+			  "Language": "en-US",
+			  "Entities": {
+			    "calendario.mes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Calendario",
+			          "ConceptualProperty": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "calendario.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Calendario",
+			          "ConceptualProperty": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Año": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.total_facturado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Total Facturado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Facturado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Total facturado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.total_cobrado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Total Cobrado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cobrado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Total cobrado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.estado_f": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "estado_f"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.num_facturas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Num Facturas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Facturas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.pendiente_de_cobro": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Pendiente de Cobro"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Pendiente": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.ticket_promedio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Ticket Promedio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ticket promedio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.antiguedad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Antiguedad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Antigüedad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.facturas_por_cobrar": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Facturas por Cobrar"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Facturas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.monto_por_cobrar": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Monto por Cobrar"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Monto": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.id_factura": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "id_factura"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Factura": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.mascota": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "mascota"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mascota": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.total_f": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "total_f"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "total_f": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.total_calculado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "total_calculado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "total_calculado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.diferencia": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Diferencia"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Diferencia": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.ingresos": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Ingresos"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ingresos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "facturas.facturas_descuadradas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Facturas",
+			          "ConceptualProperty": "Facturas Descuadradas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Facturas descuadradas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.especie": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "especie"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Especie": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.sexo_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "sexo_m"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Sexo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.raza": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "raza"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Raza": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.mascotas_registradas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "Mascotas Registradas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mascotas registradas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Mascotas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.edad_promedio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "Edad Promedio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Edad promedio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotas.peso_promedio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Mascotas",
+			          "ConceptualProperty": "Peso Promedio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Peso promedio": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.total_citas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Total Citas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Total citas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Citas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.canceladas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "% Canceladas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% canceladas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.especialidad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "especialidad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Especialidad": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.estado_cita": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Estado Cita"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.veterinario": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "veterinario"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Veterinario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Vet.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.especie": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "especie"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Especie": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.ingresos_por_consultas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Ingresos por Consultas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Ingresos": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.del_total_de_citas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "% del Total de Citas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "% total": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.citas_completadas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Citas Completadas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Completadas": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.citas_canceladas": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Citas Canceladas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cancel.": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "fecha"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fecha": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.hora": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "hora"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Hora": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.mascota": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "mascota"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mascota": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.temporada": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Temporada"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Temporada": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.citas_temporada_alta": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Citas Temporada Alta"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Temporada alta": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.citas_temporada_normal": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Citas Temporada Normal"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Temporada normal": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.citas_temporada_baja": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Citas Temporada Baja"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Temporada baja": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.franja_horaria": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Franja Horaria"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Franja": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.dia_semana": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "Dia Semana"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Día": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "citas.motivo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Citas",
+			          "ConceptualProperty": "motivo"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Motivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.veterinario": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "veterinario"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Veterinario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.anio": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "anio"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Año": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.mes": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mes": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.rn": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "rn"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.fecha_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "fecha_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fecha y hora": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.motivo_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "motivo_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Motivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasvet.estado_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasVet",
+			          "ConceptualProperty": "estado_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.propietario": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "propietario"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Propietario (historial)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        },
+			        {
+			          "Propietario": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.nombre_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "nombre_m"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mascota": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.rn": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "rn"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.fecha_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "fecha_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Fecha y hora": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.motivo_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "motivo_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Motivo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "ultimascitasmascota.estado_c": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "UltimasCitasMascota",
+			          "ConceptualProperty": "estado_c"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Estado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotaspesadas.raza": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MascotasPesadas",
+			          "ConceptualProperty": "raza"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Raza": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotaspesadas.tamanio_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MascotasPesadas",
+			          "ConceptualProperty": "tamanio_m"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Tamaño": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotaspesadas.rn": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MascotasPesadas",
+			          "ConceptualProperty": "rn"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotaspesadas.nombre_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MascotasPesadas",
+			          "ConceptualProperty": "nombre_m"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Mascota": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "mascotaspesadas.peso_m": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "MascotasPesadas",
+			          "ConceptualProperty": "peso_m"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Peso (kg)": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "procedimientosdiag.descripcion_d": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ProcedimientosDiag",
+			          "ConceptualProperty": "descripcion_d"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Diagnóstico": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "procedimientosdiag.n": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ProcedimientosDiag",
+			          "ConceptualProperty": "n"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "procedimientosdiag.nombre_p": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ProcedimientosDiag",
+			          "ConceptualProperty": "nombre_p"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Procedimiento": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "procedimientosdiag.costo_p": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ProcedimientosDiag",
+			          "ConceptualProperty": "costo_p"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "procedimientosdiag.costo_acumulado": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "ProcedimientosDiag",
+			          "ConceptualProperty": "costo_acumulado"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo acumulado": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "detallefactura.tipo_concepto": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DetalleFactura",
+			          "ConceptualProperty": "tipo_concepto"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Concepto": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "detallefactura.medicamento": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "DetalleFactura",
+			          "ConceptualProperty": "medicamento"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Medicamento": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "topprocedimientos.id_cita": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "TopProcedimientos",
+			          "ConceptualProperty": "id_cita"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Cita": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "topprocedimientos.descripcion_d": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "TopProcedimientos",
+			          "ConceptualProperty": "descripcion_d"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Diagnóstico": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "topprocedimientos.rn": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "TopProcedimientos",
+			          "ConceptualProperty": "rn"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "#": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "topprocedimientos.nombre_p": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "TopProcedimientos",
+			          "ConceptualProperty": "nombre_p"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Procedimiento": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    },
+			    "topprocedimientos.costo_p": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "TopProcedimientos",
+			          "ConceptualProperty": "costo_p"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "Costo": {
+			            "State": "Suggested",
+			            "Source": {
+			              "Type": "External",
+			              "Agent": "PowerBI.VisualColumnRename"
+			            },
+			            "Weight": 0.9
+			          }
+			        }
+			      ]
+			    }
+			  }
+			}
+		contentType: json
+

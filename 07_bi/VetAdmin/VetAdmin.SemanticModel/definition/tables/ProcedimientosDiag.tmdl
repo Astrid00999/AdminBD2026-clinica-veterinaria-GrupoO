@@ -1,0 +1,86 @@
+/// Consulta 3: procedimientos de cada diagnóstico con número de orden y costo acumulado
+table ProcedimientosDiag
+	lineageTag: 1ce7aaf6-1274-4d5b-b895-83881361175e
+
+	column id_procedimiento
+		dataType: int64
+		formatString: 0
+		lineageTag: 8aadaaf2-0114-4031-99f9-a066cd11c7f3
+		summarizeBy: none
+		sourceColumn: id_procedimiento
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_p
+		dataType: string
+		lineageTag: 33627de0-8994-4d27-8ca5-639e566f181d
+		summarizeBy: none
+		sourceColumn: nombre_p
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_p
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 8962bc0b-961a-4a29-90ec-c434c73629e8
+		summarizeBy: none
+		sourceColumn: costo_p
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_diagnostico
+		dataType: int64
+		formatString: 0
+		lineageTag: cc2bf11a-dcbb-4a1c-87c4-a08643b18f49
+		summarizeBy: none
+		sourceColumn: id_diagnostico
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion_d
+		dataType: string
+		lineageTag: e26d76ce-4a83-4165-bbe5-d2d54339d6ce
+		summarizeBy: none
+		sourceColumn: descripcion_d
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: bfc29435-34c8-443d-8880-ff20a9746bd9
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column n
+		dataType: int64
+		formatString: 0
+		lineageTag: f447a542-8a30-4c00-a333-bb604e55645e
+		summarizeBy: none
+		sourceColumn: n
+
+		annotation SummarizationSetBy = Automatic
+
+	column costo_acumulado
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 65ab8c74-5a80-462b-b68c-a1b60ac6e8f8
+		summarizeBy: none
+		sourceColumn: costo_acumulado
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ProcedimientosDiag = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_procedimientos_acumulado"]}[Data],
+				    Tipos = Table.TransformColumnTypes(#"Navegación 1", {{"id_procedimiento", Int64.Type}, {"nombre_p", type text}, {"costo_p", type number}, {"id_diagnostico", Int64.Type}, {"descripcion_d", type text}, {"id_cita", Int64.Type}, {"n", Int64.Type}, {"costo_acumulado", type number}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

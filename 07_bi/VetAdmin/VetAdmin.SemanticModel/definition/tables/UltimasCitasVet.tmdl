@@ -1,0 +1,94 @@
+/// Consulta 1: las 3 citas más recientes de cada mes, por veterinario
+table UltimasCitasVet
+	lineageTag: 923345f5-8ec9-4d37-aa4d-96c391770c7f
+
+	column id_cita
+		dataType: int64
+		formatString: 0
+		lineageTag: 4dfa411e-b004-416e-85db-5e9c09c1985b
+		summarizeBy: none
+		sourceColumn: id_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_c
+		dataType: dateTime
+		formatString: dd/mm/yyyy hh:nn
+		lineageTag: e36ee7a1-e755-4e4b-be14-a1a1bd76a72b
+		summarizeBy: none
+		sourceColumn: fecha_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column motivo_c
+		dataType: string
+		lineageTag: 5041d965-2e0b-4d18-b709-f00e97b6b145
+		summarizeBy: none
+		sourceColumn: motivo_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado_c
+		dataType: string
+		lineageTag: e346a67a-6b62-4b09-b899-5db3072de19d
+		summarizeBy: none
+		sourceColumn: estado_c
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_veterinario
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c50b2d7-896c-4d71-848a-e520df750066
+		summarizeBy: none
+		sourceColumn: id_veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column veterinario
+		dataType: string
+		lineageTag: 090a964a-e8b3-417d-bea3-8f03361b4424
+		summarizeBy: none
+		sourceColumn: veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: 595533b3-9e17-4c7c-af67-5352972f500f
+		summarizeBy: none
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: 95a488fc-0ed4-4c3f-98ec-8609dc726a2a
+		summarizeBy: none
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column rn
+		dataType: int64
+		formatString: 0
+		lineageTag: 0e10657b-d5b6-48c0-803a-fb120445c9ad
+		summarizeBy: none
+		sourceColumn: rn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition UltimasCitasVet = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_ultimas_citas_veterinario"]}[Data],
+				    Tipos = Table.TransformColumnTypes(#"Navegación 1", {{"id_cita", Int64.Type}, {"fecha_c", type datetime}, {"motivo_c", type text}, {"estado_c", type text}, {"id_veterinario", Int64.Type}, {"veterinario", type text}, {"anio", Int64.Type}, {"mes", Int64.Type}, {"rn", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

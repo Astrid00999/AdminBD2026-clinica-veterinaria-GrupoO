@@ -1,0 +1,31 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-ES
+	maxParallelismPerRefresh: 2
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation __PBI_TimeIntelligenceEnabled = 0
+
+annotation PBI_QueryOrder = ["Citas", "DetalleFactura", "Facturas", "Mascotas", "IndicadoresMascotas", "ProductividadVet", "ResumenFinanciero", "UltimasCitasVet", "UltimasCitasMascota", "ProcedimientosDiag", "TopProcedimientos", "MascotasPesadas"]
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Citas
+ref table DetalleFactura
+ref table Facturas
+ref table Mascotas
+ref table IndicadoresMascotas
+ref table ProductividadVet
+ref table ResumenFinanciero
+ref table UltimasCitasVet
+ref table UltimasCitasMascota
+ref table ProcedimientosDiag
+ref table TopProcedimientos
+ref table MascotasPesadas
+ref table Calendario
+
+ref cultureInfo es-ES
+

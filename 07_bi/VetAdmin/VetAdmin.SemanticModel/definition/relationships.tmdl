@@ -1,0 +1,42 @@
+relationship 888652e3-ae52-4bd0-b100-50fa1b781351
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Citas.fecha
+	toColumn: Calendario.Fecha
+
+relationship 98fa1f5b-8a39-477f-b577-a0c2f16ff57d
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Facturas.fecha_emision_f
+	toColumn: Calendario.Fecha
+
+relationship a380d8a1-13fa-46b6-8dad-9b0c0e7de1f9
+	fromColumn: DetalleFactura.id_factura
+	toColumn: Facturas.id_factura
+
+relationship c1167434-a5da-4c8f-adb6-5cda78254bbe
+	fromColumn: Citas.id_mascota
+	toColumn: Mascotas.id_mascota
+
+relationship baa105a3-3fbd-4200-a996-3fb93d68da35
+	fromColumn: Facturas.id_mascota
+	toColumn: Mascotas.id_mascota
+
+relationship 19f7bd12-97e3-4764-bcee-d645d5359c0e
+	fromColumn: UltimasCitasVet.id_cita
+	toColumn: Citas.id_cita
+
+relationship b31158df-fb3b-4acd-9185-6c71d45ae359
+	fromColumn: UltimasCitasMascota.id_cita
+	toColumn: Citas.id_cita
+
+relationship 5db9cd9a-d580-432b-a4c5-7db2489b661e
+	fromColumn: ProcedimientosDiag.id_cita
+	toColumn: Citas.id_cita
+
+relationship 1a0face1-6869-48f7-9796-0d0b3c408ee0
+	fromColumn: TopProcedimientos.id_cita
+	toColumn: Citas.id_cita
+
+relationship 52f9c92f-b63e-45f5-80ea-0b773d93078a
+	fromColumn: MascotasPesadas.id_mascota
+	toColumn: Mascotas.id_mascota
+

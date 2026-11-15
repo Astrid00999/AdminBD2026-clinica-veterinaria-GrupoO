@@ -1,0 +1,112 @@
+/// Vista reportes.vw_productividad_veterinaria
+table ProductividadVet
+	lineageTag: 92bd9ca4-7700-41f7-95f5-6944d7c7a690
+
+	column id_veterinario
+		dataType: int64
+		formatString: 0
+		lineageTag: 6b298479-2287-475f-b586-a8a053b793fe
+		summarizeBy: none
+		sourceColumn: id_veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column veterinario
+		dataType: string
+		lineageTag: 3995daa6-e927-4ee8-8979-5931daa0c839
+		summarizeBy: none
+		sourceColumn: veterinario
+
+		annotation SummarizationSetBy = Automatic
+
+	column especialidad
+		dataType: string
+		lineageTag: ba0f2968-6ed5-488f-bfbf-ef406731356b
+		summarizeBy: none
+		sourceColumn: especialidad
+
+		annotation SummarizationSetBy = Automatic
+
+	column total_citas
+		dataType: int64
+		formatString: 0
+		lineageTag: 9517fb90-47a0-4f3e-bae0-f61f829d4295
+		summarizeBy: sum
+		sourceColumn: total_citas
+
+		annotation SummarizationSetBy = Automatic
+
+	column citas_completadas
+		dataType: int64
+		formatString: 0
+		lineageTag: e0fd5da0-6cf0-40be-bce5-fd4831b5c896
+		summarizeBy: sum
+		sourceColumn: citas_completadas
+
+		annotation SummarizationSetBy = Automatic
+
+	column citas_canceladas
+		dataType: int64
+		formatString: 0
+		lineageTag: da6de5a2-bfc7-4421-98df-947e032932f5
+		summarizeBy: sum
+		sourceColumn: citas_canceladas
+
+		annotation SummarizationSetBy = Automatic
+
+	column citas_programadas
+		dataType: int64
+		formatString: 0
+		lineageTag: 0828934b-fcd2-48bd-8546-0a6e1ff3517d
+		summarizeBy: sum
+		sourceColumn: citas_programadas
+
+		annotation SummarizationSetBy = Automatic
+
+	column diagnosticos_emitidos
+		dataType: int64
+		formatString: 0
+		lineageTag: fe9b8877-5d92-4569-bc2f-1ad4a6c3b885
+		summarizeBy: sum
+		sourceColumn: diagnosticos_emitidos
+
+		annotation SummarizationSetBy = Automatic
+
+	column mascotas_atendidas
+		dataType: int64
+		formatString: 0
+		lineageTag: 96b8ad43-7575-4f50-92d8-5f71a6e404d7
+		summarizeBy: sum
+		sourceColumn: mascotas_atendidas
+
+		annotation SummarizationSetBy = Automatic
+
+	column primera_cita
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: e6506ae8-592c-4c5f-8eed-a4cb5889f8b7
+		summarizeBy: none
+		sourceColumn: primera_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	column ultima_cita
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 0f8079b0-63a3-4986-9ad5-883a0e90f92d
+		summarizeBy: none
+		sourceColumn: ultima_cita
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ProductividadVet = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_productividad_veterinaria"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+

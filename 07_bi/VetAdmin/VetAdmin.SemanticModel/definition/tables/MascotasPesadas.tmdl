@@ -1,0 +1,84 @@
+/// Consulta 5: las 3 mascotas más pesadas de cada tamaño dentro de cada raza
+table MascotasPesadas
+	lineageTag: 30420758-3f02-416c-8533-1bf038af92be
+
+	column id_mascota
+		dataType: int64
+		formatString: 0
+		lineageTag: ad4f4d2b-f5b8-499e-8e7b-d1ea9f53bc1b
+		summarizeBy: none
+		sourceColumn: id_mascota
+
+		annotation SummarizationSetBy = Automatic
+
+	column nombre_m
+		dataType: string
+		lineageTag: b4e5107f-7d37-4bad-a311-204a9fdb0fe8
+		summarizeBy: none
+		sourceColumn: nombre_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column tamanio_m
+		dataType: string
+		lineageTag: 1308e6e1-08a5-45a2-b6ed-836b66274ec3
+		summarizeBy: none
+		sourceColumn: tamanio_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column peso_m
+		dataType: double
+		formatString: 0.0
+		lineageTag: 93a9fa96-e49a-45e3-a78a-1913519c75e6
+		summarizeBy: none
+		sourceColumn: peso_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_raza
+		dataType: int64
+		formatString: 0
+		lineageTag: 015022b3-9954-470f-875e-5728db97e5fd
+		summarizeBy: none
+		sourceColumn: id_raza
+
+		annotation SummarizationSetBy = Automatic
+
+	column raza
+		dataType: string
+		lineageTag: f0d2665e-8cde-4671-87f6-c43452aab7e2
+		summarizeBy: none
+		sourceColumn: raza
+
+		annotation SummarizationSetBy = Automatic
+
+	column especie
+		dataType: string
+		lineageTag: 1f1605d6-efb4-4880-aa00-41a37f4dc6b0
+		summarizeBy: none
+		sourceColumn: especie
+
+		annotation SummarizationSetBy = Automatic
+
+	column rn
+		dataType: int64
+		formatString: 0
+		lineageTag: 6ccdc282-c843-4030-9441-924f48231cb8
+		summarizeBy: none
+		sourceColumn: rn
+
+		annotation SummarizationSetBy = Automatic
+
+	partition MascotasPesadas = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_mascotas_mas_pesadas"]}[Data],
+				    Tipos = Table.TransformColumnTypes(#"Navegación 1", {{"id_mascota", Int64.Type}, {"nombre_m", type text}, {"tamanio_m", type text}, {"peso_m", type number}, {"id_raza", Int64.Type}, {"raza", type text}, {"especie", type text}, {"rn", Int64.Type}})
+				in
+				    Tipos
+
+	annotation PBI_ResultType = Table
+

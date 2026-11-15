@@ -1,0 +1,119 @@
+/// Vista reportes.vw_detalle_facturacion
+table DetalleFactura
+	lineageTag: d377aebb-2c0d-43c9-8c21-141f58c1c07b
+
+	column id_factura
+		dataType: int64
+		formatString: 0
+		lineageTag: 02b84d37-b0ce-4137-a878-aff54c5653a6
+		summarizeBy: none
+		sourceColumn: id_factura
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_detalle_factura
+		dataType: int64
+		formatString: 0
+		lineageTag: 8aeb33e9-47e5-4b65-bc7f-46b3182d93ab
+		summarizeBy: none
+		sourceColumn: id_detalle_factura
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_emision_f
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 1664bcb9-15f0-4a64-beff-ed7ac712302b
+		summarizeBy: none
+		sourceColumn: fecha_emision_f
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column estado_f
+		dataType: string
+		lineageTag: 06d59c2a-76d0-4344-9f7a-cb83d2373a15
+		summarizeBy: none
+		sourceColumn: estado_f
+
+		annotation SummarizationSetBy = Automatic
+
+	column tipo_concepto
+		dataType: string
+		lineageTag: 8d41cf07-c922-4998-808e-a999d40e009a
+		summarizeBy: none
+		sourceColumn: tipo_concepto
+
+		annotation SummarizationSetBy = Automatic
+
+	column descripcion
+		dataType: string
+		lineageTag: c2adecf8-7b72-4af8-9011-7cdeeccd91fe
+		summarizeBy: none
+		sourceColumn: descripcion
+
+		annotation SummarizationSetBy = Automatic
+
+	column medicamento
+		dataType: string
+		lineageTag: dbb53338-d2b1-4c30-908f-9e15c6421cd5
+		summarizeBy: none
+		sourceColumn: medicamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column presentacion_m
+		dataType: string
+		lineageTag: 598f06de-7999-4f9a-9d4a-117b687e74c5
+		summarizeBy: none
+		sourceColumn: presentacion_m
+
+		annotation SummarizationSetBy = Automatic
+
+	column cantidad_df
+		dataType: int64
+		formatString: 0
+		lineageTag: c79a67a3-0396-465c-98f7-ad7291bcb7d6
+		summarizeBy: sum
+		sourceColumn: cantidad_df
+
+		annotation SummarizationSetBy = Automatic
+
+	column precio_unit_df
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: 94f0b77f-a7ac-420d-a5d4-1f2472f1eea7
+		summarizeBy: none
+		sourceColumn: precio_unit_df
+
+		annotation SummarizationSetBy = Automatic
+
+	column subtotal_df
+		dataType: double
+		formatString: \$#,0.00;(\$#,0.00);\$#,0.00
+		lineageTag: f6edbf1f-ad8c-4724-94d1-c72ef657eb08
+		summarizeBy: sum
+		sourceColumn: subtotal_df
+
+		annotation SummarizationSetBy = Automatic
+
+	column Mes = MONTH(DetalleFactura[fecha_emision_f])
+		dataType: int64
+		formatString: 0
+		lineageTag: 85283f52-6503-4582-9e51-5f4e84016255
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition DetalleFactura = m
+		mode: import
+		source =
+				let
+				    Origen = Sql.Database("localhost,1434", "ClinicaVeterinaria"),
+				    #"Navegación 1" = Origen{[Schema = "reportes", Item = "vw_detalle_facturacion"]}[Data]
+				in
+				    #"Navegación 1"
+
+	annotation PBI_ResultType = Table
+
