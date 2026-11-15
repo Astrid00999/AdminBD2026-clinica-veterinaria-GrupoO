@@ -162,15 +162,7 @@ values (1, '2025-01-10', '2025-01-20', 'Tratamiento ótico tópico', 'Limpiar el
        (53, '2025-06-20', '2025-07-20', 'Tratamiento acaricida', 'Cambiar la cama de la jaula y desinfectarla.'),
        (54, '2025-06-25', '2025-06-28', 'Analgesia', 'Heno y ramas para roer a libre demanda.');
 go
-  
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Iván', 'Peña', '7000-0035', 'ivan.pena@veterinaria.com'),
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Mónica', 'Vargas', '7000-0036', 'monica.vargas@veterinaria.com'),
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Roberto', 'León', '7000-0037', 'roberto.leon@veterinaria.com'),
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Melissa', 'Pineda', '7000-0038', 'melissa.pineda@veterinaria.com'),
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Cristian', 'Durán', '7000-0039', 'cristian.duran@veterinaria.com'),
-       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Alejandra', 'Escobar', '7000-0040', 'alejandra.escobar@veterinaria.com');
-go
-
+ 
 
 -- ============================================================
 -- 12° insert: detalles_tratamientos

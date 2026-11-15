@@ -2418,8 +2418,7 @@ union all select 'veterinario', count(*) from catalogos.veterinario
 order by tabla
 go
 
-use [master]
-go
+
 alter database [ClinicaVeterinaria] set read_write
 go
 
