@@ -1,3 +1,65 @@
+
+
+-- ============================================================
+-- 10° insert: tratamiento (45)
+-- ============================================================
+insert into clinica.tratamiento (id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
+values (1, '2025-01-10', '2025-01-20', 'Tratamiento ótico tópico', 'Limpiar el oído antes de cada aplicación; no usar hisopos.'),
+       (2, '2025-01-15', '2025-01-15', 'Esquema de vacunación anual', 'Reportar decaimiento o fiebre; refuerzo en un año.'),
+       (3, '2025-01-20', '2025-04-20', 'Plan de reducción de peso', 'Pesar la ración exacta indicada; nada de premios.'),
+       (4, '2025-01-25', '2025-01-30', 'Soporte digestivo y dieta blanda', 'Dieta blanda en porciones pequeñas por 5 días.'),
+       (5, '2025-02-01', '2025-02-02', 'Plan preventivo', 'Repetir desparasitación cada 3 meses.'),
+       (6, '2025-02-05', '2025-03-07', 'Control de pulgas y del prurito', 'Tratar a todas las mascotas de la casa y fumigar el ambiente.'),
+       (7, '2025-02-10', '2025-02-24', 'Manejo del dolor y control de peso', 'Ejercicio suave; evitar escaleras.'),
+       (8, '2025-02-15', '2025-03-17', 'Higiene dental preventiva', 'Cepillado dental diario.'),
+       (9, '2025-02-20', '2025-03-02', 'Tratamiento de traqueobronquitis', 'Reposo; usar pechera; aislar de otros perros 7 días.'),
+       (10, '2025-02-25', '2025-03-27', 'Plan de alimentación', 'Mantener la ración y pesar cada mes.'),
+       (11, '2025-03-02', '2025-03-02', 'Esquema de vacunación anual', 'Evitar baños por 3 días; refuerzo en un año.'),
+       (12, '2025-03-06', '2025-03-13', 'Tratamiento oftálmico', 'Aplicar la pomada rigurosamente en los horarios indicados.'),
+       (13, '2025-03-10', '2025-03-20', 'Tratamiento de úlcera corneal', 'Uso obligatorio de collar isabelino las 24 horas.'),
+       (14, '2025-03-15', '2025-04-26', 'Manejo postoperatorio de fractura', 'Reposo absoluto en jaula o espacio pequeño.'),
+       (15, '2025-03-20', '2025-04-19', 'Desparasitación preventiva', 'Repetir la desparasitación interna cada 3 meses.'),
+       (16, '2025-03-25', '2025-09-21', 'Tratamiento cardíaco de mantenimiento', 'Evitar emociones fuertes y ejercicio extremo.'),
+       (17, '2025-04-01', '2025-04-02', 'Plan preventivo', 'Aumentar el consumo de agua colocando más fuentes.'),
+       (18, '2025-04-05', '2025-05-05', 'Plan de alimentación', 'Mantener horarios fijos para la alimentación.'),
+       (19, '2025-04-10', '2025-04-24', 'Tratamiento antifúngico tópico', 'Baños terapéuticos dejando actuar el champú 10 minutos.'),
+       (20, '2025-04-15', '2025-05-15', 'Desparasitación preventiva', 'Verificar la eliminación de parásitos en el arenero.'),
+       (21, '2026-06-18', '2026-06-28', 'Tratamiento de bronquitis', 'Evitar exposición a humo, polvo y ambientes fríos.'),
+       (22, '2026-06-19', '2026-06-29', 'Tratamiento de soporte respiratorio felino', 'Mantener en ambiente cálido y limpiar secreción nasal.'),
+       (23, '2026-06-20', '2026-07-04', 'Antibioterapia', 'Mantener la jaula limpia y sin corrientes de aire.'),
+       (24, '2026-06-18', '2026-07-18', 'Control de pulgas y del prurito', 'Aplicar antipulgas y evitar contacto con pulgas del entorno.'),
+       (25, '2026-06-19', '2026-08-18', 'Enriquecimiento ambiental y cambio de dieta', 'Dieta con pellets, frutas y verduras; más juguetes.'),
+       (26, '2026-06-20', '2026-07-18', 'Tratamiento acaricida', 'Cambiar la cama de la jaula y desinfectarla.'),
+       (27, '2026-06-18', '2026-06-18', 'Esquema de vacunación anual', 'Reportar decaimiento, fiebre o vómito.'),
+       (28, '2026-06-19', '2026-07-19', 'Plan preventivo', 'Mantener dieta variada y luz natural.'),
+       (29, '2026-06-20', '2026-06-27', 'Estimulación digestiva y analgesia', 'Ofrecer heno fresco; alimentación asistida si no come.'),
+       (30, '2026-06-21', '2026-06-30', 'Tratamiento anticoccidial', 'Limpiar la jaula a diario.'),
+       (31, '2026-01-08', '2026-02-07', 'Plan preventivo', 'Mantener una alimentación balanceada y control en seis meses.'),
+       (32, '2026-02-15', '2026-02-15', 'Esquema de vacunación anual', 'Vigilar posibles reacciones durante 24 horas.'),
+       (33, '2026-03-22', '2026-05-21', 'Plan de reducción de peso', 'Disminuir semillas y aumentar pellets y verduras.'),
+       (34, '2026-04-10', '2026-04-17', 'Antibioterapia y soporte', 'Mantener la jaula limpia y seca.'),
+       (35, '2026-05-18', '2026-05-28', 'Cambio de sustrato y tratamiento tópico', 'Usar papel sin tinta como sustrato.'),
+       (36, '2026-07-06', '2026-07-06', 'Control postquirúrgico', 'Continuar con controles de rutina.'),
+       (37, '2026-08-12', '2026-08-12', 'Control postquirúrgico', 'Mantener la zona limpia.'),
+       (38, '2026-09-25', '2026-10-25', 'Plan preventivo', 'Baños de arena dos veces por semana.'),
+       (39, '2026-10-14', '2026-10-28', 'Antibioterapia', 'Completar el antibiótico y evitar el frío.'),
+       (40, '2026-10-28', '2026-11-27', 'Plan de alimentación', 'Heno a libre demanda y menos pellets.'),
+       (44, '2025-05-05', '2025-05-19', 'Desparasitación', 'Lavar comederos y bebederos a diario.'),
+       (46, '2025-05-15', '2025-05-25', 'Antibioterapia y calor', 'Mantener en ambiente cálido y sin corrientes de aire.'),
+       (51, '2025-06-10', '2025-06-17', 'Antibioterapia y soporte', 'Mantener la jaula limpia y seca.'),
+       (53, '2025-06-20', '2025-07-20', 'Tratamiento acaricida', 'Cambiar la cama de la jaula y desinfectarla.'),
+       (54, '2025-06-25', '2025-06-28', 'Analgesia', 'Heno y ramas para roer a libre demanda.');
+go
+  
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Iván', 'Peña', '7000-0035', 'ivan.pena@veterinaria.com'),
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Mónica', 'Vargas', '7000-0036', 'monica.vargas@veterinaria.com'),
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Roberto', 'León', '7000-0037', 'roberto.leon@veterinaria.com'),
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Melissa', 'Pineda', '7000-0038', 'melissa.pineda@veterinaria.com'),
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Cristian', 'Durán', '7000-0039', 'cristian.duran@veterinaria.com'),
+       ((select id_especialidad from catalogos.especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Alejandra', 'Escobar', '7000-0040', 'alejandra.escobar@veterinaria.com');
+go
+
+
 -- ============================================================
 -- 12° insert: detalles_tratamientos
 -- id_detalle_tratamiento es el número de renglón dentro de cada tratamiento
@@ -174,65 +236,6 @@ values (1, 'Citología ótica', 'Toma de muestra del conducto auditivo y tinció
        (37, 'Retiro de suturas', 'Extracción de puntos y limpieza de la zona.', 15.00),
        (39, 'Nebulización', 'Terapia respiratoria para facilitar la eliminación de secreciones.', 20.00),
        (40, 'Evaluación nutricional', 'Seguimiento del plan alimenticio y evaluación del estado corporal.', 20.00);
-go
-
--- ============================================================
--- 10° insert: tratamiento (45)
--- ============================================================
-insert into clinica.tratamiento (id_diagnostico, fecha_inicio, fecha_fin, descripcion_t, indicaciones_t)
-values (1, '2025-01-10', '2025-01-20', 'Tratamiento ótico tópico', 'Limpiar el oído antes de cada aplicación; no usar hisopos.'),
-       (2, '2025-01-15', '2025-01-15', 'Esquema de vacunación anual', 'Reportar decaimiento o fiebre; refuerzo en un año.'),
-       (3, '2025-01-20', '2025-04-20', 'Plan de reducción de peso', 'Pesar la ración exacta indicada; nada de premios.'),
-       (4, '2025-01-25', '2025-01-30', 'Soporte digestivo y dieta blanda', 'Dieta blanda en porciones pequeñas por 5 días.'),
-       (5, '2025-02-01', '2025-02-02', 'Plan preventivo', 'Repetir desparasitación cada 3 meses.'),
-       (6, '2025-02-05', '2025-03-07', 'Control de pulgas y del prurito', 'Tratar a todas las mascotas de la casa y fumigar el ambiente.'),
-       (7, '2025-02-10', '2025-02-24', 'Manejo del dolor y control de peso', 'Ejercicio suave; evitar escaleras.'),
-       (8, '2025-02-15', '2025-03-17', 'Higiene dental preventiva', 'Cepillado dental diario.'),
-       (9, '2025-02-20', '2025-03-02', 'Tratamiento de traqueobronquitis', 'Reposo; usar pechera; aislar de otros perros 7 días.'),
-       (10, '2025-02-25', '2025-03-27', 'Plan de alimentación', 'Mantener la ración y pesar cada mes.'),
-       (11, '2025-03-02', '2025-03-02', 'Esquema de vacunación anual', 'Evitar baños por 3 días; refuerzo en un año.'),
-       (12, '2025-03-06', '2025-03-13', 'Tratamiento oftálmico', 'Aplicar la pomada rigurosamente en los horarios indicados.'),
-       (13, '2025-03-10', '2025-03-20', 'Tratamiento de úlcera corneal', 'Uso obligatorio de collar isabelino las 24 horas.'),
-       (14, '2025-03-15', '2025-04-26', 'Manejo postoperatorio de fractura', 'Reposo absoluto en jaula o espacio pequeño.'),
-       (15, '2025-03-20', '2025-04-19', 'Desparasitación preventiva', 'Repetir la desparasitación interna cada 3 meses.'),
-       (16, '2025-03-25', '2025-09-21', 'Tratamiento cardíaco de mantenimiento', 'Evitar emociones fuertes y ejercicio extremo.'),
-       (17, '2025-04-01', '2025-04-02', 'Plan preventivo', 'Aumentar el consumo de agua colocando más fuentes.'),
-       (18, '2025-04-05', '2025-05-05', 'Plan de alimentación', 'Mantener horarios fijos para la alimentación.'),
-       (19, '2025-04-10', '2025-04-24', 'Tratamiento antifúngico tópico', 'Baños terapéuticos dejando actuar el champú 10 minutos.'),
-       (20, '2025-04-15', '2025-05-15', 'Desparasitación preventiva', 'Verificar la eliminación de parásitos en el arenero.'),
-       (21, '2026-06-18', '2026-06-28', 'Tratamiento de bronquitis', 'Evitar exposición a humo, polvo y ambientes fríos.'),
-       (22, '2026-06-19', '2026-06-29', 'Tratamiento de soporte respiratorio felino', 'Mantener en ambiente cálido y limpiar secreción nasal.'),
-       (23, '2026-06-20', '2026-07-04', 'Antibioterapia', 'Mantener la jaula limpia y sin corrientes de aire.'),
-       (24, '2026-06-18', '2026-07-18', 'Control de pulgas y del prurito', 'Aplicar antipulgas y evitar contacto con pulgas del entorno.'),
-       (25, '2026-06-19', '2026-08-18', 'Enriquecimiento ambiental y cambio de dieta', 'Dieta con pellets, frutas y verduras; más juguetes.'),
-       (26, '2026-06-20', '2026-07-18', 'Tratamiento acaricida', 'Cambiar la cama de la jaula y desinfectarla.'),
-       (27, '2026-06-18', '2026-06-18', 'Esquema de vacunación anual', 'Reportar decaimiento, fiebre o vómito.'),
-       (28, '2026-06-19', '2026-07-19', 'Plan preventivo', 'Mantener dieta variada y luz natural.'),
-       (29, '2026-06-20', '2026-06-27', 'Estimulación digestiva y analgesia', 'Ofrecer heno fresco; alimentación asistida si no come.'),
-       (30, '2026-06-21', '2026-06-30', 'Tratamiento anticoccidial', 'Limpiar la jaula a diario.'),
-       (31, '2026-01-08', '2026-02-07', 'Plan preventivo', 'Mantener una alimentación balanceada y control en seis meses.'),
-       (32, '2026-02-15', '2026-02-15', 'Esquema de vacunación anual', 'Vigilar posibles reacciones durante 24 horas.'),
-       (33, '2026-03-22', '2026-05-21', 'Plan de reducción de peso', 'Disminuir semillas y aumentar pellets y verduras.'),
-       (34, '2026-04-10', '2026-04-17', 'Antibioterapia y soporte', 'Mantener la jaula limpia y seca.'),
-       (35, '2026-05-18', '2026-05-28', 'Cambio de sustrato y tratamiento tópico', 'Usar papel sin tinta como sustrato.'),
-       (36, '2026-07-06', '2026-07-06', 'Control postquirúrgico', 'Continuar con controles de rutina.'),
-       (37, '2026-08-12', '2026-08-12', 'Control postquirúrgico', 'Mantener la zona limpia.'),
-       (38, '2026-09-25', '2026-10-25', 'Plan preventivo', 'Baños de arena dos veces por semana.'),
-       (39, '2026-10-14', '2026-10-28', 'Antibioterapia', 'Completar el antibiótico y evitar el frío.'),
-       (40, '2026-10-28', '2026-11-27', 'Plan de alimentación', 'Heno a libre demanda y menos pellets.'),
-       (44, '2025-05-05', '2025-05-19', 'Desparasitación', 'Lavar comederos y bebederos a diario.'),
-       (46, '2025-05-15', '2025-05-25', 'Antibioterapia y calor', 'Mantener en ambiente cálido y sin corrientes de aire.'),
-       (51, '2025-06-10', '2025-06-17', 'Antibioterapia y soporte', 'Mantener la jaula limpia y seca.'),
-       (53, '2025-06-20', '2025-07-20', 'Tratamiento acaricida', 'Cambiar la cama de la jaula y desinfectarla.'),
-       (54, '2025-06-25', '2025-06-28', 'Analgesia', 'Heno y ramas para roer a libre demanda.');
-go
-  
-       ((select id_especialidad from especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Iván', 'Peña', '7000-0035', 'ivan.pena@veterinaria.com'),
-       ((select id_especialidad from especialidades where nombre_esp = 'Urgencias Veterinarias'), 'Mónica', 'Vargas', '7000-0036', 'monica.vargas@veterinaria.com'),
-       ((select id_especialidad from especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Roberto', 'León', '7000-0037', 'roberto.leon@veterinaria.com'),
-       ((select id_especialidad from especialidades where nombre_esp = 'Diagnóstico por Imágenes'), 'Melissa', 'Pineda', '7000-0038', 'melissa.pineda@veterinaria.com'),
-       ((select id_especialidad from especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Cristian', 'Durán', '7000-0039', 'cristian.duran@veterinaria.com'),
-       ((select id_especialidad from especialidades where nombre_esp = 'Fisioterapia y Rehabilitación'), 'Alejandra', 'Escobar', '7000-0040', 'alejandra.escobar@veterinaria.com');
 go
 
 
