@@ -1,12 +1,11 @@
-/* ============================================================
+/*============================================================
    03_security/roles_users.sql
 
    Requisitos:
      - Ejecutar con una cuenta sysadmin.
      - Ejecutar al final, después de:
-         02_
-         /schema_and_data.sql
-         02_ClinicaVeterinaria/schemas_and_transfer.sql
+         02_migration/schema_and_data.sql
+         02_migration/schemas_and_transfer.sql
          05_programmability/views.sql
          03_security/audits.sql y 06_backup_restore/backup_strategy.sql
        (si estos dos aún no existen, el script avisa y se puede repetir después)
@@ -25,17 +24,11 @@
    ============================================================ */
 
 
-/* ------------------------------------------------------------
+/*------------------------------------------------------------
    0. verificación y contraseñas
    las contraseñas se guardan solo en la sesión (session_context) y
    se borran al final. mínimo 8 caracteres con mayúscula, minúscula,
    número y símbolo.
-   ------------------------------------------------------------ 
-   */
-   
-
-   /* ------------------------------------------------------------
-   0. verificación y contraseñas
    ------------------------------------------------------------ */
 
 -- por si una ejecución anterior quedó a medias en esta misma pestaña
@@ -46,12 +39,13 @@ go
 use master;
 go
 
-declare @clave_personal nvarchar(128) = N'Vet#Clinica2026!k7';  -- cuentas de personas
-declare @clave_servicio nvarchar(128) = N'Srv$Backup2026!m4Q';  -- lg_bi y lg_backup
+-- ESCRIBIR LAS CONTRASEÑAS SOLO AL EJECUTAR. No subirlas al repositorio.
+declare @clave_personal nvarchar(128) = N'ClavePersonal';  -- cuentas de personas
+declare @clave_servicio nvarchar(128) = N'ClaveServicio';  -- lg_bi y lg_backup
 
 if db_id(N'ClinicaVeterinaria') is null
 begin
-    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
+    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_migration/schema_and_data.sql.', 16, 1);
     set noexec on;
 end
 else if @clave_personal like N'<%' or @clave_servicio like N'<%'
@@ -71,51 +65,11 @@ go
 
 if object_id(N'gestion.citas', N'U') is null or object_id(N'reportes.vw_citas', N'V') is null
 begin
-    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
+    raiserror(N'Primero ejecuten 02_migration/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
     set noexec on;
 end
 go
-   
-   
-   /*
--- por si una ejecución anterior quedó a medias en esta misma pestaña
-if @@trancount > 0 rollback transaction;
-if original_login() <> suser_sname() revert;
-go
 
-use master;
-go
-
-declare @clave_personal nvarchar(128) = N'<>';  -- cuentas de personas
-declare @clave_servicio nvarchar(128) = N'<escribir antes de ejecutar>';  -- lg_bi y lg_backup
-
-if db_id(N'ClinicaVeterinaria') is null
-begin
-    raiserror(N'La base ClinicaVeterinaria no existe. Ejecuten primero 02_ClinicaVeterinaria/schema_and_data.sql.', 16, 1);
-    set noexec on;
-end
-else if @clave_personal like N'<%' or @clave_servicio like N'<%'
-begin
-    raiserror(N'Escriban las dos contraseñas en la sección 0 antes de ejecutar.', 16, 1);
-    set noexec on;
-end
-else
-begin
-    exec sp_set_session_context N'clave_personal', @clave_personal;
-    exec sp_set_session_context N'clave_servicio', @clave_servicio;
-end
-go
-
-use ClinicaVeterinaria;
-go
-
-if object_id(N'gestion.citas', N'U') is null or object_id(N'reportes.vw_citas', N'V') is null
-begin
-    raiserror(N'Primero ejecuten 02_ClinicaVeterinaria/schemas_and_transfer.sql y 05_programmability/views.sql.', 16, 1);
-    set noexec on;
-end
-go
-*/
 
 /* ------------------------------------------------------------
    1. limpieza
@@ -162,7 +116,7 @@ create role rol_admin       authorization dbo;  -- administración técnica (no 
 create role rol_veterinario authorization dbo;  -- atención clínica
 create role rol_recepcion   authorization dbo;  -- propietarios, mascotas y agenda
 create role rol_facturacion authorization dbo;  -- cobros y facturas
-create role rol_bi          authorization dbo;  -- análisis: solo vistas sin datos personales
+create role rol_bi          authorization dbo;  -- análisis: vistas del esquema reportes
 create role rol_respaldo    authorization dbo;  -- cuenta de servicio de respaldos
 create role rol_auditoria   authorization dbo;  -- lectura de la auditoría
 create role rol_docente     authorization dbo;  -- docente: revisa todo, no modifica nada
@@ -201,7 +155,11 @@ grant alter on clinica.tratamiento            to rol_admin;
 grant alter on clinica.detalles_tratamientos  to rol_admin;
 grant alter on clinica.procedimientos         to rol_admin;
 grant alter on finanzas.facturas              to rol_admin;
+<<<<<<< HEAD
 grant alter on finanzas.detalles_facturas    to rol_admin;
+=======
+grant alter on finanzas.detalles_facturas     to rol_admin;
+>>>>>>> 3464011 (:recycle: feat: Actualizar roles y usuarios)
 
 -- planes de ejecución, fragmentación y query store; respaldos manuales
 grant showplan, view database state to rol_admin;
@@ -262,14 +220,19 @@ grant select on reportes.vw_detalle_facturacion to rol_facturacion;
 grant select on reportes.vw_resumen_financiero  to rol_facturacion;
 go
 
--- 3.5 rol_bi: solo vistas sin datos personales, ninguna tabla base
+-- 3.5 rol_bi: solo lectura de vistas, ninguna tabla base
+-- (esquema reportes completo: alimenta el dashboard de power bi, incluidas
+-- las vistas del tablero y vw_procedimientos; las 7 vistas de abajo se
+-- mantienen explícitas para documentar las que usa el análisis principal)
+grant select on schema::reportes to rol_bi;
+
 grant select on reportes.vw_mascotas                  to rol_bi;
 grant select on reportes.vw_citas                     to rol_bi;
 grant select on reportes.vw_detalle_facturacion       to rol_bi;
 grant select on reportes.vw_resumen_financiero        to rol_bi;
 grant select on reportes.vw_productividad_veterinaria to rol_bi;
 grant select on reportes.vw_indicadores_mascotas      to rol_bi;
-grant select on reportes.vw_facturacion to rol_bi;
+grant select on reportes.vw_facturacion               to rol_bi;
 go
 
 -- 3.6 rol_respaldo: solo respaldar (no lee ni modifica datos)
@@ -414,6 +377,17 @@ go
    ------------------------------------------------------------ */
 set nocount on;
 
+-- cita sin factura: facturas tiene un índice único por id_cita, así que
+-- el insert de prueba necesita una cita que todavía no esté facturada
+-- (se calcula aquí como sysadmin; si todas están facturadas, usa la 11)
+declare @cita_libre bigint =
+    coalesce((select top 1 c.id_cita
+              from gestion.citas as c
+              left join finanzas.facturas as f on f.id_cita = c.id_cita
+              where f.id_factura is null
+              order by c.id_cita), 11);
+declare @cita_txt nvarchar(20) = cast(@cita_libre as nvarchar(20));
+
 declare @pruebas table (
     id         int identity(1, 1),
     rol        sysname,
@@ -449,7 +423,7 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
 (N'rol_veterinario', N'usr_veterinario1', N'update de peso_m en gestion.mascotas',
  N'update gestion.mascotas set peso_m = peso_m where id_mascota = 1;', N'permitido'),
 (N'rol_veterinario', N'usr_veterinario1', N'insert en finanzas.facturas',
- N'insert into finanzas.facturas (id_cita, fecha_emision_f) values (11, getdate());', N'denegado'),
+ N'insert into finanzas.facturas (id_cita, fecha_emision_f) values (' + @cita_txt + N', getdate());', N'denegado'),
 (N'rol_veterinario', N'usr_veterinario1', N'select en finanzas.facturas',
  N'declare @n int; select @n = count(*) from finanzas.facturas;', N'denegado'),
 (N'rol_veterinario', N'usr_veterinario1', N'select de dui_p en gestion.propietarios',
@@ -458,7 +432,7 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
  N'declare @n int; select @n = count(*) from clinica.diagnosticos;', N'permitido'),
 -- facturación
 (N'rol_facturacion', N'usr_facturacion', N'insert en finanzas.facturas',
- N'insert into finanzas.facturas (id_cita, fecha_emision_f, estado_f, total_f) values (11, getdate(), ''Pendiente'', 0);', N'permitido'),
+ N'insert into finanzas.facturas (id_cita, fecha_emision_f, estado_f, total_f) values (' + @cita_txt + N', getdate(), ''Pendiente'', 0);', N'permitido'),
 (N'rol_facturacion', N'usr_facturacion', N'delete en finanzas.facturas',
  N'delete from finanzas.facturas where id_factura = 1;', N'denegado'),
 (N'rol_facturacion', N'usr_facturacion', N'select en reportes.vw_facturacion',
@@ -469,13 +443,15 @@ insert into @pruebas (rol, usuario, operacion, sentencia, esperado) values
  N'declare @x varchar(max); select top 1 @x = cast(motivo_c as varchar(max)) from gestion.citas;', N'denegado'),
 (N'rol_facturacion', N'usr_facturacion', N'update en clinica.diagnosticos',
  N'update clinica.diagnosticos set fecha_d = fecha_d where id_diagnostico = 1;', N'denegado'),
--- bi
+-- bi (lectura de todo el esquema reportes, ninguna tabla base)
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_resumen_financiero',
  N'declare @n int; select @n = count(*) from reportes.vw_resumen_financiero;', N'permitido'),
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_indicadores_mascotas',
  N'declare @n int; select @n = count(*) from reportes.vw_indicadores_mascotas;', N'permitido'),
 (N'rol_bi', N'usr_bi', N'select en reportes.vw_propietarios',
- N'declare @n int; select @n = count(*) from reportes.vw_propietarios;', N'denegado'),
+ N'declare @n int; select @n = count(*) from reportes.vw_propietarios;', N'permitido'),
+(N'rol_bi', N'usr_bi', N'select en reportes.vw_procedimientos (vista del tablero)',
+ N'declare @n int; select @n = count(*) from reportes.vw_procedimientos;', N'permitido'),
 (N'rol_bi', N'usr_bi', N'select en gestion.propietarios (tabla base)',
  N'declare @n int; select @n = count(*) from gestion.propietarios;', N'denegado'),
 (N'rol_bi', N'usr_bi', N'update en gestion.citas',
